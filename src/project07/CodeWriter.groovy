@@ -10,7 +10,13 @@ class CodeWriter {
     private static eqIndex = 0
     private static gtIndex = 0
     private static ltIndex = 0
-    private static final myMap = [local:'LCL',argument:'ARG',this:'THIS',that:'THAT',temp:'5']
+    private static final myMap = [
+            local:'LCL',
+            argument:'ARG',
+            this:'THIS',
+            that:'THAT',
+            temp:'5'
+    ]
 
     /**
      *
