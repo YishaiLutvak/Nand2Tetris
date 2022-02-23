@@ -4,13 +4,13 @@ import project07.Constants.CommandType
 
 class CodeWriter {
 
-    private static final myMap = [local:'LCL',argument:'ARG',this:'THIS',that:'THAT',temp:'5']
     private static CodeWriter instance = null //singleton
     private static FileWriter out = null
+    private static String currentFileName = null
     private static eqIndex = 0
     private static gtIndex = 0
     private static ltIndex = 0
-    private static String currentFileName = null
+    private static final myMap = [local:'LCL',argument:'ARG',this:'THIS',that:'THAT',temp:'5']
 
     /**
      *
@@ -42,8 +42,8 @@ class CodeWriter {
      * setter and add comment at assembly file
      * @param file
      */
-    void setCurrentFileName(String file) {
-        this.currentFileName = file.split('\\.')[0]
+    static void setCurrentFileName(String file) {
+        currentFileName = file.split('\\.')[0]
         out << "// ${file}\n"
     }
 
@@ -71,35 +71,35 @@ class CodeWriter {
      * @param segment
      * @param index
      */
-    void writePushPop(CommandType command, String segment, int index) {
+    static void writePushPop(CommandType command, String segment, int index) {
         switch (command) {
             case CommandType.C_PUSH-> switch (segment) {
                 case 'constant' -> out << Constants.PUSH_CONSTANT
                         .replace('[value]', "${index}")
-                case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_GROUP1
+                case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
                         .replace('[index]', "${index}")
                         .replace('[segment]', "${myMap[segment]}")
-                case 'temp' -> out << Constants.PUSH_GROUP2
+                case 'temp' -> out << Constants.PUSH_TEMP
                         .replace('[index]', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.PUSH_GROUP4.replace('[index]','THIS')
-                    case 1 -> out << Constants.PUSH_GROUP4.replace('[index]','THAT')}
-                case 'static' -> out << Constants.PUSH_GROUP3
-                        .replace('[index]', "${this.currentFileName}.${index}")
+                    case 0 -> out << Constants.PUSH_POINTER.replace('[index]','THIS')
+                    case 1 -> out << Constants.PUSH_POINTER.replace('[index]','THAT')}
+                case 'static' -> out << Constants.PUSH_STATIC
+                        .replace('[index]', "${currentFileName}.${index}")
             }
             case CommandType.C_POP -> switch (segment) {
-                case 'local', 'argument', 'this', 'that' -> out << Constants.POP_GROUP1
-                        .replace('[offset]', 'A=A+1\n' * index)
+                case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
+                        .replace('[offset]', 'A=A+1\n  ' * index)
                         .replace('[segment]',
                                 "${myMap[segment]}")
-                case 'temp' -> out << Constants.POP_GROUP2
+                case 'temp' -> out << Constants.POP_TEMP
                         .replace('[index]', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.POP_GROUP4.replace('[index]','THIS')
-                    case 1 -> out << Constants.POP_GROUP4.replace('[index]','THAT')
+                    case 0 -> out << Constants.POP_POINTER.replace('[index]','THIS')
+                    case 1 -> out << Constants.POP_POINTER.replace('[index]','THAT')
                 }
-                case 'static' -> out << Constants.POP_GROUP3
-                        .replace('[index]', "${this.currentFileName}.${index}")
+                case 'static' -> out << Constants.POP_STATIC
+                        .replace('[index]', "${currentFileName}.${index}")
             }
         }
     }

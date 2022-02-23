@@ -13,7 +13,7 @@ class Parser {
      * @param file
      */
     private Parser(File inputFile) {
-        this.file = inputFile
+        file = inputFile
     }
 
     /**
@@ -33,14 +33,14 @@ class Parser {
      * @param cmd
      */
     static void setCurrentCommand(String cmd) {
-        this.currentCommand = cmd
+        currentCommand = cmd
     }
 
     /**
      * getter
      * @return
      */
-    static CommandType getCommandType() {
+    static def getCommandType() {
         switch (currentCommand.split(' ')[0]) {
             case 'push'-> CommandType.C_PUSH
             case 'pop'-> CommandType.C_POP
