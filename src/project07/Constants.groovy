@@ -229,7 +229,7 @@ class Constants {
 
     static final String PUSH_STATIC = $/
   @[index]
-  D=M               //   D = ram[index]
+  D=M               //   D = ram[[index]]
   @SP               //   A = 0
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D
@@ -244,7 +244,7 @@ class Constants {
   A=M               //   A = ram[0]         
   D=M               //   D = ram[A]         
   @[index]                     
-  M=D               //   ram[index] = D  
+  M=D               //   ram[[index]] = D  
 
 /$
 

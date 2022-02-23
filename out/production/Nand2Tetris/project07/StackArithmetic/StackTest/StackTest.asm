@@ -34,12 +34,12 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ.0_TRUE  //   A = address of label TRUE
+  @EQ.0_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ.0_END   //   A = address of label END                          
+  @EQ.0_END                             
   0;JMP             //   jump to label of END
 (EQ.0_TRUE)                      
   @SP               //   A = 0                               
@@ -77,12 +77,12 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ.1_TRUE  //   A = address of label TRUE
+  @EQ.1_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ.1_END   //   A = address of label END                          
+  @EQ.1_END                             
   0;JMP             //   jump to label of END
 (EQ.1_TRUE)                      
   @SP               //   A = 0                               
@@ -120,12 +120,12 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ.2_TRUE  //   A = address of label TRUE
+  @EQ.2_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ.2_END   //   A = address of label END                          
+  @EQ.2_END                             
   0;JMP             //   jump to label of END
 (EQ.2_TRUE)                      
   @SP               //   A = 0                               
@@ -163,12 +163,12 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT.0_TRUE  //   A = address of label TRUE      
+  @LT.0_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT.0_END   //   A = address of label END       
+  @LT.0_END        
   0;JMP             //   jump to label of END           
 (LT.0_TRUE)                          
   @SP               //   A = 0                          
@@ -206,12 +206,12 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT.1_TRUE  //   A = address of label TRUE      
+  @LT.1_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT.1_END   //   A = address of label END       
+  @LT.1_END        
   0;JMP             //   jump to label of END           
 (LT.1_TRUE)                          
   @SP               //   A = 0                          
@@ -249,12 +249,12 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT.2_TRUE  //   A = address of label TRUE      
+  @LT.2_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT.2_END   //   A = address of label END       
+  @LT.2_END        
   0;JMP             //   jump to label of END           
 (LT.2_TRUE)                          
   @SP               //   A = 0                          
@@ -292,12 +292,12 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT.0_TRUE  //   A = address of label TRUE        
+  @GT.0_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT.0_END   //   A = address of label END         
+  @GT.0_END         
   0;JMP             //   jump to label of END             
 (GT.0_TRUE)                            
   @SP               //   A = 0                            
@@ -335,12 +335,12 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT.1_TRUE  //   A = address of label TRUE        
+  @GT.1_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT.1_END   //   A = address of label END         
+  @GT.1_END         
   0;JMP             //   jump to label of END             
 (GT.1_TRUE)                            
   @SP               //   A = 0                            
@@ -378,12 +378,12 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT.2_TRUE  //   A = address of label TRUE        
+  @GT.2_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT.2_END   //   A = address of label END         
+  @GT.2_END         
   0;JMP             //   jump to label of END             
 (GT.2_TRUE)                            
   @SP               //   A = 0                            

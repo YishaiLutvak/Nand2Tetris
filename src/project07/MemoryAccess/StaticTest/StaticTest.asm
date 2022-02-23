@@ -42,7 +42,7 @@
   A=M               //   A = ram[0]         
   D=M               //   D = ram[A]         
   @StaticTest.8                     
-  M=D               //   ramStaticTest.8 = D  
+  M=D               //   ram[StaticTest.8] = D  
 
 // pop static 3    (line 11)
 
@@ -51,7 +51,7 @@
   A=M               //   A = ram[0]         
   D=M               //   D = ram[A]         
   @StaticTest.3                     
-  M=D               //   ramStaticTest.3 = D  
+  M=D               //   ram[StaticTest.3] = D  
 
 // pop static 1    (line 12)
 
@@ -60,12 +60,12 @@
   A=M               //   A = ram[0]         
   D=M               //   D = ram[A]         
   @StaticTest.1                     
-  M=D               //   ramStaticTest.1 = D  
+  M=D               //   ram[StaticTest.1] = D  
 
 // push static 3    (line 13)
 
   @StaticTest.3
-  D=M               //   D = ramStaticTest.3
+  D=M               //   D = ram[StaticTest.3]
   @SP               //   A = 0
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D
@@ -75,7 +75,7 @@
 // push static 1    (line 14)
 
   @StaticTest.1
-  D=M               //   D = ramStaticTest.1
+  D=M               //   D = ram[StaticTest.1]
   @SP               //   A = 0
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D
@@ -97,7 +97,7 @@
 // push static 8    (line 16)
 
   @StaticTest.8
-  D=M               //   D = ramStaticTest.8
+  D=M               //   D = ram[StaticTest.8]
   @SP               //   A = 0
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D
