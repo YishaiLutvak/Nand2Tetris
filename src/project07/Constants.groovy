@@ -123,38 +123,38 @@ class Constants {
 /$
 
     static final String AND = $/
-  @SP
-  AM=M-1
-  D=M
-  @SP
-  AM=M-1
-  D=D&M
-  M=D
-  @SP
-  M=M+1
+  @SP               //   A = 0                            
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
+  D=M               //   D = ram[A]                       
+  @SP               //   A = 0                            
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
+  D=D&M             //   D = D&&ram[A]                     
+  M=D               //   ram[A] = D        
+  @SP               //   A = 0     
+  M=M+1             //   ram[0] = ram[0]+1
 
 /$
 
     static final String OR = $/
-  @SP
-  AM=M-1
-  D=M
-  @SP
-  AM=M-1
-  D=D|M
-  M=D
-  @SP
-  M=M+1
+  @SP               //   A = 0                           
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1 
+  D=M               //   D = ram[A]                      
+  @SP               //   A = 0                           
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1 
+  D=D|M             //   D = D||ram[A]                   
+  M=D               //   ram[A] = D                      
+  @SP               //   A = 0                           
+  M=M+1             //   ram[0] = ram[0]+1               
 
 /$
 
     static final String NOT = $/
-  @SP
-  AM=M-1
-  D=!M
-  M=D
-  @SP
-  M=M+1
+  @SP               //   A = 0                          
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
+  D=!M              //   D = !ram[A]                     
+  M=D               //   ram[0] = D                          
+  @SP               //   A = 0
+  M=M+1             //   ram[0] = ram[0]+1                 
 
 /$
 
