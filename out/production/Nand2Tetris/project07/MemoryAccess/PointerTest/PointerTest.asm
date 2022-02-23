@@ -9,7 +9,7 @@
 // push constant 3030    (line 8)
 
   @3030                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 3030
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -22,14 +22,14 @@
   A=M-1             //   A = ram[0]-1       
   D=M               //   D = ram[A]       
   @THIS                
-  M=D               //   ramTHIS = D            
+  M=D               //   ram[THIS] = D            
   @SP               //   A = 0 
   M=M-1             //   ram[0] = ram[0]-1
 
 // push constant 3040    (line 10)
 
   @3040                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 3040
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -42,14 +42,14 @@
   A=M-1             //   A = ram[0]-1       
   D=M               //   D = ram[A]       
   @THAT                
-  M=D               //   ramTHAT = D            
+  M=D               //   ram[THAT] = D            
   @SP               //   A = 0 
   M=M-1             //   ram[0] = ram[0]-1
 
 // push constant 32    (line 12)
 
   @32                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 32
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -61,8 +61,8 @@
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
   D=M               //   D = ram[A]  
-  @THIS        //   A = LCL\ARG\THIS\THAT
-  A=M               //   A = ramTHIS             
+  @THIS        
+  A=M               //   A = ram[THIS]             
   A=A+1
   A=A+1
   M=D               //   ram[A] = D      
@@ -72,7 +72,7 @@
 // push constant 46    (line 14)
 
   @46                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 46
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -84,8 +84,8 @@
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
   D=M               //   D = ram[A]  
-  @THAT        //   A = LCL\ARG\THIS\THAT
-  A=M               //   A = ramTHAT             
+  @THAT        
+  A=M               //   A = ram[THAT]             
   A=A+1
   A=A+1
   A=A+1
@@ -99,7 +99,7 @@
 // push pointer 0    (line 16)
 
   @THIS
-  D=M               //   D = ATHIS
+  D=M               //   D = A[THIS]
   @SP               //   A = 0            
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D       
@@ -109,7 +109,7 @@
 // push pointer 1    (line 17)
 
   @THAT
-  D=M               //   D = ATHAT
+  D=M               //   D = A[THAT]
   @SP               //   A = 0            
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D       
@@ -132,8 +132,8 @@
 
   @2                        
   D=A               //   D = A (index)  
-  @THIS        //   A = LCL\ARG\THIS\THAT                       
-  A=M+D             //   A = ramTHIS+D (D=index=offset)                          
+  @THIS                               
+  A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
@@ -157,8 +157,8 @@
 
   @6                        
   D=A               //   D = A (index)  
-  @THAT        //   A = LCL\ARG\THIS\THAT                       
-  A=M+D             //   A = ramTHAT+D (D=index=offset)                          
+  @THAT                               
+  A=M+D             //   A = ram[THAT]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       

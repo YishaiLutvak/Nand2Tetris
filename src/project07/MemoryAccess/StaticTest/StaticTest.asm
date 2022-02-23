@@ -8,7 +8,7 @@
 // push constant 111    (line 7)
 
   @111                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 111
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -18,7 +18,7 @@
 // push constant 333    (line 8)
 
   @333                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 333
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -28,7 +28,7 @@
 // push constant 888    (line 9)
 
   @888                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 888
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D

@@ -8,7 +8,7 @@
 // push constant 7    (line 7)
 
   @7                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 7
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -18,7 +18,7 @@
 // push constant 8    (line 8)
 
   @8                                   
-  D=A               //   D = A (value)
+  D=A               //   D = 8
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
