@@ -4,12 +4,12 @@ import project07.Constants.CommandType
 
 class CodeWriter {
 
-    private static CodeWriter instance = null //singleton
+    private static CodeWriter instance = null // singleton
     private static FileWriter out = null
     private static String currentFileName = null
-    private static eqIndex = 0
-    private static gtIndex = 0
-    private static ltIndex = 0
+    private static eqCounter = 0
+    private static gtICounter = 0
+    private static ltCounter = 0
     private static final myMap = [
             local:'LCL',
             argument:'ARG',
@@ -19,8 +19,9 @@ class CodeWriter {
     ]
 
     /**
-     *
-     * @param outputFile
+     * Constructor
+     * Opens the output file and gets ready to write into it.
+     * @param outputFile - path of output file.
      */
     private CodeWriter(File outputFile) {
         if (outputFile.isDirectory()) {
@@ -33,19 +34,19 @@ class CodeWriter {
     }
 
     /**
-     * singleton
-     * @param file
-     * @return
+     * Singleton
+     * @param outputFile - path of output file.
+     * @return instance of CodeWriter.
      */
-    static CodeWriter getInstance(File file) {
+    static CodeWriter getInstance(File outputFile) {
         if (instance == null) {
-            instance = new CodeWriter(file)
+            instance = new CodeWriter(outputFile)
         }
         return instance
     }
 
     /**
-     * setter and add comment at assembly file
+     * Setter and add comment at assembly file
      * @param file
      */
     static void setCurrentFileName(String file) {
@@ -54,17 +55,17 @@ class CodeWriter {
     }
 
     /**
-     *
-     * @param command
+     * Writes to the output file the assembly code that implements the given arithmetic command.
+     * @param command - string arithmetic of command.
      */
     static void writeArithmetic(String command) {
         switch (command) {
             case 'add' -> out << Constants.ADD
             case 'sub' -> out << Constants.SUB
             case 'neg' -> out << Constants.NEG
-            case 'eq' -> out << Constants.EQ.replace('[index]', "${eqIndex++}")
-            case 'gt' -> out << Constants.GT.replace('[index]', "${gtIndex++}")
-            case 'lt' -> out << Constants.LT.replace('[index]', "${ltIndex++}")
+            case 'eq' -> out << Constants.EQ.replace('{index}', "${eqCounter++}")
+            case 'gt' -> out << Constants.GT.replace('{index}', "${gtICounter++}")
+            case 'lt' -> out << Constants.LT.replace('{index}', "${ltCounter++}")
             case 'and' -> out << Constants.AND
             case 'or' -> out << Constants.OR
             case 'not' -> out << Constants.NOT
@@ -72,55 +73,58 @@ class CodeWriter {
     }
 
     /**
-     *
-     * @param command
-     * @param segment
-     * @param index
+     * Writes to the output file the assembly code that
+     * implements the given command, where command is either C_PUSH or C_POP.
+     * @param command - type of command - first word in command.
+     * @param segment - name of segment - second word in command.
+     * @param index - offset in segment - last word in command.
      */
     static void writePushPop(CommandType command, String segment, int index) {
         switch (command) {
+            //
             case CommandType.C_PUSH-> switch (segment) {
                 case 'constant' -> out << Constants.PUSH_CONSTANT
-                        .replace('[value]', "${index}")
+                        .replace('{value}', "${index}")
                 case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
-                        .replace('[index]', "${index}")
-                        .replace('[segment]', "${myMap[segment]}")
+                        .replace('{index}', "${index}")
+                        .replace('{segment}', "${myMap[segment]}")
                 case 'temp' -> out << Constants.PUSH_TEMP
-                        .replace('[index]', "${index}")
+                        .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.PUSH_POINTER.replace('[index]','THIS')
-                    case 1 -> out << Constants.PUSH_POINTER.replace('[index]','THAT')}
+                    case 0 -> out << Constants.PUSH_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants.PUSH_POINTER.replace('{index}','THAT')}
                 case 'static' -> out << Constants.PUSH_STATIC
-                        .replace('[index]', "${currentFileName}.${index}")
+                        .replace('{index}', "${currentFileName}.${index}")
             }
+            //
             case CommandType.C_POP -> switch (segment) {
                 case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
-                        .replace('[offset]', 'A=A+1\n  ' * index)
-                        .replace('[segment]',
+                        .replace('{index}', 'A=A+1\n  ' * index)
+                        .replace('{segment}',
                                 "${myMap[segment]}")
                 case 'temp' -> out << Constants.POP_TEMP
-                        .replace('[index]', "${index}")
+                        .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.POP_POINTER.replace('[index]','THIS')
-                    case 1 -> out << Constants.POP_POINTER.replace('[index]','THAT')
+                    case 0 -> out << Constants.POP_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants.POP_POINTER.replace('{index}','THAT')
                 }
                 case 'static' -> out << Constants.POP_STATIC
-                        .replace('[index]', "${currentFileName}.${index}")
+                        .replace('{index}', "${currentFileName}.${index}")
             }
         }
     }
 
     /**
-     *
-     * @param command
-     * @param numberLine
+     * Emit comment in output file.
+     * @param command - string of command.
+     * @param numberLine - number of line.
      */
     static void emitComment(String command, int numberLine) {
         out << "// ${command}    (line ${numberLine})\n"
     }
 
     /**
-     *
+     * Closes the output file.
      */
     static void close() {
         out.close()

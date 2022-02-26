@@ -175,7 +175,7 @@
 // push local 0    (line 21)
 
   @0                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @LCL                               
   A=M+D             //   A = ram[LCL]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
@@ -188,7 +188,7 @@
 // push that 5    (line 22)
 
   @5                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @THAT                               
   A=M+D             //   A = ram[THAT]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
@@ -213,7 +213,7 @@
 // push argument 1    (line 24)
 
   @1                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @ARG                               
   A=M+D             //   A = ram[ARG]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
@@ -238,7 +238,7 @@
 // push this 6    (line 26)
 
   @6                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @THIS                               
   A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
@@ -251,7 +251,7 @@
 // push this 6    (line 27)
 
   @6                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @THIS                               
   A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
   D=M               //   D = ram[A]  

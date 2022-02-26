@@ -131,7 +131,7 @@
 // push this 2    (line 19)
 
   @2                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @THIS                               
   A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
@@ -156,7 +156,7 @@
 // push that 6    (line 21)
 
   @6                        
-  D=A               //   D = A (index)  
+  D=A               //   D = A (A=index=offset)  
   @THAT                               
   A=M+D             //   A = ram[THAT]+D (D=index=offset)                          
   D=M               //   D = ram[A]  

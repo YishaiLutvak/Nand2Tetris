@@ -57,18 +57,18 @@ class Constants {
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ.[index]_TRUE  
+  @EQ.{index}_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ.[index]_END                             
+  @EQ.{index}_END                             
   0;JMP             //   jump to label of END
-(EQ.[index]_TRUE)                      
+(EQ.{index}_TRUE)                      
   @SP               //   A = 0                               
   A=M               //   A = ram[0]  
   M=-1              //   ram[A] = -1
-(EQ.[index]_END)    
+(EQ.{index}_END)    
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -81,18 +81,18 @@ class Constants {
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT.[index]_TRUE          
+  @GT.{index}_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT.[index]_END         
+  @GT.{index}_END         
   0;JMP             //   jump to label of END             
-(GT.[index]_TRUE)                            
+(GT.{index}_TRUE)                            
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=-1              //   ram[A] = -1                      
-(GT.[index]_END)                              
+(GT.{index}_END)                              
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
@@ -105,18 +105,18 @@ class Constants {
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT.[index]_TRUE        
+  @LT.{index}_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT.[index]_END        
+  @LT.{index}_END        
   0;JMP             //   jump to label of END           
-(LT.[index]_TRUE)                          
+(LT.{index}_TRUE)                          
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=-1              //   ram[A] = -1                    
-(LT.[index]_END)                            
+(LT.{index}_END)                            
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
@@ -159,8 +159,8 @@ class Constants {
 /$
 
     static final String PUSH_CONSTANT = $/
-  @[value]                                   
-  D=A               //   D = [value]
+  @{value}                                   
+  D=A               //   D = {value}
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
   M=D               //   ram[A] = D
@@ -170,10 +170,10 @@ class Constants {
 /$
 
     static final String PUSH_LCL_ARG_THIS_THAT = $/
-  @[index]                        
-  D=A               //   D = A (index)  
-  @[segment]                               
-  A=M+D             //   A = ram[[segment]]+D (D=index=offset)                          
+  @{index}                        
+  D=A               //   D = A (A=index=offset)  
+  @{segment}                               
+  A=M+D             //   A = ram[{segment}]+D (D=index=offset)                          
   D=M               //   D = ram[A]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
@@ -187,16 +187,16 @@ class Constants {
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
   D=M               //   D = ram[A]  
-  @[segment]        
-  A=M               //   A = ram[[segment]]             
-  [offset]M=D               //   ram[A] = D      
+  @{segment}        
+  A=M               //   A = ram[{segment}]             
+  {index}M=D               //   ram[A] = D      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
 /$
 
     static final String PUSH_TEMP = $/
-  @[index]
+  @{index}
   A=A+1
   A=A+1
   A=A+1
@@ -215,7 +215,7 @@ class Constants {
   @SP               //   A = 0
   A=M-1             //   A = ram[0]-1  
   D=M               //   D = ram[A]    
-  @[index]
+  @{index}
   A=A+1
   A=A+1
   A=A+1
@@ -228,8 +228,8 @@ class Constants {
 /$
 
     static final String PUSH_STATIC = $/
-  @[index]
-  D=M               //   D = ram[[index]]
+  @{index}
+  D=M               //   D = ram[{index}]
   @SP               //   A = 0
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D
@@ -243,14 +243,14 @@ class Constants {
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
   D=M               //   D = ram[A]         
-  @[index]                     
-  M=D               //   ram[[index]] = D  
+  @{index}                     
+  M=D               //   ram[{index}] = D  
 
 /$
 
     static final String PUSH_POINTER = $/
-  @[index]
-  D=M               //   D = A[[index]]
+  @{index}
+  D=M               //   D = A[{index}]
   @SP               //   A = 0            
   A=M               //   A = ram[0]
   M=D               //   ram[A] = D       
@@ -263,8 +263,8 @@ class Constants {
   @SP               //   A = 0            
   A=M-1             //   A = ram[0]-1       
   D=M               //   D = ram[A]       
-  @[index]                
-  M=D               //   ram[[index]] = D            
+  @{index}                
+  M=D               //   ram[{index}] = D            
   @SP               //   A = 0 
   M=M-1             //   ram[0] = ram[0]-1
 

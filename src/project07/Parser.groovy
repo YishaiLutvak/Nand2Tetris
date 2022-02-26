@@ -9,17 +9,18 @@ class Parser {
     private static String currentCommand
 
     /**
-     *
-     * @param file
+     * Constructor
+     * Open the input file and gets reade to parse.
+     * @param inputFile.
      */
     private Parser(File inputFile) {
         file = inputFile
     }
 
     /**
-     * singleton
-     * @param file
-     * @return
+     * Singleton
+     * @param inputFile.
+     * @return instance of Parser.
      */
     static Parser getInstance(File inputFile) {
         if (instance == null) {
@@ -29,16 +30,16 @@ class Parser {
     }
 
     /**
-     * setter
-     * @param cmd
+     * Setter
+     * @param cmd - string of cmd.
      */
     static void setCurrentCommand(String cmd) {
         currentCommand = cmd
     }
 
     /**
-     * getter
-     * @return
+     * @return CommandType - a constant representing the type of the current command.
+     * C_ARITHMETIC is returned for all the arithmetic/logical commands.
      */
     static def getCommandType() {
         switch (currentCommand.split(' ')[0]) {
@@ -50,16 +51,17 @@ class Parser {
     }
 
     /**
-     *
-     * @return
+     * @return the first argument or current command.
+     * In the case of C_ARITHMETIC, the command itself (add, sub, etc.) is returned.
+     * Should not be called if the current command is C_RETURN.
      */
     static String arg1() {
         currentCommand.split(' ')[1]
     }
 
     /**
-     *
-     * @return
+     * @return the second argument of current command.
+     * Should be called only if the current command is C_PUSH, C_POP, C_FUNCTION, or C_CALL.
      */
     static int arg2() {
         currentCommand.split(' ')[2] as int
