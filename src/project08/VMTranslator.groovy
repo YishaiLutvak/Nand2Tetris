@@ -1,14 +1,6 @@
-package project07
+package project08
 
-import project07.Constants.CommandType
-
-//input to test
-//1. C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
-//2. C:\Nand2Tetris\src\project07\StackArithmetic\StackTest
-//3. C:\Nand2Tetris\src\project07\MemoryAccess\BasicTest
-//4. C:\Nand2Tetris\src\project07\MemoryAccess\PointerTest
-//5. C:\Nand2Tetris\src\project07\MemoryAccess\StaticTest
-
+import project08.Constants.CommandType
 
 /**
  * Translator from "vm" intermediate-language-code to hack assembly-language-code.
@@ -75,3 +67,4 @@ class VMTranslator {
         }
     }
 }
+
