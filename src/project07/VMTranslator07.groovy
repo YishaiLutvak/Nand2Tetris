@@ -1,6 +1,6 @@
 package project07
 
-import project07.Constants.CommandType
+import project07.Constants07.CommandType
 
 //input to test
 //1. C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
@@ -13,10 +13,10 @@ import project07.Constants.CommandType
 /**
  * Translator from "vm" intermediate-language-code to hack assembly-language-code.
  */
-class VMTranslator {
+class VMTranslator07 {
 
-    static CodeWriter writer = null
-    static Parser parser = null
+    static CodeWriter07 writer = null
+    static Parser07 parser = null
 
     /**
      * Manages the translation of vm files into a hack file.
@@ -36,7 +36,7 @@ class VMTranslator {
      * @param vmFile - path of vm file.
      */
     static void handleSingleFile(File vmFile) {
-        writer = CodeWriter.getInstance(vmFile)
+        writer = CodeWriter07.getInstance(vmFile)
         writer.setCurrentFileName(vmFile.name)
         translateVmFile(vmFile)
         writer.close()
@@ -47,7 +47,7 @@ class VMTranslator {
      * @param dir - path of directory.
      */
     static void handleDirectory(File dir) {
-        writer = CodeWriter.getInstance(dir)
+        writer = CodeWriter07.getInstance(dir)
         dir.eachFileMatch(~/.*\.vm/) {
             writer.setCurrentFileName(it.name)
             translateVmFile(it)
@@ -62,7 +62,7 @@ class VMTranslator {
      * @param vmFile - vm file to translate.
      */
     static void translateVmFile(File vmFile) {
-        parser = Parser.getInstance(vmFile)
+        parser = Parser07.getInstance(vmFile)
         vmFile.eachLine() { line, numberLine ->
             writer.emitComment(line, numberLine)
             parser.setCurrentCommand(line)

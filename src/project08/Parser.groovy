@@ -46,6 +46,12 @@ class Parser {
             case 'push'-> CommandType.C_PUSH
             case 'pop'-> CommandType.C_POP
             case 'add','sub','neg','eq','gt','lt','and','or','not'-> CommandType.C_ARITHMETIC
+            case 'label'-> CommandType.C_LABEL
+            case 'goto' -> CommandType.C_GOTO
+            case 'if-goto' -> CommandType.C_IF
+            case 'call' -> CommandType.C_CALL
+            case 'return' -> CommandType.C_RETURN
+            case 'function' -> CommandType.C_FUNCTION
             default -> CommandType.C_NOTHING
         }
     }

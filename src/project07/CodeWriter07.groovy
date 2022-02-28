@@ -1,10 +1,10 @@
 package project07
 
-import project07.Constants.CommandType
+import project07.Constants07.CommandType
 
-class CodeWriter {
+class CodeWriter07 {
 
-    private static CodeWriter instance = null // singleton
+    private static CodeWriter07 instance = null // singleton
     private static FileWriter out = null
     private static String currentFileName = null
     private static eqCounter = 0
@@ -23,7 +23,7 @@ class CodeWriter {
      * Opens the output file and gets ready to write into it.
      * @param outputFile - path of output file.
      */
-    private CodeWriter(File outputFile) {
+    private CodeWriter07(File outputFile) {
         if (outputFile.isDirectory()) {
             out = new FileWriter(new File(outputFile, "${outputFile.name}.asm"))
         }
@@ -38,9 +38,9 @@ class CodeWriter {
      * @param outputFile - path of output file.
      * @return instance of CodeWriter.
      */
-    static CodeWriter getInstance(File outputFile) {
+    static CodeWriter07 getInstance(File outputFile) {
         if (instance == null) {
-            instance = new CodeWriter(outputFile)
+            instance = new CodeWriter07(outputFile)
         }
         return instance
     }
@@ -60,15 +60,15 @@ class CodeWriter {
      */
     static void writeArithmetic(String command) {
         switch (command) {
-            case 'add' -> out << Constants.ADD
-            case 'sub' -> out << Constants.SUB
-            case 'neg' -> out << Constants.NEG
-            case 'eq' -> out << Constants.EQ.replace('{index}', "${eqCounter++}")
-            case 'gt' -> out << Constants.GT.replace('{index}', "${gtICounter++}")
-            case 'lt' -> out << Constants.LT.replace('{index}', "${ltCounter++}")
-            case 'and' -> out << Constants.AND
-            case 'or' -> out << Constants.OR
-            case 'not' -> out << Constants.NOT
+            case 'add' -> out << Constants07.ADD
+            case 'sub' -> out << Constants07.SUB
+            case 'neg' -> out << Constants07.NEG
+            case 'eq' -> out << Constants07.EQ.replace('{index}', "${eqCounter++}")
+            case 'gt' -> out << Constants07.GT.replace('{index}', "${gtICounter++}")
+            case 'lt' -> out << Constants07.LT.replace('{index}', "${ltCounter++}")
+            case 'and' -> out << Constants07.AND
+            case 'or' -> out << Constants07.OR
+            case 'not' -> out << Constants07.NOT
         }
     }
 
@@ -83,32 +83,32 @@ class CodeWriter {
         switch (command) {
             //
             case CommandType.C_PUSH-> switch (segment) {
-                case 'constant' -> out << Constants.PUSH_CONSTANT
+                case 'constant' -> out << Constants07.PUSH_CONSTANT
                         .replace('{value}', "${index}")
-                case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
+                case 'local', 'argument', 'this', 'that' -> out << Constants07.PUSH_LCL_ARG_THIS_THAT
                         .replace('{index}', "${index}")
                         .replace('{segment}', "${myMap[segment]}")
-                case 'temp' -> out << Constants.PUSH_TEMP
+                case 'temp' -> out << Constants07.PUSH_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.PUSH_POINTER.replace('{index}','THIS')
-                    case 1 -> out << Constants.PUSH_POINTER.replace('{index}','THAT')}
-                case 'static' -> out << Constants.PUSH_STATIC
+                    case 0 -> out << Constants07.PUSH_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants07.PUSH_POINTER.replace('{index}','THAT')}
+                case 'static' -> out << Constants07.PUSH_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
             //
             case CommandType.C_POP -> switch (segment) {
-                case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
+                case 'local', 'argument', 'this', 'that' -> out << Constants07.POP_LCL_ARG_THIS_THAT
                         .replace('{index}', 'A=A+1\n  ' * index)
                         .replace('{segment}',
                                 "${myMap[segment]}")
-                case 'temp' -> out << Constants.POP_TEMP
+                case 'temp' -> out << Constants07.POP_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << Constants.POP_POINTER.replace('{index}','THIS')
-                    case 1 -> out << Constants.POP_POINTER.replace('{index}','THAT')
+                    case 0 -> out << Constants07.POP_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants07.POP_POINTER.replace('{index}','THAT')
                 }
-                case 'static' -> out << Constants.POP_STATIC
+                case 'static' -> out << Constants07.POP_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
         }

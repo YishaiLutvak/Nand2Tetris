@@ -1,6 +1,6 @@
 package project07
 
-class Constants {
+class Constants07 {
     static enum CommandType {
         C_ARITHMETIC,
         C_PUSH,

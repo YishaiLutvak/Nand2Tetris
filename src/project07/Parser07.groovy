@@ -1,10 +1,10 @@
 package project07
 
-import project07.Constants.CommandType
+import project07.Constants07.CommandType
 
-class Parser {
+class Parser07 {
 
-    private static Parser instance = null //singleton
+    private static Parser07 instance = null //singleton
     private static File file = null
     private static String currentCommand
 
@@ -13,7 +13,7 @@ class Parser {
      * Open the input file and gets reade to parse.
      * @param inputFile.
      */
-    private Parser(File inputFile) {
+    private Parser07(File inputFile) {
         file = inputFile
     }
 
@@ -22,9 +22,9 @@ class Parser {
      * @param inputFile.
      * @return instance of Parser.
      */
-    static Parser getInstance(File inputFile) {
+    static Parser07 getInstance(File inputFile) {
         if (instance == null) {
-            instance = new Parser(inputFile)
+            instance = new Parser07(inputFile)
         }
         return instance
     }

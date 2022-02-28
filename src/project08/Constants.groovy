@@ -270,4 +270,210 @@ class Constants {
   M=M-1             //   ram[0] = ram[0]-1
 
 /$
+
+    public static final String LABEL = $/
+({label})
+
+/$
+
+    public static final String GOTO = $/
+  @{label}
+  0; JMP
+
+/$
+
+    public static final String IF_GOTO = $/
+  @SP
+  M=M-1
+  A=M
+  D=M
+  @{label}
+  D;JNE
+
+/$
+
+
+    static final String CALL = $/
+  @{nameOfFunction}.Return-Address{index}  // push return-address
+  D=A
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1	
+  @LCL  // push LCL
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1	
+  @ARG  // push ARG
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1	
+  @THIS  // push THIS
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1	
+  @THAT  // push THAT
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1	
+  @SP  // ARG = SP-n-5
+  D=M
+  @{newARG}
+  D=D-A
+  @5
+  D=D-A
+  @ARG
+  M=D
+  @SP  // LCL = SP
+  D=M
+  @LCL
+  M=D	
+  @{nameOfFunction}  // goto g
+  0;JMP
+({nameOfFunction}.Return-Address{index})  // label return-address
+
+/$
+
+
+    static final String FUNCTION = $/
+({nameOfFunction})
+  @{numberOfLocals}
+  D=A
+  @{nameOfFunction}.End
+  D;JEQ
+({nameOfFunction}.Loop)  // (numberOfLocals != 0) jump if false
+  @SP
+  A=M
+  M=0
+  @SP
+  M=M+1
+  @{nameOfFunction}.Loop
+  D=D-1;JNE  // [numberOfLocals != 0) jump while 
+({nameOfFunction}.End)  // (numberOfLocals == 0) finish if true 
+
+/$
+
+    static final String RETURN = $/
+  // FRAME = LCL
+  @LCL
+  D=M
+  @5  // RET = * (FRAME-5)  // RAM[13] = (LOCAL - 5)
+  A=D-A
+  D=M
+  @13
+  M=D
+  @SP  // * ARG = pop()	
+  M=M-1
+  A=M
+  D=M
+  @ARG
+  A=M
+  M=D
+  @ARG  // SP = ARG+1 
+  D=M
+  @SP
+  M=D+1	
+  @LCL  // THAT = *(FRAM-1)
+  M=M-1
+  A=M
+  D=M
+  @THAT
+  M=D
+  @LCL  // THIS = *(FRAM-2) 
+  M=M-1
+  A=M
+  D=M
+  @THIS
+  M=D
+  @LCL  // ARG = *(FRAM-3)
+  M=M-1
+  A=M
+  D=M
+  @ARG
+  M=D				
+  @LCL  // LCL = *(FRAM-4)
+  M=M-1
+  A=M
+  D=M
+  @LCL
+  M=D		
+  @13  // goto RET
+  A=M
+  0; JMP
+
+/$
+
+
+    static final String BOOTSTRAP = '''
+  // bootstrap
+  @256
+  D=A
+  @SP
+  M=D
+  @Sys.init$RETURN0  // push return-address
+  D=A
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  @LCL  // push LCL
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  @ARG  // push ARG
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  @THIS  // push THIS
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  @THAT  // push THAT
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  @SP  // ARG = SP-n-5
+  D=M
+  @0
+  D=D-A
+  @5
+  D=D-A
+  @ARG
+  M=D
+  @SP  // LCL = SP
+  D=M
+  @LCL
+  M=D
+  @Sys.init
+  0;JMP
+(Sys.init$RETURN0)
+
+'''
+
 }

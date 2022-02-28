@@ -10,6 +10,7 @@ class CodeWriter {
     private static eqCounter = 0
     private static gtICounter = 0
     private static ltCounter = 0
+    private static callCounter = 0
     private static final myMap = [
             local:'LCL',
             argument:'ARG',
@@ -60,15 +61,15 @@ class CodeWriter {
      */
     static void writeArithmetic(String command) {
         switch (command) {
-            case 'add' -> out << project07.Constants.ADD
-            case 'sub' -> out << project07.Constants.SUB
-            case 'neg' -> out << project07.Constants.NEG
-            case 'eq' -> out << project07.Constants.EQ.replace('{index}', "${eqCounter++}")
-            case 'gt' -> out << project07.Constants.GT.replace('{index}', "${gtICounter++}")
-            case 'lt' -> out << project07.Constants.LT.replace('{index}', "${ltCounter++}")
-            case 'and' -> out << project07.Constants.AND
-            case 'or' -> out << project07.Constants.OR
-            case 'not' -> out << project07.Constants.NOT
+            case 'add' -> out << Constants.ADD
+            case 'sub' -> out << Constants.SUB
+            case 'neg' -> out << Constants.NEG
+            case 'eq' -> out << Constants.EQ.replace('{index}', "${eqCounter++}")
+            case 'gt' -> out << Constants.GT.replace('{index}', "${gtICounter++}")
+            case 'lt' -> out << Constants.LT.replace('{index}', "${ltCounter++}")
+            case 'and' -> out << Constants.AND
+            case 'or' -> out << Constants.OR
+            case 'not' -> out << Constants.NOT
         }
     }
 
@@ -83,36 +84,69 @@ class CodeWriter {
         switch (command) {
         //
             case CommandType.C_PUSH-> switch (segment) {
-                case 'constant' -> out << project07.Constants.PUSH_CONSTANT
+                case 'constant' -> out << Constants.PUSH_CONSTANT
                         .replace('{value}', "${index}")
-                case 'local', 'argument', 'this', 'that' -> out << project07.Constants.PUSH_LCL_ARG_THIS_THAT
+                case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
                         .replace('{index}', "${index}")
                         .replace('{segment}', "${myMap[segment]}")
-                case 'temp' -> out << project07.Constants.PUSH_TEMP
+                case 'temp' -> out << Constants.PUSH_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << project07.Constants.PUSH_POINTER.replace('{index}','THIS')
-                    case 1 -> out << project07.Constants.PUSH_POINTER.replace('{index}','THAT')}
-                case 'static' -> out << project07.Constants.PUSH_STATIC
+                    case 0 -> out << Constants.PUSH_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants.PUSH_POINTER.replace('{index}','THAT')}
+                case 'static' -> out << Constants.PUSH_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
                 //
             case CommandType.C_POP -> switch (segment) {
-                case 'local', 'argument', 'this', 'that' -> out << project07.Constants.POP_LCL_ARG_THIS_THAT
+                case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
                         .replace('{index}', 'A=A+1\n  ' * index)
                         .replace('{segment}',
                                 "${myMap[segment]}")
-                case 'temp' -> out << project07.Constants.POP_TEMP
+                case 'temp' -> out << Constants.POP_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
-                    case 0 -> out << project07.Constants.POP_POINTER.replace('{index}','THIS')
-                    case 1 -> out << project07.Constants.POP_POINTER.replace('{index}','THAT')
+                    case 0 -> out << Constants.POP_POINTER.replace('{index}','THIS')
+                    case 1 -> out << Constants.POP_POINTER.replace('{index}','THAT')
                 }
-                case 'static' -> out << project07.Constants.POP_STATIC
+                case 'static' -> out << Constants.POP_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
         }
     }
+
+    static void writeLabel(String label) {
+        out <<  Constants.LABEL.replace('{label}', "${currentFileName}.${label}")
+    }
+
+    static void writeGoto(String label) {
+        out <<  Constants.GOTO.replace('{label}', "${currentFileName}.${label}")
+    }
+
+    static void writeIfGoto(String label) {
+        out <<  Constants.IF_GOTO.replace('{label}', "${currentFileName}.${label}")
+    }
+
+    static void writeCall(String functionName, int numOfArguments) {
+        out << Constants.CALL.replace('{nameOfFunction}', "${functionName}")
+                        .replace('{newARG}', "${numOfArguments}")
+                        .replace('{index}', "${callCounter++}")
+    }
+
+    static void writeReturn() {
+        out << Constants.RETURN
+    }
+
+    static void writeFunction(String functionName, int numOfLocals) {
+        out << Constants.FUNCTION
+                .replace('{nameOfFunction}', "${functionName}")
+                .replace('{numberOfLocals}', "${numOfLocals}")
+    }
+
+    static void writeBootstrap(){
+        out << Constants.BOOTSTRAP
+    }
+
 
     /**
      * Emit comment in output file.

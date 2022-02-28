@@ -2,6 +2,15 @@ package project08
 
 import project08.Constants.CommandType
 
+
+// input to tests
+// C:\Nand2Tetris\src\project08\FunctionCalls\FibonacciElement
+// C:\Nand2Tetris\src\project08\FunctionCalls\NestedCall
+// C:\Nand2Tetris\src\project08\FunctionCalls\SimpleFunction
+// C:\Nand2Tetris\src\project08\FunctionCalls\StaticsTest
+// C:\Nand2Tetris\src\project08\ProgramFlow\BasicLoop
+// C:\Nand2Tetris\src\project08\ProgramFlow\FibonacciSeries
+
 /**
  * Translator from "vm" intermediate-language-code to hack assembly-language-code.
  */
@@ -63,6 +72,12 @@ class VMTranslator {
                 case CommandType.C_ARITHMETIC -> writer.writeArithmetic(line)
                 case CommandType.C_PUSH,CommandType.C_POP ->
                     writer.writePushPop(commandType, parser.arg1(), parser.arg2())
+                case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())
+                case CommandType.C_GOTO -> writer.writeGoto(parser.arg1())
+                case CommandType.C_IF -> writer.writeIfGoto(parser.arg1())
+                case CommandType.C_CALL -> writer.writeCall(parser.arg1(), parser.arg2())
+                case CommandType.C_RETURN -> writer.writeReturn()
+                case CommandType.C_FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
             }
         }
     }
