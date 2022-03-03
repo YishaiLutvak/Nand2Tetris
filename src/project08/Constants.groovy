@@ -406,7 +406,7 @@ class Constants {
   D=M              //   D = ram[ram[0]]         
   @ARG             //   A = ARG         
   A=M              //   A = ram[ARG]              
-  M=D              //   ram[A] = ram[ram[0]]  
+  M=D              //   ram[ram[ARG]] = ram[ram[0]]  
   
   // *** SP = ARG+1 ***
   @ARG             //   A = ARG 

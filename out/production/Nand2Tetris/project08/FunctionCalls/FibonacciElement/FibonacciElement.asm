@@ -131,6 +131,28 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // lt                     // checks if n<2    (line 14)
+
+  @SP               //   A = 0                          
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
+  D=M               //   D = ram[A]                     
+  @SP               //   A = 0                          
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
+  D=M-D             //   D = ram[A]-D                   
+  @LT_0_TRUE        
+  D;JLT             //   if D<0 jump to label of TRUE   
+  @SP               //   A = 0                          
+  A=M               //   A = ram[0]                     
+  M=0               //   ram[A] = 0                     
+  @LT_0_END        
+  0;JMP             //   jump to label of END           
+(LT_0_TRUE)                          
+  @SP               //   A = 0                          
+  A=M               //   A = ram[0]                     
+  M=-1              //   ram[A] = -1                    
+(LT_0_END)                            
+  @SP               //   A = 0                          
+  M=M+1             //   ram[0] = ram[0]+1              
+
 // if-goto IF_TRUE    (line 15)
 
   @SP               //   A = 0             
@@ -183,7 +205,7 @@
   D=M              //   D = ram[ram[0]]         
   @ARG             //   A = ARG         
   A=M              //   A = ram[ARG]              
-  M=D              //   ram[A] = ram[ram[0]]  
+  M=D              //   ram[ram[ARG]] = ram[ram[0]]  
   
   // *** SP = ARG+1 ***
   @ARG             //   A = ARG 
@@ -443,6 +465,17 @@
 (Main.fibonacci$ReturnAddress1)  
 
 // add                    // returns fib(n-1) + fib(n-2)    (line 29)
+
+  @SP               //   A = 0
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
+  D=M               //   D = ram[A]
+  @SP               //   A = 0 
+  AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
+  D=M+D             //   D = ram[A]+D
+  M=D               //   ram[A] = D
+  @SP               //   A = 0
+  M=M+1             //   ram[0] = ram[0]+1
+
 // return    (line 30)
 
   // *** FRAME = LCL ***
@@ -464,7 +497,7 @@
   D=M              //   D = ram[ram[0]]         
   @ARG             //   A = ARG         
   A=M              //   A = ram[ARG]              
-  M=D              //   ram[A] = ram[ram[0]]  
+  M=D              //   ram[ram[ARG]] = ram[ram[0]]  
   
   // *** SP = ARG+1 ***
   @ARG             //   A = ARG 
