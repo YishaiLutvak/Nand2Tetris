@@ -65,12 +65,15 @@ class VMTranslator07 {
         parser = Parser07.getInstance(vmFile)
         vmFile.eachLine() { line, numberLine ->
             writer.emitComment(line, numberLine)
-            parser.setCurrentCommand(line)
-            def commandType = parser.getCommandType()
-            switch (commandType) {
-                case CommandType.C_ARITHMETIC -> writer.writeArithmetic(line)
-                case CommandType.C_PUSH,CommandType.C_POP ->
-                    writer.writePushPop(commandType, parser.arg1(), parser.arg2())
+            // check if line is not comment
+            if (!line.startsWith("//")) {
+                parser.setCurrentCommand(line)
+                def commandType = parser.getCommandType()
+                switch (commandType) {
+                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(line)
+                    case CommandType.C_PUSH, CommandType.C_POP ->
+                        writer.writePushPop(commandType, parser.arg1(), parser.arg2())
+                }
             }
         }
     }
