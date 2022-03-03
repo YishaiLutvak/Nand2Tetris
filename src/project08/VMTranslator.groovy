@@ -74,7 +74,7 @@ class VMTranslator {
                     writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                 case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())
                 case CommandType.C_GOTO -> writer.writeGoto(parser.arg1())
-                case CommandType.C_IF -> writer.writeIfGoto(parser.arg1())
+                case CommandType.C_IF -> writer.writeIf(parser.arg1())
                 case CommandType.C_CALL -> writer.writeCall(parser.arg1(), parser.arg2())
                 case CommandType.C_RETURN -> writer.writeReturn()
                 case CommandType.C_FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())

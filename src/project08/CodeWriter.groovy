@@ -115,38 +115,66 @@ class CodeWriter {
         }
     }
 
+    /**
+     *
+     */
+    static void writeInit(){
+        out << Constants.BOOTSTRAP
+    }
+
+    /**
+     *
+     * @param label
+     */
     static void writeLabel(String label) {
         out <<  Constants.LABEL.replace('{label}', "${currentFileName}.${label}")
     }
 
+    /**
+     *
+     * @param label
+     */
     static void writeGoto(String label) {
         out <<  Constants.GOTO.replace('{label}', "${currentFileName}.${label}")
     }
 
-    static void writeIfGoto(String label) {
+    /**
+     *
+     * @param label
+     */
+    static void writeIf(String label) {
         out <<  Constants.IF_GOTO.replace('{label}', "${currentFileName}.${label}")
     }
 
+    /**
+     *
+     * @param functionName
+     * @param numOfArguments
+     */
     static void writeCall(String functionName, int numOfArguments) {
-        out << Constants.CALL.replace('{nameOfFunction}', "${functionName}")
-                        .replace('{newARG}', "${numOfArguments}")
-                        .replace('{index}', "${callCounter++}")
+        out << Constants.CALL
+                .replace('{nameOfFunction}', "${functionName}")
+                .replace('{numARG}', "${numOfArguments}")
+                .replace('{index}', "${callCounter++}")
     }
 
+    /**
+     *
+     */
     static void writeReturn() {
         out << Constants.RETURN
     }
 
+    /**
+     *
+     * @param functionName
+     * @param numOfLocals
+     */
     static void writeFunction(String functionName, int numOfLocals) {
         out << Constants.FUNCTION
                 .replace('{nameOfFunction}', "${functionName}")
                 .replace('{numberOfLocals}', "${numOfLocals}")
     }
-
-    static void writeBootstrap(){
-        out << Constants.BOOTSTRAP
-    }
-
 
     /**
      * Emit comment in output file.
