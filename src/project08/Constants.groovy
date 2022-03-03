@@ -58,18 +58,18 @@ class Constants {
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ.{index}_TRUE  
+  @EQ_{index}_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ.{index}_END                             
+  @EQ_{index}_END                             
   0;JMP             //   jump to label of END
-(EQ.{index}_TRUE)                      
+(EQ_{index}_TRUE)                      
   @SP               //   A = 0                               
   A=M               //   A = ram[0]  
   M=-1              //   ram[A] = -1
-(EQ.{index}_END)    
+(EQ_{index}_END)    
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -82,18 +82,18 @@ class Constants {
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT.{index}_TRUE          
+  @GT_{index}_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT.{index}_END         
+  @GT_{index}_END         
   0;JMP             //   jump to label of END             
-(GT.{index}_TRUE)                            
+(GT_{index}_TRUE)                            
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=-1              //   ram[A] = -1                      
-(GT.{index}_END)                              
+(GT_{index}_END)                              
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
@@ -106,18 +106,18 @@ class Constants {
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT.{index}_TRUE        
+  @LT_{index}_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT.{index}_END        
+  @LT_{index}_END        
   0;JMP             //   jump to label of END           
-(LT.{index}_TRUE)                          
+(LT_{index}_TRUE)                          
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=-1              //   ram[A] = -1                    
-(LT.{index}_END)                            
+(LT_{index}_END)                            
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
@@ -164,7 +164,7 @@ class Constants {
   D=A               //   D = {value}
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = {value}
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -172,13 +172,13 @@ class Constants {
 
     static final String PUSH_LCL_ARG_THIS_THAT = $/
   @{index}                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = {index}  
   @{segment}                               
-  A=M+D             //   A = ram[{segment}]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[{segment}]+{index}                          
+  D=M               //   D = ram[ram[{segment}]+{index}]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
@@ -187,10 +187,10 @@ class Constants {
     static final String POP_LCL_ARG_THIS_THAT = $/
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @{segment}        
   A=M               //   A = ram[{segment}]             
-  {index}M=D               //   ram[A] = D      
+  {index}M=D               //   ram[ram[{segment}]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -203,10 +203,10 @@ class Constants {
   A=A+1
   A=A+1
   A=A+1             //   A = index+5
-  D=M               //   D = ram[A]
+  D=M               //   D = ram[index+5]
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
-  M=D               //   ram[A] = D        
+  M=D               //   ram[ram[0]] = ram[index+5]         
   @SP               //   A = 0             
   M=M+1             //   ram[0] = ram[0]+1 
 
@@ -215,14 +215,14 @@ class Constants {
     static final String POP_TEMP = $/
   @SP               //   A = 0
   A=M-1             //   A = ram[0]-1  
-  D=M               //   D = ram[A]    
+  D=M               //   D = ram[ram[0]-1]    
   @{index}
   A=A+1
   A=A+1
   A=A+1
   A=A+1
   A=A+1             //   A = index+5
-  M=D               //   ram[A] = D
+  M=D               //   ram[index+5] = D
   @SP               //   A = 0
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -233,7 +233,7 @@ class Constants {
   D=M               //   D = ram[{index}]
   @SP               //   A = 0
   A=M               //   A = ram[0]
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = D
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -243,7 +243,7 @@ class Constants {
   @SP               //   A = 0         
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
-  D=M               //   D = ram[A]         
+  D=M               //   D = ram[ram[0]]         
   @{index}                     
   M=D               //   ram[{index}] = D  
 
@@ -254,7 +254,7 @@ class Constants {
   D=M               //   D = A[{index}]
   @SP               //   A = 0            
   A=M               //   A = ram[0]
-  M=D               //   ram[A] = D       
+  M=D               //   ram[ram[0]] = D       
   @SP               //   A = 0                      
   M=M+1             //   ram[0] = ram[0]+1         
 
@@ -263,7 +263,7 @@ class Constants {
     static final String POP_POINTER = $/
   @SP               //   A = 0            
   A=M-1             //   A = ram[0]-1       
-  D=M               //   D = ram[A]       
+  D=M               //   D = ram[ram[0]-1]       
   @{index}                
   M=D               //   ram[{index}] = D            
   @SP               //   A = 0 
@@ -293,13 +293,13 @@ class Constants {
 /$
 
 
-    static final String CALL = $/  
+    static final String CALL = '''  
   // *** push return-address *** 
-  @{nameOfFunction}.ReturnAddress{index}  
-  D=A               //   D = {nameOfFunction}.ReturnAddress{index}        
+  @{nameOfFunction}$ReturnAddress{index}  
+  D=A               //   D = {nameOfFunction}$ReturnAddress{index}        
   @SP               //   A = 0              
   A=M               //   A = ram[0]         
-  M=D               //   ram[ram[0]] = {nameOfFunction}.ReturnAddress{index}         
+  M=D               //   ram[ram[0]] = {nameOfFunction}$ReturnAddress{index}         
   @SP               //   A = 0              
   M=M+1             //   ram[0] = ram[0]+1  
 
@@ -360,9 +360,9 @@ class Constants {
   0;JMP            //   jump to {nameOfFunction}
 
   // *** label return-address *** 
-({nameOfFunction}.ReturnAddress{index})  
+({nameOfFunction}$ReturnAddress{index})  
 
-/$
+'''
 
 
     static final String FUNCTION = $/
@@ -372,17 +372,17 @@ class Constants {
   // *** initialize local variables ***
   @{numberOfLocals}
   D=A              //  D = {numberOfLocals}
-  @{nameOfFunction}.End
-  D;JEQ            //  if (numberOfLocals == 0) jump to {nameOfFunction}.End 
-({nameOfFunction}.Loop)              
+  @{nameOfFunction}_End
+  D;JEQ            //  if (numberOfLocals == 0) jump to {nameOfFunction}_End 
+({nameOfFunction}_Loop)              
   @SP              //   A = 0             
   A=M              //   A = ram[0]        
   M=0              //   ram[ram[0]] = 0        
   @SP              //   A = 0             
   M=M+1            //   ram[0] = ram[0]+1 
-  @{nameOfFunction}.Loop
-  D=D-1;JNE        //   if (numberOfLocals != 0) jump to {nameOfFunction}.Loop 
-({nameOfFunction}.End) 
+  @{nameOfFunction}_Loop
+  D=D-1;JNE        //   if (numberOfLocals != 0) jump to {nameOfFunction}_Loop 
+({nameOfFunction}_End) 
 
 /$
 
@@ -406,7 +406,7 @@ class Constants {
   D=M              //   D = ram[ram[0]]         
   @ARG             //   A = ARG         
   A=M              //   A = ram[ARG]              
-  M=D              //   ram[A] = D  
+  M=D              //   ram[A] = ram[ram[0]]  
   
   // *** SP = ARG+1 ***
   @ARG             //   A = ARG 
@@ -420,7 +420,7 @@ class Constants {
   A=M              //   A = ram[LCL]         
   D=M              //   D = ram[ram[LCL]]  
   @THAT            //   A = THAT
-  M=D              //   A[THAT] = D
+  M=D              //   A[THAT] = ram[ram[LCL]]
   
   // *** THIS = *(FRAME-2) ***
   @LCL             //   A = LCL              
@@ -428,7 +428,7 @@ class Constants {
   A=M              //   A = ram[LCL]         
   D=M              //   D = ram[ram[LCL]]           
   @THIS            //   A = THIS             
-  M=D              //   A[THIS] = D          
+  M=D              //   A[THIS] = ram[ram[LCL]]          
 
   // *** ARG = *(FRAME-3) ***
   @LCL             //   A = LCL              
@@ -436,7 +436,7 @@ class Constants {
   A=M              //   A = ram[LCL]         
   D=M              //   D = ram[ram[LCL]]           
   @ARG             //   A = ARG             
-  M=D			   //   A[ARG] = D          	
+  M=D			   //   A[ARG] = ram[ram[LCL]]          	
   
   // *** LCL = *(FRAME-4) ***
   @LCL             //   A = LCL              
@@ -444,7 +444,7 @@ class Constants {
   A=M              //   A = ram[LCL]         
   D=M              //   D = ram[ram[LCL]]           
   @LCL             //   A = LCL              
-  M=D		       //   A[LCL] = D          
+  M=D		       //   A[LCL] = ram[ram[LCL]]          
   
   // *** goto RET ***
   @13              //   A = 13              
@@ -454,14 +454,19 @@ class Constants {
 /$
 
 
-    static final String BOOTSTRAP = '''// bootstrap
+    static final String BOOTSTRAPPING = '''// ++++++++++++++ BOOTSTRAPPING ++++++++++++++
 
+  // *** SP = 256 ***
+  
   @256
   D=A
   @SP
   M=D
 
-  @Sys.init$RETURN0  // push return-address
+  // *** call Sys.init ***
+  
+  // push return-address
+  @Sys.init$RETURN0  
   D=A
   @SP
   A=M
@@ -469,7 +474,17 @@ class Constants {
   @SP
   M=M+1
 
-  @LCL  // push LCL
+  // push LCL
+  @LCL  
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  
+  // push ARG
+  @ARG  
   D=M
   @SP
   A=M
@@ -477,7 +492,8 @@ class Constants {
   @SP
   M=M+1
 
-  @ARG  // push ARG
+  // push THIS
+  @THIS
   D=M
   @SP
   A=M
@@ -485,7 +501,8 @@ class Constants {
   @SP
   M=M+1
 
-  @THIS  // push THIS
+  // push THAT
+  @THAT
   D=M
   @SP
   A=M
@@ -493,15 +510,8 @@ class Constants {
   @SP
   M=M+1
 
-  @THAT  // push THAT
-  D=M
+  // ARG = SP-n-5 
   @SP
-  A=M
-  M=D
-  @SP
-  M=M+1
-
-  @SP  // ARG = SP-n-5
   D=M
   @0
   D=D-A
@@ -510,7 +520,8 @@ class Constants {
   @ARG
   M=D
 
-  @SP  // LCL = SP
+  // LCL = SP 
+  @SP
   D=M
   @LCL
   M=D
@@ -520,6 +531,7 @@ class Constants {
 
 (Sys.init$RETURN0)
 
+// ++++++++++++++ END BOOTSTRAPPING ++++++++++++++
 '''
 
 }

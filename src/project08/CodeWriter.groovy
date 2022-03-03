@@ -119,7 +119,7 @@ class CodeWriter {
      *
      */
     static void writeInit(){
-        out << Constants.BOOTSTRAP
+        out << Constants.BOOTSTRAPPING
     }
 
     /**
