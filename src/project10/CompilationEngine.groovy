@@ -65,7 +65,7 @@ class CompilationEngine {
         //'class'
         tokenizer.advance()
         if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD ||
-                tokenizer.keyWord() != JackTokenizer.LexicalElements.LE_CLASS){
+                tokenizer.keyWord() != JackTokenizer.KeyWords.KW_CLASS){
             error("class")
         }
         printWriter.print("<class>\n")
@@ -164,7 +164,7 @@ class CompilationEngine {
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
         //next is a '}'
-        if (tokenizer.getTokenType() == JackTokenizer.SYMBOL && tokenizer.symbol() == '}'){
+        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             return
         }
@@ -264,7 +264,7 @@ class CompilationEngine {
     private void compileParameterList(){
         //check if there is parameterList, if next token is ')' than go back
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.SYMBOL && tokenizer.symbol() == ')'){
+        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
             return
         }
@@ -319,14 +319,14 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.IDENTIFIER){
+            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
                 error("identifier")
             }
             printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
             tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
             //',' or ';'
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
                 error("',' or ';'")
             }
             if (tokenizer.symbol() == ','){
@@ -367,14 +367,15 @@ class CompilationEngine {
         tokenPrintWriter.print("<keyword>let</keyword>\n")
         //varName
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.IDENTIFIER){
+        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
             error("varName")
         }
         printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
         tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
         //'[' or '='
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
+        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL ||
+                (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
             error("'['|'='")
         }
         boolean expExist = false
@@ -386,7 +387,7 @@ class CompilationEngine {
             compileExpression()
             //']'
             tokenizer.advance()
-            if (tokenizer.getTokenType() == JackTokenizer.SYMBOL && tokenizer.symbol() == ']'){
+            if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ']'){
                 printWriter.print("<symbol>]</symbol>\n")
                 tokenPrintWriter.print("<symbol>]</symbol>\n")
             } else {
@@ -585,7 +586,7 @@ class CompilationEngine {
         printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
         tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.SYMBOL && tokenizer.symbol() == '('){
+        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '('){
             //'(' expressionList ')'
             printWriter.print("<symbol>(</symbol>\n")
             tokenPrintWriter.print("<symbol>(</symbol>\n")

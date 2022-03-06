@@ -196,7 +196,7 @@ class JackTokenizer {
      */
     int intVal(){
         if(currentTokenType == LexicalElements.LE_INT_CONST){
-            currentTokenType as int
+            currentToken as int
         } else {
             throw new IllegalStateException("Current token is not an integer constant!")
         }
