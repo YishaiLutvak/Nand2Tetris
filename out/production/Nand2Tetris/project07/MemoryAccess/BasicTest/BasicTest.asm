@@ -11,7 +11,7 @@
   D=A               //   D = 10
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 10
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -19,10 +19,10 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @LCL        
   A=M               //   A = ram[LCL]             
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[LCL]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -32,7 +32,7 @@
   D=A               //   D = 21
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 21
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -42,7 +42,7 @@
   D=A               //   D = 22
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 22
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -50,12 +50,12 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @ARG        
   A=M               //   A = ram[ARG]             
   A=A+1
   A=A+1
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[ARG]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -63,11 +63,11 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @ARG        
   A=M               //   A = ram[ARG]             
   A=A+1
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[ARG]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -77,7 +77,7 @@
   D=A               //   D = 36
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 36
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -85,7 +85,7 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @THIS        
   A=M               //   A = ram[THIS]             
   A=A+1
@@ -94,7 +94,7 @@
   A=A+1
   A=A+1
   A=A+1
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[THIS]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -104,7 +104,7 @@
   D=A               //   D = 42
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 42
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -114,7 +114,7 @@
   D=A               //   D = 45
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 45
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -122,7 +122,7 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @THAT        
   A=M               //   A = ram[THAT]             
   A=A+1
@@ -130,7 +130,7 @@
   A=A+1
   A=A+1
   A=A+1
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[THAT]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -138,12 +138,12 @@
 
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
-  D=M               //   D = ram[A]  
+  D=M               //   D = ram[ram[0]-1]  
   @THAT        
   A=M               //   A = ram[THAT]             
   A=A+1
   A=A+1
-  M=D               //   ram[A] = D      
+  M=D               //   ram[ram[THAT]] = ram[ram[0]-1]      
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
@@ -153,7 +153,7 @@
   D=A               //   D = 510
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 510
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -161,40 +161,40 @@
 
   @SP               //   A = 0
   A=M-1             //   A = ram[0]-1  
-  D=M               //   D = ram[A]    
+  D=M               //   D = ram[ram[0]-1]    
   @6
   A=A+1
   A=A+1
   A=A+1
   A=A+1
   A=A+1             //   A = index+5
-  M=D               //   ram[A] = D
+  M=D               //   ram[index+5] = D
   @SP               //   A = 0
   M=M-1             //   ram[0] = ram[0]-1
 
 // push local 0    (line 21)
 
   @0                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = 0  
   @LCL                               
-  A=M+D             //   A = ram[LCL]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[LCL]+0                          
+  D=M               //   D = ram[ram[LCL]+0]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
 // push that 5    (line 22)
 
   @5                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = 5  
   @THAT                               
-  A=M+D             //   A = ram[THAT]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[THAT]+5                          
+  D=M               //   D = ram[ram[THAT]+5]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
@@ -213,13 +213,13 @@
 // push argument 1    (line 24)
 
   @1                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = 1  
   @ARG                               
-  A=M+D             //   A = ram[ARG]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[ARG]+1                          
+  D=M               //   D = ram[ram[ARG]+1]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
@@ -238,26 +238,26 @@
 // push this 6    (line 26)
 
   @6                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = 6  
   @THIS                               
-  A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[THIS]+6                          
+  D=M               //   D = ram[ram[THIS]+6]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
 // push this 6    (line 27)
 
   @6                        
-  D=A               //   D = A (A=index=offset)  
+  D=A               //   D = 6  
   @THIS                               
-  A=M+D             //   A = ram[THIS]+D (D=index=offset)                          
-  D=M               //   D = ram[A]  
+  A=M+D             //   A = ram[THIS]+6                          
+  D=M               //   D = ram[ram[THIS]+6]  
   @SP               //   A = 0                    
   A=M               //   A = ram[0]                       
-  M=D               //   ram[A] = D                            
+  M=D               //   ram[ram[0]] = D                            
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
@@ -293,10 +293,10 @@
   A=A+1
   A=A+1
   A=A+1             //   A = index+5
-  D=M               //   D = ram[A]
+  D=M               //   D = ram[index+5]
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
-  M=D               //   ram[A] = D        
+  M=D               //   ram[ram[0]] = ram[index+5]         
   @SP               //   A = 0             
   M=M+1             //   ram[0] = ram[0]+1 
 

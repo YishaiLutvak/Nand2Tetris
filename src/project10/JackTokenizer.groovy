@@ -1,8 +1,5 @@
 package project10
 
-//import java.io.File
-//import java.io.FileNotFoundException
-//import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -12,74 +9,75 @@ import java.util.regex.Pattern
  * 2.breaks it into Jack-language tokens, as specified by the Jack grammar.
  */
 class JackTokenizer {
-    //constant for type
-    final static int KEYWORD = 1
-    final static int SYMBOL = 2
-    final static int IDENTIFIER = 3
-    final static int INT_CONST = 4
-    final static int STRING_CONST = 5
-
-    //constant for keyword
-    final static int CLASS = 10
-    final static int METHOD = 11
-    final static int FUNCTION = 12
-    final static int CONSTRUCTOR = 13
-    final static int INT = 14
-    final static int BOOLEAN = 15
-    final static int CHAR = 16
-    final static int VOID = 17
-    final static int VAR = 18
-    final static int STATIC = 19
-    final static int FIELD = 20
-    final static int LET = 21
-    final static int DO = 22
-    final static int IF = 23
-    final static int ELSE = 24
-    final static int WHILE = 25
-    final static int RETURN = 26
-    final static int TRUE = 27
-    final static int FALSE = 28
-    final static int NULL = 29
-    final static int THIS = 30
-
-    private Scanner scanner
-    private String currentToken
-    private int currentTokenType
-    private int pointer
-    private ArrayList<String> tokens
-
-    private static Pattern tokenPatterns
-    private static String keyWordReg
-    private static String symbolReg
-    private static String intReg
-    private static String strReg
-    private static String idReg
-    private static HashMap<String,Integer> keyWordMap = new HashMap<String, Integer>()
-    private static def opSet = ['+','-','*','/','|','<','>','='] as Set
-
-    static {
-        keyWordMap.put("class",CLASS)
-        keyWordMap.put("constructor",CONSTRUCTOR)
-        keyWordMap.put("function",FUNCTION)
-        keyWordMap.put("method",METHOD)
-        keyWordMap.put("field",FIELD)
-        keyWordMap.put("static",STATIC)
-        keyWordMap.put("var",VAR)
-        keyWordMap.put("int",INT)
-        keyWordMap.put("char",CHAR)
-        keyWordMap.put("boolean",BOOLEAN)
-        keyWordMap.put("void",VOID)
-        keyWordMap.put("true",TRUE)
-        keyWordMap.put("false",FALSE)
-        keyWordMap.put("null",NULL)
-        keyWordMap.put("this",THIS)
-        keyWordMap.put("let",LET)
-        keyWordMap.put("do",DO)
-        keyWordMap.put("if",IF)
-        keyWordMap.put("else",ELSE)
-        keyWordMap.put("while",WHILE)
-        keyWordMap.put("return",RETURN)
+    static enum LexicalElements {
+        LE_KEYWORD,
+        LE_SYMBOL,
+        LE_IDENTIFIER,
+        LE_INT_CONST,
+        LE_STRING_CONST,
+        LE_NOTHING,
     }
+    static enum KeyWords{
+        KW_CLASS,
+        KW_METHOD,
+        KW_FUNCTION,
+        KW_CONSTRUCTOR,
+        KW_INT,
+        KW_BOOLEAN,
+        KW_CHAR,
+        KW_VOID,
+        KW_VAR,
+        KW_STATIC,
+        KW_FIELD,
+        KW_LET,
+        KW_DO,
+        KW_IF,
+        KW_ELSE,
+        KW_WHILE,
+        KW_RETURN,
+        KW_TRUE,
+        KW_FALSE,
+        KW_NULL,
+        KW_THIS,
+        KW_NOTHING,
+    }
+
+    private String currentToken = ''
+    private LexicalElements currentTokenType = LexicalElements.LE_NOTHING
+    private int pointer = 0
+    private tokens = []
+
+    private static String keyWordReg =
+            /class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return|/
+    private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
+    private static String intReg = /[0-9]+/
+    private static String strReg = /"[^"\n]*"/
+    private static String idReg = /[\w_]+/
+    private static Pattern tokenPatterns = ~(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
+    private static def opSet = ['+','-','*','/','|','<','>','='] as Set
+    static def myMap = [
+            class      : KeyWords.KW_CLASS,
+            constructor:KeyWords.KW_CONSTRUCTOR,
+            function   :KeyWords.KW_FUNCTION,
+            method     :KeyWords.KW_METHOD,
+            field      :KeyWords.KW_FIELD,
+            static     :KeyWords.KW_STATIC,
+            var        :KeyWords.KW_VAR,
+            int        :KeyWords.KW_INT,
+            char       :KeyWords.KW_CHAR,
+            boolean    :KeyWords.KW_BOOLEAN,
+            void       :KeyWords.KW_VOID,
+            true       :KeyWords.KW_TRUE,
+            false      :KeyWords.KW_FALSE,
+            null       :KeyWords.KW_NULL,
+            this       :KeyWords.KW_THIS,
+            let        :KeyWords.KW_LET,
+            do         :KeyWords.KW_DO,
+            if         :KeyWords.KW_IF,
+            else       :KeyWords.KW_ELSE,
+            while      :KeyWords.KW_WHILE,
+            return     :KeyWords.KW_RETURN,
+    ]
 
     /**
      * Opens the input file/stream and gets ready to tokenize it
@@ -87,47 +85,22 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            scanner = new Scanner(inFile)
-            String preprocessed = ""
-            //String line = ""
+            def scanner = new Scanner(inFile)
+            def preprocessed = ""
             while(scanner.hasNext()){
-                line = noComments(scanner.nextLine()).trim()
+                def line = noComments(scanner.nextLine()).trim()
                 if (line.length() > 0) {
                     preprocessed += line + "\n"
                 }
             }
             preprocessed = noBlockComments(preprocessed).trim()
-            //init all regex
-            initRegs()
-            Matcher m = tokenPatterns.matcher(preprocessed)
-            tokens = new ArrayList<String>()
-            pointer = 0
-            while(m.find()){
-                tokens.add(m.group())
+            Matcher matcher = tokenPatterns.matcher(preprocessed)
+            while(matcher.find()){
+                tokens.add(matcher.group())
             }
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
-        currentToken = ""
-        currentTokenType = -1
-    }
-
-    /**
-     * init regex we need in tokenizer
-     */
-    private static void initRegs(){
-        keyWordReg = ""
-        for(String seg: keyWordMap.keySet()){
-            keyWordReg += seg + "|"
-        }
-        intReg = "[0-9]+"
-        //symbolReg = "[\\&\\*\\+\\(\\)\\.\\/\\,\\-\\]\\;\\~\\}\\|\\{\\>\\=\\[\\<]"
-        symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
-        //strReg = "\"[^\"\n]*\""
-        strReg = /"[^"\n]*"/
-        //idReg = "[\\w_]+"
-        idReg = /[\w_]+/
-        tokenPatterns = Pattern.compile(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
     }
 
     /**
@@ -135,7 +108,7 @@ class JackTokenizer {
      * @return
      */
     boolean hasMoreTokens() {
-        return pointer < tokens.size()
+        pointer < tokens.size()
     }
 
     /**
@@ -145,37 +118,36 @@ class JackTokenizer {
      */
     void advance(){
         if(hasMoreTokens()) {
-            currentToken = tokens.get(pointer)
-            pointer++
+            currentToken = tokens[pointer++]
         } else {
             throw new IllegalStateException("No more tokens")
         }
-        //System.out.println(currentToken)
-        if(currentToken.matches(keyWordReg)){
-            currentTokenType = KEYWORD
-        } else if(currentToken.matches(symbolReg)){
-            currentTokenType = SYMBOL
-        } else if(currentToken.matches(intReg)){
-            currentTokenType = INT_CONST
-        } else if(currentToken.matches(strReg)){
-            currentTokenType = STRING_CONST
-        } else if(currentToken.matches(idReg)){
-            currentTokenType = IDENTIFIER
+        println(currentToken)
+        if(currentToken ==~ keyWordReg){
+            currentTokenType = LexicalElements.LE_KEYWORD
+        } else if(currentToken ==~ symbolReg){
+            currentTokenType = LexicalElements.LE_SYMBOL
+        } else if(currentToken ==~ intReg){
+            currentTokenType = LexicalElements.LE_INT_CONST
+        } else if(currentToken ==~ strReg){
+            currentTokenType = LexicalElements.LE_STRING_CONST
+        } else if(currentToken ==~ idReg){
+            currentTokenType = LexicalElements.LE_IDENTIFIER
         } else {
             throw new IllegalArgumentException("Unknown token:" + currentToken)
         }
     }
 
     String getCurrentToken() {
-        return currentToken
+        currentToken
     }
 
     /**
      * Returns the type of the current token
      * @return
      */
-    int tokenType(){
-        return currentTokenType
+    LexicalElements getTokenType(){
+        currentTokenType
     }
 
     /**
@@ -183,9 +155,9 @@ class JackTokenizer {
      * Should be called only when tokenType() is KEYWORD
      * @return
      */
-    int keyWord(){
-        if(currentTokenType == KEYWORD){
-            return keyWordMap.get(currentToken)
+    KeyWords keyWord(){
+        if(currentTokenType == LexicalElements.LE_KEYWORD){
+            myMap[currentToken]
         } else {
             throw new IllegalStateException("Current token is not a keyword!")
         }
@@ -197,9 +169,8 @@ class JackTokenizer {
      * @return if current token is not a symbol return \0
      */
     String symbol(){
-        if(currentTokenType == SYMBOL){
-            // return currentToken.charAt(0)
-            return currentToken[0]
+        if(currentTokenType == LexicalElements.LE_SYMBOL){
+            currentToken
         } else {
             throw new IllegalStateException("Current token is not a symbol!")
         }
@@ -211,8 +182,8 @@ class JackTokenizer {
      * @return
      */
     String identifier(){
-        if(currentTokenType == IDENTIFIER){
-            return currentToken
+        if(currentTokenType == LexicalElements.LE_IDENTIFIER){
+            currentToken
         } else {
             throw new IllegalStateException("Current token is not an identifier!")
         }
@@ -224,8 +195,8 @@ class JackTokenizer {
      * @return
      */
     int intVal(){
-        if(currentTokenType == INT_CONST){
-            return Integer.parseInt(currentToken)
+        if(currentTokenType == LexicalElements.LE_INT_CONST){
+            currentTokenType as int
         } else {
             throw new IllegalStateException("Current token is not an integer constant!")
         }
@@ -238,8 +209,8 @@ class JackTokenizer {
      * @return
      */
     String stringVal(){
-        if(currentTokenType == STRING_CONST){
-            return currentToken.substring(1, currentToken.length() - 1)
+        if(currentTokenType == LexicalElements.LE_STRING_CONST){
+            currentToken//[1,-1]
         } else {
             throw new IllegalStateException("Current token is not a string constant!")
         }
@@ -249,9 +220,7 @@ class JackTokenizer {
      * move pointer back
      */
     void pointerBack(){
-        if(pointer > 0) {
-            pointer--
-        }
+        pointer = pointer > 0 ? --pointer: 0
     }
 
     /**
@@ -259,7 +228,7 @@ class JackTokenizer {
      * @return
      */
     boolean isOp(){
-        return opSet.contains(symbol())
+        symbol() in opSet
     }
 
     /**
@@ -268,27 +237,7 @@ class JackTokenizer {
      * @return
      */
     static String noComments(String strIn){
-        int position = strIn.indexOf("//")
-        if(position != -1){
-            strIn = strIn.substring(0, position)
-        }
-        return strIn
-    }
-
-    /**
-     * Delete spaces from a String
-     * @param strIn
-     * @return
-     */
-    static String noSpaces(String strIn){
-        String result = ""
-        if(strIn.length() != 0){
-            String[] segs = strIn.split(" ")
-            for(String s: segs){
-                result += s
-            }
-        }
-        return result
+        strIn.split('//')[0]
     }
 
     /**
@@ -297,18 +246,6 @@ class JackTokenizer {
      * @return
      */
     static String noBlockComments(String strIn){
-        int startIndex = strIn.indexOf("/*")
-        if(startIndex == -1) return strIn
-        String result = strIn
-        int endIndex = strIn.indexOf("*/")
-        while(startIndex != -1){
-            if(endIndex == -1){
-                return strIn.substring(0,startIndex - 1)
-            }
-            result = result.substring(0,startIndex) + result.substring(endIndex + 2)
-            startIndex = result.indexOf("/*")
-            endIndex = result.indexOf("*/")
-        }
-        return result
+        strIn.replaceAll('(?s)/\\*.*?\\*/','')
     }
 }
