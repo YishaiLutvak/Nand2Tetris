@@ -38,6 +38,14 @@ class Parser {
     }
 
     /**
+     * Getter
+     * @param cmd - string of cmd.
+     */
+    static String getCurrentCommand() {
+        return currentCommand
+    }
+
+    /**
      * @return CommandType - a constant representing the type of the current command.
      * C_ARITHMETIC is returned for all the arithmetic/logical commands.
      */

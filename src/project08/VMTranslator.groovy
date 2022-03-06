@@ -10,6 +10,13 @@ import project08.Constants.CommandType
 // C:\Nand2Tetris\src\project08\ProgramFlow\BasicLoop
 // C:\Nand2Tetris\src\project08\ProgramFlow\FibonacciSeries
 
+/*(input to test 07
+1. C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
+2. C:\Nand2Tetris\src\project07\StackArithmetic\StackTest
+3. C:\Nand2Tetris\src\project07\MemoryAccess\BasicTest
+4. C:\Nand2Tetris\src\project07\MemoryAccess\PointerTest
+5. C:\Nand2Tetris\src\project07\MemoryAccess\StaticTest)*/
+
 /**
  * Translator from "vm" intermediate-language-code to hack assembly-language-code.
  */
@@ -69,11 +76,11 @@ class VMTranslator {
         vmFile.eachLine() { line, numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
-            if (!line.startsWith("//")) {
+            if (!(line==~"^( *//).*")) {
                 parser.setCurrentCommand(line)
                 def commandType = parser.getCommandType()
                 switch (commandType) {
-                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.currentCommand)
+                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand())
                     case CommandType.C_PUSH,CommandType.C_POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                     case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())
@@ -83,7 +90,7 @@ class VMTranslator {
                     case CommandType.C_RETURN -> writer.writeReturn()
                     case CommandType.C_FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
                 }
-            }
+            } //else {println("(line==~\"^( *//).*\")" + " " + line)}
         }
     }
 }

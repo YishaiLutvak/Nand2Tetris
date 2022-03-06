@@ -1,5 +1,7 @@
 package regex
 
+import java.util.regex.Matcher
+
 
 //********************************************
 //https://www.tutorialspoint.com/groovy/groovy_regular_expressions.htm
@@ -30,19 +32,19 @@ package regex
 
 //********************************************
 
-def number = 2
-
-def str1 = /The number is 2/
-def str2 = /The number is $number/
-
-assert str1 instanceof String
-assert str2 instanceof GString
+//def number = 2
+//
+//def str1 = /The number is 2/
+//def str2 = /The number is $number/
+//
+//assert str1 instanceof String
+//assert str2 instanceof GString
 
 //********************************************
 
-assert (/Version \d+\.\d+\.\d+/) == 'Version \\d+\\.\\d+\\.\\d+'
-
-assert 'The price is $99' ==~ /The price is \$\d+/
+//assert (/Version \d+\.\d+\.\d+/) == 'Version \\d+\\.\\d+\\.\\d+'
+//
+//assert 'The price is $99' ==~ /The price is \$\d+/
 
 //********************************************
 
@@ -56,23 +58,23 @@ assert 'The price is $99' ==~ /The price is \$\d+/
 //assert matcher.size() == 2
 //assert matcher[0..-1] == ["groovier", "better"]
 
-def matcher = "My code is groovier and better when I use Groovy there" =~ /\S+er\b/
-
-assert matcher instanceof java.util.regex.Matcher
-
-assert matcher.find()
-assert matcher.size() == 2
-assert matcher[0..-1] == ["groovier", "better"]
+//def matcher = "My code is groovier and better when I use Groovy there" =~ /\S+er\b/
+//
+//assert matcher instanceof Matcher
+//
+//assert matcher.find()
+//assert matcher.size() == 2
+//assert matcher[0..-1] == ["groovier", "better"]
 
 //********************************************
 
-if ("My code is groovier and better when I use Groovy there" =~ /\S+er\b/) {
-    println "At least one element matches the pattern..."
-}
-
-if ("Lorem ipsum dolor sit amet" =~ /\d+/) {
-    println "This line is not executed..."
-}
+//if ("My code is groovier and better when I use Groovy there" =~ /\S+er\b/) {
+//    println "At least one element matches the pattern..."
+//}
+//
+//if ("Lorem ipsum dolor sit amet" =~ /\d+/) {
+//    println "This line is not executed..."
+//}
 
 //********************************************
 
@@ -81,5 +83,3 @@ assert "v3.12.4" ==~ /v\d{1,3}\.\d{1,3}\.\d{1,3}/
 assert !("GROOVY-123: some change" ==~ /[A-Z]{3,6}-\d{1,4}/)
 
 assert "GROOVY-123: some change" ==~ /[A-Z]{3,6}-\d{1,4}.{1,100}/
-
-
