@@ -29,7 +29,7 @@ class CodeWriter07 {
         }
         else {
             out = new FileWriter(new File(
-                    outputFile.getParent(), "${outputFile.name.split('\\.')[0]}.asm"))
+                    outputFile.getParent(), "${outputFile.name.split(/\./)[0]}.asm"))
         }
     }
 
@@ -50,7 +50,7 @@ class CodeWriter07 {
      * @param file - name of file.
      */
     static void setCurrentFileName(String file) {
-        currentFileName = file.split('\\.')[0]
+        currentFileName = file.split(/\./)[0]
         out << "// ${file}\n"
     }
 

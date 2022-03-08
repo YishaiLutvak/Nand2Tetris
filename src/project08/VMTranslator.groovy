@@ -34,13 +34,13 @@ class VMTranslator {
             println("Missing argument!!!")
             return
         }
-        def path = new File(args[0])
-        path.isDirectory() ? handleDirectory(path) : handleSingleFile(path)
+        def inFile = new File(args[0])
+        inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
     }
 
     /**
      * Handles a single vm file.
-     * @param vmFile - path of vm file.
+     * @param vmFile - vm file.
      */
     static void handleSingleFile(File vmFile) {
         writer = CodeWriter.getInstance(vmFile)
@@ -51,7 +51,7 @@ class VMTranslator {
 
     /**
      * Handles a folder that has vm files.
-     * @param dir - path of directory.
+     * @param dir - directory.
      */
     static void handleDirectory(File dir) {
         writer = CodeWriter.getInstance(dir)

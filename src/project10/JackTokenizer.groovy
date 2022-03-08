@@ -10,42 +10,21 @@ import java.util.regex.Pattern
  */
 class JackTokenizer {
     static enum LexicalElements {
-        LE_KEYWORD,
-        LE_SYMBOL,
-        LE_IDENTIFIER,
-        LE_INT_CONST,
-        LE_STRING_CONST,
-        LE_NOTHING,
+        LE_KEYWORD, LE_SYMBOL, LE_IDENTIFIER,
+        LE_INT_CONST, LE_STRING_CONST, LE_NOTHING,
     }
     static enum KeyWords{
-        KW_CLASS,
-        KW_METHOD,
-        KW_FUNCTION,
-        KW_CONSTRUCTOR,
-        KW_INT,
-        KW_BOOLEAN,
-        KW_CHAR,
-        KW_VOID,
-        KW_VAR,
-        KW_STATIC,
-        KW_FIELD,
-        KW_LET,
-        KW_DO,
-        KW_IF,
-        KW_ELSE,
-        KW_WHILE,
-        KW_RETURN,
-        KW_TRUE,
-        KW_FALSE,
-        KW_NULL,
-        KW_THIS,
-        KW_NOTHING,
+        KW_CLASS, KW_METHOD, KW_FUNCTION, KW_CONSTRUCTOR,
+        KW_INT, KW_BOOLEAN, KW_CHAR, KW_VOID,
+        KW_VAR, KW_STATIC, KW_FIELD, KW_LET, KW_DO,
+        KW_IF, KW_ELSE, KW_WHILE, KW_RETURN,
+        KW_TRUE, KW_FALSE, KW_NULL, KW_THIS, KW_NOTHING,
     }
 
-    private String currentToken = ''
-    private LexicalElements currentTokenType = LexicalElements.LE_NOTHING
-    private int pointer = 0
-    private tokens = []
+    private static String currentToken = ''
+    private static LexicalElements currentTokenType = LexicalElements.LE_NOTHING
+    private static int pointer = 0
+    private static def tokens = []
 
     private static String keyWordReg =
             /class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return|/

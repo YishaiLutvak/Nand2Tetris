@@ -14,56 +14,44 @@ package project10
 class JackAnalyzer{
 
     /**
-     * Return all the .jack files in a directory
-     * @param dir
-     * @return
+     * Handles a single jack file.
+     * @param vmFile - path of jack file.
      */
-    static ArrayList<File> getJackFiles(File dir){
-        File[] files = dir.listFiles()
-        ArrayList<File> result = new ArrayList<File>()
-        if (files == null) return result
-        for (File f:files){
-            if (f.name.endsWith(".jack")){
-                result.add(f)
-            }
-        }
-        return result
+    static ArrayList<File> handleSingleFile(File file) {
+        if (!file.name.endsWith(".jack")) throw new IllegalArgumentException(".jack file is required!")
+        [file]
+    }
+
+    /**
+     * Handles a folder that has jack files.
+     * @param dir - path of directory.
+     */
+    static ArrayList<File> handleDirectory(File dir) {
+        def jackFiles = dir.listFiles().findAll{it.name.endsWith(".jack")}
+        if (jackFiles.size() == 0) throw new IllegalArgumentException('No jack file in this directory')
+        jackFiles
     }
 
     static void main(args) {
-        if(args.length == 0){
-            println("Missing argument!!!")
-            return
-        }
-        String fileInName = args[0]
-        File fileIn = new File(fileInName)
-        String fileOutPath, tokenFileOutPath
-        File fileOut,tokenFileOut
-        ArrayList<File> jackFiles = new ArrayList<File>()
-        if (fileIn.isFile()) {
-            //if it is a single file, see whether it is a vm file
-            String path = fileIn.getAbsolutePath()
-            if (!path.endsWith(".jack")) {
-                throw new IllegalArgumentException(".jack file is required!")
-            }
-            jackFiles.add(fileIn)
-        } else if (fileIn.isDirectory()) {
-            //if it is a directory get all jack files under this directory
-            jackFiles = getJackFiles(fileIn)
-            //if no vn file in this directory
-            if (jackFiles.size() == 0) {
-                throw new IllegalArgumentException("No jack file in this directory")
-            }
-        }
-        for (File f: jackFiles) {
-            fileOutPath = f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(".")) + ".xml"
-            tokenFileOutPath = f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(".")) + "T.xml"
-            fileOut = new File(fileOutPath)
-            tokenFileOut = new File(tokenFileOutPath)
-            CompilationEngine compilationEngine = new CompilationEngine(f,fileOut,tokenFileOut)
+        if(args.length == 0){ println('Missing argument!!!'); return }
+
+        File inFile = new File(args[0])
+        def jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
+
+        jackFiles.each {
+            String fileName = it.name.split(/\./)[0]
+            String fileOutPath = "${fileName}.xml"
+            String tokenFileOutPath = "${fileName}T.xml"
+            String parent = it.getParent()
+
+            File fileOut = new File(parent,fileOutPath)
+            File tokenFileOut = new File(parent,tokenFileOutPath)
+
+            CompilationEngine compilationEngine = new CompilationEngine(it,fileOut,tokenFileOut)
             compilationEngine.compileClass()
-            System.out.println("File created : " + fileOutPath)
-            System.out.println("File created : " + tokenFileOutPath)
+
+            println("File created : $fileOutPath")
+            println("File created : $tokenFileOutPath")
         }
     }
 }

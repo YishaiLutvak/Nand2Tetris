@@ -14,7 +14,7 @@ class Constants07 {
         C_NOTHING
     }
 
-    static final String ADD = $/
+    static final String ADD = '''
   @SP               //   A = 0
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M               //   D = ram[A]
@@ -25,9 +25,9 @@ class Constants07 {
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
-/$
+'''
 
-    static final String SUB = $/
+    static final String SUB = '''
   @SP               //   A = 0                           
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M               //   D = ram[A]                      
@@ -38,9 +38,9 @@ class Constants07 {
   @SP               //   A = 0                           
   M=M+1             //   ram[0] = ram[0]+1               
 
-/$
+'''
 
-    static final String NEG = $/
+    static final String NEG = '''
   @SP               //   A = 0                           
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=-M              //   D = -ram[A]                      
@@ -48,9 +48,9 @@ class Constants07 {
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1                    
 
-/$
+'''
 
-    static final String EQ = $/
+    static final String EQ = '''
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M               //   D = ram[A]                    
@@ -72,9 +72,9 @@ class Constants07 {
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
-/$
+'''
 
-    static final String GT = $/
+    static final String GT = '''
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M               //   D = ram[A]                       
@@ -96,9 +96,9 @@ class Constants07 {
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
-/$
+'''
 
-    static final String LT = $/
+    static final String LT = '''
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M               //   D = ram[A]                     
@@ -120,9 +120,9 @@ class Constants07 {
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
-/$
+'''
 
-    static final String AND = $/
+    static final String AND = '''
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M               //   D = ram[A]                       
@@ -133,9 +133,9 @@ class Constants07 {
   @SP               //   A = 0     
   M=M+1             //   ram[0] = ram[0]+1
 
-/$
+'''
 
-    static final String OR = $/
+    static final String OR = '''
   @SP               //   A = 0                           
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1 
   D=M               //   D = ram[A]                      
@@ -146,9 +146,9 @@ class Constants07 {
   @SP               //   A = 0                           
   M=M+1             //   ram[0] = ram[0]+1               
 
-/$
+'''
 
-    static final String NOT = $/
+    static final String NOT = '''
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=!M              //   D = !ram[A]                     
@@ -156,9 +156,9 @@ class Constants07 {
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1                 
 
-/$
+'''
 
-    static final String PUSH_CONSTANT = $/
+    static final String PUSH_CONSTANT = '''
   @{value}                                   
   D=A               //   D = {value}
   @SP               //   A = 0                     
@@ -167,9 +167,9 @@ class Constants07 {
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
-/$
+'''
 
-    static final String PUSH_LCL_ARG_THIS_THAT = $/
+    static final String PUSH_LCL_ARG_THIS_THAT = '''
   @{index}                        
   D=A               //   D = A (A=index=offset)  
   @{segment}                               
@@ -181,9 +181,9 @@ class Constants07 {
   @SP               //   A = 0               
   M=M+1             //   ram[0] = ram[0]+1 
 
-/$
+'''
 
-    static final String POP_LCL_ARG_THIS_THAT = $/
+    static final String POP_LCL_ARG_THIS_THAT = '''
   @SP               //   A = 0              
   A=M-1             //   A = ram[0]-1           
   D=M               //   D = ram[A]  
@@ -193,9 +193,9 @@ class Constants07 {
   @SP               //   A = 0             
   M=M-1             //   ram[0] = ram[0]-1
 
-/$
+'''
 
-    static final String PUSH_TEMP = $/
+    static final String PUSH_TEMP = '''
   @{index}
   A=A+1
   A=A+1
@@ -209,9 +209,9 @@ class Constants07 {
   @SP               //   A = 0             
   M=M+1             //   ram[0] = ram[0]+1 
 
-/$
+'''
 
-    static final String POP_TEMP = $/
+    static final String POP_TEMP = '''
   @SP               //   A = 0
   A=M-1             //   A = ram[0]-1  
   D=M               //   D = ram[A]    
@@ -225,9 +225,9 @@ class Constants07 {
   @SP               //   A = 0
   M=M-1             //   ram[0] = ram[0]-1
 
-/$
+'''
 
-    static final String PUSH_STATIC = $/
+    static final String PUSH_STATIC = '''
   @{index}
   D=M               //   D = ram[{index}]
   @SP               //   A = 0
@@ -236,9 +236,9 @@ class Constants07 {
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1
 
-/$
+'''
 
-    static final String POP_STATIC = $/
+    static final String POP_STATIC = '''
   @SP               //   A = 0         
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
@@ -246,9 +246,9 @@ class Constants07 {
   @{index}                     
   M=D               //   ram[{index}] = D  
 
-/$
+'''
 
-    static final String PUSH_POINTER = $/
+    static final String PUSH_POINTER = '''
   @{index}
   D=M               //   D = A[{index}]
   @SP               //   A = 0            
@@ -257,9 +257,9 @@ class Constants07 {
   @SP               //   A = 0                      
   M=M+1             //   ram[0] = ram[0]+1         
 
-/$
+'''
 
-    static final String POP_POINTER = $/
+    static final String POP_POINTER = '''
   @SP               //   A = 0            
   A=M-1             //   A = ram[0]-1       
   D=M               //   D = ram[A]       
@@ -268,7 +268,7 @@ class Constants07 {
   @SP               //   A = 0 
   M=M-1             //   ram[0] = ram[0]-1
 
-/$
+'''
 
 }
 
