@@ -702,8 +702,6 @@ class CompilationEngine {
         if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == symbol){
             printWriter.print("<symbol>" + symbol + "</symbol>\n")
             tokenPrintWriter.print("<symbol>" + symbol + "</symbol>\n")
-        } else {
-            error("'" + symbol + "'")
-        }
+        } else error("'" + symbol + "'")
     }
 }

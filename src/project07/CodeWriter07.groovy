@@ -39,9 +39,8 @@ class CodeWriter07 {
      * @return instance of CodeWriter.
      */
     static CodeWriter07 getInstance(File outputFile) {
-        if (instance == null) {
+        if (instance == null)
             instance = new CodeWriter07(outputFile)
-        }
         return instance
     }
 
@@ -51,7 +50,7 @@ class CodeWriter07 {
      */
     static void setCurrentFileName(String file) {
         currentFileName = file.split(/\./)[0]
-        out << "// ${file}\n"
+        out << "// $file\n"
     }
 
     /**

@@ -23,9 +23,8 @@ class Parser07 {
      * @return instance of Parser.
      */
     static Parser07 getInstance(File inputFile) {
-        if (instance == null) {
+        if (instance == null)
             instance = new Parser07(inputFile)
-        }
         return instance
     }
 

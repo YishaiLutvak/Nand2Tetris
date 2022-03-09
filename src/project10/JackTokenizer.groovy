@@ -10,15 +10,11 @@ import java.util.regex.Pattern
  */
 class JackTokenizer {
     static enum LexicalElements {
-        LE_KEYWORD, LE_SYMBOL, LE_IDENTIFIER,
-        LE_INT_CONST, LE_STRING_CONST, LE_NOTHING,
+        LE_KEYWORD, LE_SYMBOL, LE_IDENTIFIER, LE_INT_CONST, LE_STRING_CONST, LE_NOTHING,
     }
     static enum KeyWords{
-        KW_CLASS, KW_METHOD, KW_FUNCTION, KW_CONSTRUCTOR,
-        KW_INT, KW_BOOLEAN, KW_CHAR, KW_VOID,
-        KW_VAR, KW_STATIC, KW_FIELD, KW_LET, KW_DO,
-        KW_IF, KW_ELSE, KW_WHILE, KW_RETURN,
-        KW_TRUE, KW_FALSE, KW_NULL, KW_THIS, KW_NOTHING,
+        KW_CLASS, KW_METHOD, KW_FUNCTION, KW_CONSTRUCTOR, KW_INT, KW_BOOLEAN, KW_CHAR, KW_VOID, KW_VAR, KW_STATIC,
+        KW_FIELD, KW_LET, KW_DO, KW_IF, KW_ELSE, KW_WHILE, KW_RETURN, KW_TRUE, KW_FALSE, KW_NULL, KW_THIS, KW_NOTHING,
     }
 
     private static String currentToken = ''
@@ -27,35 +23,20 @@ class JackTokenizer {
     private static def tokens = []
 
     private static String keyWordReg =
-            /class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return|/
+            'class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return|'
     private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
-    private static String intReg = /[0-9]+/
-    private static String strReg = /"[^"\n]*"/
+    private static String intReg = '[0-9]+'
+    private static String strReg = '"[^"\n]*"'
     private static String idReg = /[\w_]+/
     private static Pattern tokenPatterns = ~(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
     private static def opSet = ['+','-','*','/','|','<','>','='] as Set
     static def myMap = [
-            class: KeyWords.KW_CLASS,
-            constructor: KeyWords.KW_CONSTRUCTOR,
-            function: KeyWords.KW_FUNCTION,
-            method: KeyWords.KW_METHOD,
-            field : KeyWords.KW_FIELD,
-            static: KeyWords.KW_STATIC,
-            var: KeyWords.KW_VAR,
-            int: KeyWords.KW_INT,
-            char: KeyWords.KW_CHAR,
-            boolean: KeyWords.KW_BOOLEAN,
-            void: KeyWords.KW_VOID,
-            true: KeyWords.KW_TRUE,
-            false: KeyWords.KW_FALSE,
-            null: KeyWords.KW_NULL,
-            this: KeyWords.KW_THIS,
-            let: KeyWords.KW_LET,
-            do: KeyWords.KW_DO,
-            if: KeyWords.KW_IF,
-            else: KeyWords.KW_ELSE,
-            while: KeyWords.KW_WHILE,
-            return: KeyWords.KW_RETURN,
+            class: KeyWords.KW_CLASS, constructor: KeyWords.KW_CONSTRUCTOR, function: KeyWords.KW_FUNCTION,
+            method: KeyWords.KW_METHOD, field : KeyWords.KW_FIELD, static: KeyWords.KW_STATIC,
+            var: KeyWords.KW_VAR, int: KeyWords.KW_INT, char: KeyWords.KW_CHAR, boolean: KeyWords.KW_BOOLEAN,
+            void: KeyWords.KW_VOID, true: KeyWords.KW_TRUE, false: KeyWords.KW_FALSE, null: KeyWords.KW_NULL,
+            this: KeyWords.KW_THIS, let: KeyWords.KW_LET, do: KeyWords.KW_DO, if: KeyWords.KW_IF,
+            else: KeyWords.KW_ELSE, while: KeyWords.KW_WHILE, return: KeyWords.KW_RETURN,
     ]
 
     /**
@@ -64,19 +45,15 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            def scanner = new Scanner(inFile)
-            def preprocessed = ""
-            while(scanner.hasNext()){
-                def line = noComments(scanner.nextLine()).trim()
-                if (line.length() > 0) {
-                    preprocessed += line + "\n"
-                }
+            def preProcessed = ""
+            inFile.eachLine {
+                def line = noComments(it).trim()
+                preProcessed += (line.length() > 0) ? "$line\n" : ""
             }
-            preprocessed = noBlockComments(preprocessed).trim()
-            Matcher matcher = tokenPatterns.matcher(preprocessed)
-            while(matcher.find()){
-                tokens.add(matcher.group())
-            }
+            preProcessed = noBlockComments(preProcessed).trim()
+            Matcher matcher = tokenPatterns.matcher(preProcessed)
+            while(matcher.find())
+                tokens += matcher.group()
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
@@ -86,7 +63,7 @@ class JackTokenizer {
      * Do we have more tokens in the input?
      * @return
      */
-    boolean hasMoreTokens() {
+    static boolean hasMoreTokens() {
         pointer < tokens.size()
     }
 
@@ -95,29 +72,27 @@ class JackTokenizer {
      * This method should only be called if hasMoreTokens() is true
      * Initially there is no current token
      */
-    void advance(){
-        if(hasMoreTokens()) {
+    static void advance(){
+        if(hasMoreTokens())
             currentToken = tokens[pointer++]
-        } else {
+        else
             throw new IllegalStateException("No more tokens")
-        }
-        println(currentToken)
-        if(currentToken ==~ keyWordReg){
+        //println(currentToken)
+        if(currentToken ==~ keyWordReg)
             currentTokenType = LexicalElements.LE_KEYWORD
-        } else if(currentToken ==~ symbolReg){
+        else if(currentToken ==~ symbolReg)
             currentTokenType = LexicalElements.LE_SYMBOL
-        } else if(currentToken ==~ intReg){
+        else if(currentToken ==~ intReg)
             currentTokenType = LexicalElements.LE_INT_CONST
-        } else if(currentToken ==~ strReg){
+        else if(currentToken ==~ strReg)
             currentTokenType = LexicalElements.LE_STRING_CONST
-        } else if(currentToken ==~ idReg){
+        else if(currentToken ==~ idReg)
             currentTokenType = LexicalElements.LE_IDENTIFIER
-        } else {
-            throw new IllegalArgumentException("Unknown token:" + currentToken)
-        }
+        else
+            throw new IllegalArgumentException("Unknown token: $currentToken")
     }
 
-    String getCurrentToken() {
+    static String getCurrentToken() {
         currentToken
     }
 
@@ -125,7 +100,7 @@ class JackTokenizer {
      * Returns the type of the current token
      * @return
      */
-    LexicalElements getTokenType(){
+    static LexicalElements getTokenType(){
         currentTokenType
     }
 
@@ -134,12 +109,11 @@ class JackTokenizer {
      * Should be called only when tokenType() is KEYWORD
      * @return
      */
-    KeyWords keyWord(){
-        if(currentTokenType == LexicalElements.LE_KEYWORD){
+    static KeyWords keyWord(){
+        if(currentTokenType == LexicalElements.LE_KEYWORD)
             myMap[currentToken]
-        } else {
+        else
             throw new IllegalStateException("Current token is not a keyword!")
-        }
     }
 
     /**
@@ -147,12 +121,11 @@ class JackTokenizer {
      * should be called only when tokenType() is SYMBOL
      * @return if current token is not a symbol return \0
      */
-    String symbol(){
-        if(currentTokenType == LexicalElements.LE_SYMBOL){
+    static String symbol(){
+        if(currentTokenType == LexicalElements.LE_SYMBOL)
             currentToken
-        } else {
+        else
             throw new IllegalStateException("Current token is not a symbol!")
-        }
     }
 
     /**
@@ -160,12 +133,11 @@ class JackTokenizer {
      * should be called only when tokenType() is IDENTIFIER
      * @return
      */
-    String identifier(){
-        if(currentTokenType == LexicalElements.LE_IDENTIFIER){
+    static String identifier(){
+        if(currentTokenType == LexicalElements.LE_IDENTIFIER)
             currentToken
-        } else {
+        else
             throw new IllegalStateException("Current token is not an identifier!")
-        }
     }
 
     /**
@@ -173,32 +145,29 @@ class JackTokenizer {
      * should be called only when tokenType() is INT_CONST
      * @return
      */
-    int intVal(){
-        if(currentTokenType == LexicalElements.LE_INT_CONST){
+    static int intVal(){
+        if(currentTokenType == LexicalElements.LE_INT_CONST)
             currentToken as int
-        } else {
+        else
             throw new IllegalStateException("Current token is not an integer constant!")
-        }
     }
 
     /**
      * Returns the string value of the current token
-     * without the double quotes
      * should be called only when tokenType() is STRING_CONST
      * @return
      */
-    String stringVal(){
-        if(currentTokenType == LexicalElements.LE_STRING_CONST){
+    static String stringVal(){
+        if(currentTokenType == LexicalElements.LE_STRING_CONST)
             currentToken//[1,-1]
-        } else {
+        else
             throw new IllegalStateException("Current token is not a string constant!")
-        }
     }
 
     /**
      * move pointer back
      */
-    void pointerBack(){
+    static void pointerBack(){
         pointer = pointer > 0 ? --pointer: 0
     }
 
@@ -206,7 +175,7 @@ class JackTokenizer {
      * return if current symbol is a op
      * @return
      */
-    boolean isOp(){
+    static boolean isOp(){
         symbol() in opSet
     }
 

@@ -10,25 +10,25 @@ class Ex0 {
 
     static main(args) {
         if(args.length == 0){
-            println(/Missing argument!!!/)
+            println('Missing argument!!!')
             return
         }
         File dir = new File(args[0])
         if (!dir.isDirectory()) {
-            println(/Dir does not exists!!!/)
+            println('Dir does not exists!!!')
             return
         }
-        out = new File(dir, $/${dir.name}.asm/$) << ''
+        out = new File(dir, "${dir.name}.asm") << ''
         handleVmFiles(dir)
-        out << $/TOTAL BUY: ${sumOfBuying.round(1)}\n/$
-        out << $/TOTAL SELL: ${sumOfSelling.round(1)}\n/$
+        out << "TOTAL BUY: ${sumOfBuying.round(1)}\n"
+        out << "TOTAL SELL: ${sumOfSelling.round(1)}\n"
     }
 
     static void handleVmFiles(dir) {
         dir.eachFileMatch(~/.*\.vm/) {
             out << it.name.split(/\./)[0] << '\n'
             it.eachLine() {
-                def splitLine = it.split(/ /)
+                def splitLine = it.split(' ')
                 def startsWith = splitLine[0]
                 def productName = splitLine[1]
                 def amount = splitLine[2] as int
@@ -53,7 +53,7 @@ class Ex0 {
     }
 
     static float computeCost(int amount,float price) {
-        float multi = amount * price
+        float multi = (float) (amount * price)
         multi.round(1)
     }
 }

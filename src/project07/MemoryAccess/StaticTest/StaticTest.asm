@@ -11,7 +11,7 @@
   D=A               //   D = 111
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 111
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -21,7 +21,7 @@
   D=A               //   D = 333
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 333
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -31,7 +31,7 @@
   D=A               //   D = 888
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 888
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -40,7 +40,7 @@
   @SP               //   A = 0         
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
-  D=M               //   D = ram[ram[0]]         
+  D=M               //   D = ram[A]         
   @StaticTest.8                     
   M=D               //   ram[StaticTest.8] = D  
 
@@ -49,7 +49,7 @@
   @SP               //   A = 0         
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
-  D=M               //   D = ram[ram[0]]         
+  D=M               //   D = ram[A]         
   @StaticTest.3                     
   M=D               //   ram[StaticTest.3] = D  
 
@@ -58,7 +58,7 @@
   @SP               //   A = 0         
   M=M-1             //   ram[0] = ram[0]-1              
   A=M               //   A = ram[0]         
-  D=M               //   D = ram[ram[0]]         
+  D=M               //   D = ram[A]         
   @StaticTest.1                     
   M=D               //   ram[StaticTest.1] = D  
 
@@ -68,7 +68,7 @@
   D=M               //   D = ram[StaticTest.3]
   @SP               //   A = 0
   A=M               //   A = ram[0]
-  M=D               //   ram[ram[0]] = D
+  M=D               //   ram[A] = D
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -78,7 +78,7 @@
   D=M               //   D = ram[StaticTest.1]
   @SP               //   A = 0
   A=M               //   A = ram[0]
-  M=D               //   ram[ram[0]] = D
+  M=D               //   ram[A] = D
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -100,7 +100,7 @@
   D=M               //   D = ram[StaticTest.8]
   @SP               //   A = 0
   A=M               //   A = ram[0]
-  M=D               //   ram[ram[0]] = D
+  M=D               //   ram[A] = D
   @SP               //   A = 0  
   M=M+1             //   ram[0] = ram[0]+1
 

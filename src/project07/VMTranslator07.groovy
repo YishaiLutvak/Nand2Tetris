@@ -63,7 +63,7 @@ class VMTranslator07 {
      */
     static void translateVmFile(File vmFile) {
         parser = Parser07.getInstance(vmFile)
-        vmFile.eachLine() { line, numberLine ->
+        vmFile.eachLine { line, numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
             if (!line.startsWith("//")) {

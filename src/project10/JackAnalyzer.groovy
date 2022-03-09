@@ -13,27 +13,11 @@ package project10
  */
 class JackAnalyzer{
 
-    /**
-     * Handles a single jack file.
-     * @param vmFile - path of jack file.
-     */
-    static ArrayList<File> handleSingleFile(File file) {
-        if (!file.name.endsWith(".jack")) throw new IllegalArgumentException(".jack file is required!")
-        [file]
-    }
-
-    /**
-     * Handles a folder that has jack files.
-     * @param dir - path of directory.
-     */
-    static ArrayList<File> handleDirectory(File dir) {
-        def jackFiles = dir.listFiles().findAll{it.name.endsWith(".jack")}
-        if (jackFiles.size() == 0) throw new IllegalArgumentException('No jack file in this directory')
-        jackFiles
-    }
-
     static void main(args) {
-        if(args.length == 0){ println('Missing argument!!!'); return }
+        if(args.length == 0){
+            println('Missing argument!!!')
+            return
+        }
 
         File inFile = new File(args[0])
         def jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
@@ -53,5 +37,26 @@ class JackAnalyzer{
             println("File created : $fileOutPath")
             println("File created : $tokenFileOutPath")
         }
+    }
+
+    /**
+     * Handles a single jack file.
+     * @param vmFile - path of jack file.
+     */
+    static ArrayList<File> handleSingleFile(File file) {
+        if (!file.name.endsWith('.jack'))
+            throw new IllegalArgumentException('.jack file is required!')
+        [file]
+    }
+
+    /**
+     * Handles a folder that has jack files.
+     * @param dir - path of directory.
+     */
+    static ArrayList<File> handleDirectory(File dir) {
+        def jackFiles = dir.listFiles().findAll{it.name.endsWith('.jack')}
+        if (jackFiles.size() == 0)
+            throw new IllegalArgumentException('No jack file in this directory')
+        jackFiles
     }
 }
