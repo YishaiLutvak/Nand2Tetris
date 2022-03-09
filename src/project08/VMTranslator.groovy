@@ -80,7 +80,7 @@ class VMTranslator {
                 parser.setCurrentCommand(line)
                 def commandType = parser.getCommandType()
                 switch (commandType) {
-                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand())
+                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(/*line*/parser.getCurrentCommand())
                     case CommandType.C_PUSH,CommandType.C_POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                     case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())

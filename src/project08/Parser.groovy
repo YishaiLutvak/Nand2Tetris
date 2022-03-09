@@ -42,7 +42,7 @@ class Parser {
      * @param cmd - string of cmd.
      */
     static String getCurrentCommand() {
-        return currentCommand
+        currentCommand
     }
 
     /**
@@ -80,7 +80,4 @@ class Parser {
     static int arg2() {
         currentCommand.split(' ')[2] as int
     }
-
-    /* static boolean hasMoreCommands() {}
-    static def advance() {} */
 }

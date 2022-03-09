@@ -23,9 +23,10 @@ class Parser07 {
      * @return instance of Parser.
      */
     static Parser07 getInstance(File inputFile) {
-        if (instance == null)
+        if (instance == null){
             instance = new Parser07(inputFile)
-        return instance
+        }
+        instance
     }
 
     /**
@@ -34,6 +35,14 @@ class Parser07 {
      */
     static void setCurrentCommand(String cmd) {
         currentCommand = cmd.split("//")[0] // for comments in end of line
+    }
+
+    /**
+     * Getter
+     * @param cmd - string of cmd.
+     */
+    static String getCurrentCommand() {
+        currentCommand
     }
 
     /**

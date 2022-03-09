@@ -51,9 +51,11 @@ class JackTokenizer {
                 preProcessed += (line.length() > 0) ? "$line\n" : ""
             }
             preProcessed = noBlockComments(preProcessed).trim()
-            Matcher matcher = tokenPatterns.matcher(preProcessed)
-            while(matcher.find())
+            Matcher matcher = preProcessed =~ tokenPatterns
+            while(matcher.find()){
                 tokens += matcher.group()
+                //println(tokens)
+            }
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
@@ -73,23 +75,25 @@ class JackTokenizer {
      * Initially there is no current token
      */
     static void advance(){
-        if(hasMoreTokens())
+        if(hasMoreTokens()){
             currentToken = tokens[pointer++]
-        else
+        } else {
             throw new IllegalStateException("No more tokens")
+        }
         //println(currentToken)
-        if(currentToken ==~ keyWordReg)
+        if(currentToken ==~ keyWordReg) {
             currentTokenType = LexicalElements.LE_KEYWORD
-        else if(currentToken ==~ symbolReg)
+        } else if(currentToken ==~ symbolReg){
             currentTokenType = LexicalElements.LE_SYMBOL
-        else if(currentToken ==~ intReg)
+        } else if(currentToken ==~ intReg) {
             currentTokenType = LexicalElements.LE_INT_CONST
-        else if(currentToken ==~ strReg)
+        } else if(currentToken ==~ strReg) {
             currentTokenType = LexicalElements.LE_STRING_CONST
-        else if(currentToken ==~ idReg)
+        } else if(currentToken ==~ idReg) {
             currentTokenType = LexicalElements.LE_IDENTIFIER
-        else
+        } else {
             throw new IllegalArgumentException("Unknown token: $currentToken")
+        }
     }
 
     static String getCurrentToken() {
@@ -110,10 +114,11 @@ class JackTokenizer {
      * @return
      */
     static KeyWords keyWord(){
-        if(currentTokenType == LexicalElements.LE_KEYWORD)
+        if(currentTokenType == LexicalElements.LE_KEYWORD){
             myMap[currentToken]
-        else
+        } else {
             throw new IllegalStateException("Current token is not a keyword!")
+        }
     }
 
     /**
@@ -122,10 +127,11 @@ class JackTokenizer {
      * @return if current token is not a symbol return \0
      */
     static String symbol(){
-        if(currentTokenType == LexicalElements.LE_SYMBOL)
+        if(currentTokenType == LexicalElements.LE_SYMBOL){
             currentToken
-        else
+        } else {
             throw new IllegalStateException("Current token is not a symbol!")
+        }
     }
 
     /**
@@ -134,10 +140,11 @@ class JackTokenizer {
      * @return
      */
     static String identifier(){
-        if(currentTokenType == LexicalElements.LE_IDENTIFIER)
+        if(currentTokenType == LexicalElements.LE_IDENTIFIER){
             currentToken
-        else
+        } else {
             throw new IllegalStateException("Current token is not an identifier!")
+        }
     }
 
     /**
@@ -146,10 +153,11 @@ class JackTokenizer {
      * @return
      */
     static int intVal(){
-        if(currentTokenType == LexicalElements.LE_INT_CONST)
+        if(currentTokenType == LexicalElements.LE_INT_CONST){
             currentToken as int
-        else
+        } else {
             throw new IllegalStateException("Current token is not an integer constant!")
+        }
     }
 
     /**
@@ -158,10 +166,11 @@ class JackTokenizer {
      * @return
      */
     static String stringVal(){
-        if(currentTokenType == LexicalElements.LE_STRING_CONST)
+        if(currentTokenType == LexicalElements.LE_STRING_CONST){
             currentToken//[1,-1]
-        else
+        } else {
             throw new IllegalStateException("Current token is not a string constant!")
+        }
     }
 
     /**

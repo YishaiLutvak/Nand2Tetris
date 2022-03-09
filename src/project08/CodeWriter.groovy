@@ -43,7 +43,7 @@ class CodeWriter {
         if (instance == null) {
             instance = new CodeWriter(outputFile)
         }
-        return instance
+        instance
     }
 
     /**
@@ -135,7 +135,7 @@ class CodeWriter {
      * @param label
      */
     static void writeGoto(String label) {
-        out <<  Constants.GOTO.replace('{label}', "${currentFileName}.${label}")
+        out << Constants.GOTO.replace('{label}', "${currentFileName}.${label}")
     }
 
     /**
@@ -143,7 +143,7 @@ class CodeWriter {
      * @param label
      */
     static void writeIf(String label) {
-        out <<  Constants.IF_GOTO.replace('{label}', "${currentFileName}.${label}")
+        out << Constants.IF_GOTO.replace('{label}', "${currentFileName}.${label}")
     }
 
     /**

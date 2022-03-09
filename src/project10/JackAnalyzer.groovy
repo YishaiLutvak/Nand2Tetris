@@ -44,8 +44,9 @@ class JackAnalyzer{
      * @param vmFile - path of jack file.
      */
     static ArrayList<File> handleSingleFile(File file) {
-        if (!file.name.endsWith('.jack'))
+        if (!file.name.endsWith('.jack')){
             throw new IllegalArgumentException('.jack file is required!')
+        }
         [file]
     }
 
@@ -55,8 +56,9 @@ class JackAnalyzer{
      */
     static ArrayList<File> handleDirectory(File dir) {
         def jackFiles = dir.listFiles().findAll{it.name.endsWith('.jack')}
-        if (jackFiles.size() == 0)
+        if (jackFiles.size() == 0){
             throw new IllegalArgumentException('No jack file in this directory')
+        }
         jackFiles
     }
 }

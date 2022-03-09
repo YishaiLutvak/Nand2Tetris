@@ -12,7 +12,7 @@
   D=A               //   D = 17
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 17
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -22,7 +22,7 @@
   D=A               //   D = 17
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 17
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -34,18 +34,18 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ_0_TRUE  
+  @EQ.0_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ_0_END                             
+  @EQ.0_END                             
   0;JMP             //   jump to label of END
-(EQ_0_TRUE)                      
+(EQ.0_TRUE)                      
   @SP               //   A = 0                               
   A=M               //   A = ram[0]  
   M=-1              //   ram[A] = -1
-(EQ_0_END)    
+(EQ.0_END)    
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -55,7 +55,7 @@
   D=A               //   D = 17
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 17
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -65,7 +65,7 @@
   D=A               //   D = 16
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 16
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -77,18 +77,18 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ_1_TRUE  
+  @EQ.1_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ_1_END                             
+  @EQ.1_END                             
   0;JMP             //   jump to label of END
-(EQ_1_TRUE)                      
+(EQ.1_TRUE)                      
   @SP               //   A = 0                               
   A=M               //   A = ram[0]  
   M=-1              //   ram[A] = -1
-(EQ_1_END)    
+(EQ.1_END)    
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -98,7 +98,7 @@
   D=A               //   D = 16
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 16
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -108,7 +108,7 @@
   D=A               //   D = 17
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 17
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -120,18 +120,18 @@
   @SP               //   A = 0                     
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1                          
   D=M-D             //   D = ram[A]-D              
-  @EQ_2_TRUE  
+  @EQ.2_TRUE  
   D;JEQ             //   if D==0 jump to label of TRUE
   @SP               //   A = 0                          
   A=M               //   A = ram[0]
   M=0               //   ram[A] = 0                     
-  @EQ_2_END                             
+  @EQ.2_END                             
   0;JMP             //   jump to label of END
-(EQ_2_TRUE)                      
+(EQ.2_TRUE)                      
   @SP               //   A = 0                               
   A=M               //   A = ram[0]  
   M=-1              //   ram[A] = -1
-(EQ_2_END)    
+(EQ.2_END)    
   @SP               //   A = 0
   M=M+1             //   ram[0] = ram[0]+1
 
@@ -141,7 +141,7 @@
   D=A               //   D = 892
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 892
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -151,7 +151,7 @@
   D=A               //   D = 891
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 891
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -163,18 +163,18 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT_0_TRUE        
+  @LT.0_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT_0_END        
+  @LT.0_END        
   0;JMP             //   jump to label of END           
-(LT_0_TRUE)                          
+(LT.0_TRUE)                          
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=-1              //   ram[A] = -1                    
-(LT_0_END)                            
+(LT.0_END)                            
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
@@ -184,7 +184,7 @@
   D=A               //   D = 891
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 891
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -194,7 +194,7 @@
   D=A               //   D = 892
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 892
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -206,18 +206,18 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT_1_TRUE        
+  @LT.1_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT_1_END        
+  @LT.1_END        
   0;JMP             //   jump to label of END           
-(LT_1_TRUE)                          
+(LT.1_TRUE)                          
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=-1              //   ram[A] = -1                    
-(LT_1_END)                            
+(LT.1_END)                            
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
@@ -227,7 +227,7 @@
   D=A               //   D = 891
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 891
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -237,7 +237,7 @@
   D=A               //   D = 891
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 891
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -249,18 +249,18 @@
   @SP               //   A = 0                          
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1
   D=M-D             //   D = ram[A]-D                   
-  @LT_2_TRUE        
+  @LT.2_TRUE        
   D;JLT             //   if D<0 jump to label of TRUE   
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=0               //   ram[A] = 0                     
-  @LT_2_END        
+  @LT.2_END        
   0;JMP             //   jump to label of END           
-(LT_2_TRUE)                          
+(LT.2_TRUE)                          
   @SP               //   A = 0                          
   A=M               //   A = ram[0]                     
   M=-1              //   ram[A] = -1                    
-(LT_2_END)                            
+(LT.2_END)                            
   @SP               //   A = 0                          
   M=M+1             //   ram[0] = ram[0]+1              
 
@@ -270,7 +270,7 @@
   D=A               //   D = 32767
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32767
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -280,7 +280,7 @@
   D=A               //   D = 32766
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32766
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -292,18 +292,18 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT_0_TRUE          
+  @GT.0_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT_0_END         
+  @GT.0_END         
   0;JMP             //   jump to label of END             
-(GT_0_TRUE)                            
+(GT.0_TRUE)                            
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=-1              //   ram[A] = -1                      
-(GT_0_END)                              
+(GT.0_END)                              
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
@@ -313,7 +313,7 @@
   D=A               //   D = 32766
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32766
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -323,7 +323,7 @@
   D=A               //   D = 32767
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32767
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -335,18 +335,18 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT_1_TRUE          
+  @GT.1_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT_1_END         
+  @GT.1_END         
   0;JMP             //   jump to label of END             
-(GT_1_TRUE)                            
+(GT.1_TRUE)                            
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=-1              //   ram[A] = -1                      
-(GT_1_END)                              
+(GT.1_END)                              
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
@@ -356,7 +356,7 @@
   D=A               //   D = 32766
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32766
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -366,7 +366,7 @@
   D=A               //   D = 32766
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 32766
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -378,18 +378,18 @@
   @SP               //   A = 0                            
   AM=M-1            //   A = ram[0]-1, ram[0] = ram[0]-1  
   D=M-D             //   D = ram[A]-D                     
-  @GT_2_TRUE          
+  @GT.2_TRUE          
   D;JGT             //   if D>0 jump to label of TRUE    
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=0               //   ram[A] = 0                       
-  @GT_2_END         
+  @GT.2_END         
   0;JMP             //   jump to label of END             
-(GT_2_TRUE)                            
+(GT.2_TRUE)                            
   @SP               //   A = 0                            
   A=M               //   A = ram[0]                       
   M=-1              //   ram[A] = -1                      
-(GT_2_END)                              
+(GT.2_END)                              
   @SP               //   A = 0                            
   M=M+1             //   ram[0] = ram[0]+1                
 
@@ -399,7 +399,7 @@
   D=A               //   D = 57
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 57
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -409,7 +409,7 @@
   D=A               //   D = 31
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 31
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -419,7 +419,7 @@
   D=A               //   D = 53
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 53
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -441,7 +441,7 @@
   D=A               //   D = 112
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 112
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -484,7 +484,7 @@
   D=A               //   D = 82
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[ram[0]] = 82
+  M=D               //   ram[A] = D
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
