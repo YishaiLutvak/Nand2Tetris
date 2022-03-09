@@ -1,7 +1,6 @@
 package project07
 
 import project07.Constants07.CommandType
-import project08.Constants
 
 //input to test
 //1. C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
@@ -67,11 +66,11 @@ class VMTranslator07 {
         vmFile.eachLine { line, numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
-            if (!line.startsWith("//")) {
+            if (!line.startsWith('//')) {
                 parser.setCurrentCommand(line)
                 def commandType = parser.getCommandType()
                 switch (commandType) {
-                    case Constants.CommandType.C_ARITHMETIC -> writer.writeArithmetic(/*line*/parser.getCurrentCommand())
+                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
                     case CommandType.C_PUSH, CommandType.C_POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                 }

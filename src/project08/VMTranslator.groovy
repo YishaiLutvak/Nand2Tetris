@@ -73,14 +73,14 @@ class VMTranslator {
      */
     static void translateVmFile(File vmFile) {
         parser = Parser.getInstance(vmFile)
-        vmFile.eachLine() { line, numberLine ->
+        vmFile.eachLine { line, numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
-            if (!(line==~"^( *//).*")) {
+            if (!(line==~'^( *//).*')) {
                 parser.setCurrentCommand(line)
                 def commandType = parser.getCommandType()
                 switch (commandType) {
-                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(/*line*/parser.getCurrentCommand())
+                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
                     case CommandType.C_PUSH,CommandType.C_POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                     case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())
@@ -90,7 +90,7 @@ class VMTranslator {
                     case CommandType.C_RETURN -> writer.writeReturn()
                     case CommandType.C_FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
                 }
-            } //else {println("(line==~\"^( *//).*\")" + " " + line)}
+            } // else {println("(line==~\'^( *//).*\')" + " " + line)}
         }
     }
 }
