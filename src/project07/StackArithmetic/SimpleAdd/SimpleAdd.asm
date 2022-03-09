@@ -11,7 +11,7 @@
   D=A               //   D = 7
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 7
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
@@ -21,7 +21,7 @@
   D=A               //   D = 8
   @SP               //   A = 0                     
   A=M               //   A = ram[0]                          
-  M=D               //   ram[A] = D
+  M=D               //   ram[ram[0]] = 8
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              

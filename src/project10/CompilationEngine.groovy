@@ -686,14 +686,6 @@ class CompilationEngine {
     }
 
     /**
-     * throw an exception to report errors
-     * @param val
-     */
-    private void error(String val){
-        throw new IllegalStateException("Expected token missing : " + val + " Current token:" + tokenizer.getCurrentToken())
-    }
-
-    /**
      * require symbol when we know there must be such symbol
      * @param symbol
      */
@@ -703,5 +695,13 @@ class CompilationEngine {
             printWriter.print("<symbol>" + symbol + "</symbol>\n")
             tokenPrintWriter.print("<symbol>" + symbol + "</symbol>\n")
         } else error("'" + symbol + "'")
+    }
+
+    /**
+     * throw an exception to report errors
+     * @param val
+     */
+    private void error(String val){
+        throw new IllegalStateException("Expected token missing : " + val + " Current token:" + tokenizer.getCurrentToken())
     }
 }

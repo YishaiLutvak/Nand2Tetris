@@ -43,7 +43,7 @@ class VMTranslator {
      * @param vmFile - vm file.
      */
     static void handleSingleFile(File vmFile) {
-        writer = CodeWriter.getInstance(vmFile)
+        writer = new CodeWriter(vmFile)
         writer.setCurrentFileName(vmFile.name)
         translateVmFile(vmFile)
         writer.close()
@@ -54,7 +54,7 @@ class VMTranslator {
      * @param dir - directory.
      */
     static void handleDirectory(File dir) {
-        writer = CodeWriter.getInstance(dir)
+        writer = new CodeWriter(dir)
         if ((dir.listFiles().findAll{it.name.endsWith(".vm")}.size()) > 1){
             writer.writeInit()
         }
@@ -72,7 +72,7 @@ class VMTranslator {
      * @param vmFile - vm file to translate.
      */
     static void translateVmFile(File vmFile) {
-        parser = Parser.getInstance(vmFile)
+        parser = new Parser(vmFile)
         vmFile.eachLine { line, numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment

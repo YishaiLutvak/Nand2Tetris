@@ -4,7 +4,6 @@ import project08.Constants.CommandType
 
 class Parser {
 
-    private static Parser instance = null //singleton
     private static File file = null
     private static String currentCommand
 
@@ -13,20 +12,8 @@ class Parser {
      * Open the input file and gets reade to parse.
      * @param inputFile.
      */
-    private Parser(File inputFile) {
+    Parser(File inputFile) {
         file = inputFile
-    }
-
-    /**
-     * Singleton
-     * @param inputFile.
-     * @return instance of Parser.
-     */
-    static Parser getInstance(File inputFile) {
-        if (instance == null) {
-            instance = new Parser(inputFile)
-        }
-        return instance
     }
 
     /**

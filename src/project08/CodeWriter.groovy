@@ -4,7 +4,6 @@ import project08.Constants.CommandType
 
 class CodeWriter {
 
-    private static CodeWriter instance = null // singleton
     private static FileWriter out = null
     private static String currentFileName = null
     private static eqCounter = 0
@@ -24,7 +23,7 @@ class CodeWriter {
      * Opens the output file and gets ready to write into it.
      * @param outputFile - path of output file.
      */
-    private CodeWriter(File outputFile) {
+    CodeWriter(File outputFile) {
         if (outputFile.isDirectory()) {
             out = new FileWriter(new File(outputFile, "${outputFile.name}.asm"))
         }
@@ -32,18 +31,6 @@ class CodeWriter {
             out = new FileWriter(new File(
                     outputFile.getParent(), "${outputFile.name.split(/\./)[0]}.asm"))
         }
-    }
-
-    /**
-     * Singleton
-     * @param outputFile - path of output file.
-     * @return instance of CodeWriter.
-     */
-    static CodeWriter getInstance(File outputFile) {
-        if (instance == null) {
-            instance = new CodeWriter(outputFile)
-        }
-        instance
     }
 
     /**

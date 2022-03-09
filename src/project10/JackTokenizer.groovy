@@ -54,7 +54,7 @@ class JackTokenizer {
             Matcher matcher = preProcessed =~ tokenPatterns
             while(matcher.find()){
                 tokens += matcher.group()
-                //println(tokens)
+                println(tokens)
             }
         } catch(FileNotFoundException e) {
             e.printStackTrace()
