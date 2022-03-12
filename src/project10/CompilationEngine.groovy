@@ -34,6 +34,7 @@ class CompilationEngine {
             (KW.THIS): 'this', (KW.LET): 'let', (KW.DO): 'do', (KW.IF): 'if',
             (KW.ELSE): 'else', (KW.WHILE): 'while', (KW.RETURN): 'return',
     ]
+
     /**
      * Creates a new compilation engine with the given input and output.
      * The next routine called must be compileClass()
@@ -50,8 +51,10 @@ class CompilationEngine {
         }
     }
 
-
-    private static writeXMLTag(LE myTokenType= tokenizer.getTokenType(),def infoTag = tokenizer.getCurrentToken()){
+    /**
+     * Writes the appropriate tag in a Tokens file and a tree file
+     */
+    private static void writeXMLTag(LE myTokenType= tokenizer.getTokenType(),def infoTag = tokenizer.getCurrentToken()){
         String nameTag = reverseMap[myTokenType]
         printWriter.print("${width * Indentation}<$nameTag> $infoTag </$nameTag>\n")
         tokenPrintWriter.print("<$nameTag> $infoTag </$nameTag>\n")
@@ -82,13 +85,10 @@ class CompilationEngine {
           if (myTokenType != LE.KEYWORD || tokenizer.keyWord() != KW.CLASS){
                error("class")
           }
-          
           printWriter.print("<class>\n")
           tokenPrintWriter.print("<tokens>\n")
-
           ++Indentation
           writeXMLTag(myTokenType)
-
           //className
           tokenizer.advance()
           myTokenType =  tokenizer.getTokenType()
@@ -96,24 +96,19 @@ class CompilationEngine {
               error("className")
           }
           writeXMLTag(myTokenType)
-
           //'{'
           requireSymbol('{')
-
           //classVarDec* subroutineDec*
           compileClassVarDec()
           compileSubroutine()
-
           //'}'
           requireSymbol('}')
           if (tokenizer.hasMoreTokens()){
               throw new IllegalStateException("Unexpected tokens")
           }
-
           --Indentation
           tokenPrintWriter.print("</tokens>\n")
           printWriter.print("</class>\n")
-
           //save file
           printWriter.close()
           tokenPrintWriter.close()
@@ -190,7 +185,6 @@ class CompilationEngine {
         }
         printWriter.print("${width * Indentation++}<subroutineDec>\n")
         writeXMLTag(myTokenType)
-
         tokenizer.advance()
         myTokenType = tokenizer.getTokenType()
         if (myTokenType == LE.KEYWORD &&
@@ -207,18 +201,14 @@ class CompilationEngine {
             error("subroutineName")
         }
         writeXMLTag(myTokenType)
-
         //'('
         requireSymbol('(')
-
         //parameterList
         printWriter.print("${width * Indentation++}<parameterList>\n")
         compileParameterList()
         printWriter.print("${width * --Indentation}</parameterList>\n")
-
         //')'
         requireSymbol(')')
-
         //subroutineBody
         compileSubroutineBody()
         printWriter.print("${width * --Indentation}</subroutineDec>\n")
@@ -230,25 +220,18 @@ class CompilationEngine {
      * '{'  varDec* statements '}'
      */
     private void compileSubroutineBody(){
-        printWriter.print("${width * Indentation}<subroutineBody>\n")
-        ++Indentation
-
+        printWriter.print("${width * Indentation++}<subroutineBody>\n")
         //'{'
         requireSymbol('{')
-
         //varDec*
         compileVarDec()
-
         //statements
         printWriter.print("${width * Indentation++}<statements>\n")
         compileStatement()
         printWriter.print("${width * --Indentation}</statements>\n")
-
         //'}'
         requireSymbol('}')
-
-        --Indentation
-        printWriter.print("${width * Indentation}</subroutineBody>\n")
+        printWriter.print("${width * --Indentation}</subroutineBody>\n")
     }
 
     /**
@@ -292,13 +275,11 @@ class CompilationEngine {
             tokenizer.pointerBack()
             return
         }
-
         //there is parameter, at least one varName
         tokenizer.pointerBack()
         do {
             //type
             compileType()
-
             //varName
             tokenizer.advance()
             myTokenType = tokenizer.getTokenType()
@@ -306,7 +287,6 @@ class CompilationEngine {
                 error("identifier")
             }
             writeXMLTag(myTokenType)
-
             //',' or ')'
             tokenizer.advance()
             myTokenType = tokenizer.getTokenType()
@@ -336,11 +316,8 @@ class CompilationEngine {
             tokenizer.pointerBack()
             return
         }
-        printWriter.print("${width * Indentation}<varDec>\n")
-        ++Indentation
-
+        printWriter.print("${width * Indentation++}<varDec>\n")
         writeXMLTag(myTokenType,'var')
-
         //type
         compileType()
         //at least one varName
@@ -353,7 +330,6 @@ class CompilationEngine {
                 error("identifier")
             }
             writeXMLTag(myTokenType)
-
             //',' or ';'
             tokenizer.advance()
             myTokenType = tokenizer.getTokenType()
@@ -366,9 +342,7 @@ class CompilationEngine {
                 break
             }
         } while(true)
-
-        --Indentation
-        printWriter.print("${width * Indentation}</varDec>\n")
+        printWriter.print("${width * --Indentation}</varDec>\n")
         compileVarDec()
     }
 
@@ -377,19 +351,13 @@ class CompilationEngine {
      * 'do' subroutineCall ';'
      */
     private void compileDo(){
-        printWriter.print("${width * Indentation}<doStatement>\n")
-        ++Indentation
-
+        printWriter.print("${width * Indentation++}<doStatement>\n")
         writeXMLTag(LE.KEYWORD,'do')
-
         //subroutineCall
         compileSubroutineCall()
-
         //';'
         requireSymbol(';')
-
-        --Indentation
-        printWriter.print("${width * Indentation}</doStatement>\n")
+        printWriter.print("${width * --Indentation}</doStatement>\n")
     }
 
     /**
@@ -399,16 +367,13 @@ class CompilationEngine {
     private void compileLet(){
         printWriter.print("${width * Indentation++}<letStatement>\n")
         writeXMLTag(LE.KEYWORD,'let')
-
         //varName
         tokenizer.advance()
         LE myTokenType = tokenizer.getTokenType()
         if (myTokenType != LE.IDENTIFIER){
             error("varName")
         }
-
         writeXMLTag(myTokenType)
-
         //'[' or '='
         tokenizer.advance()
         myTokenType = tokenizer.getTokenType()
@@ -416,15 +381,11 @@ class CompilationEngine {
             error("'['|'='")
         }
         boolean expExist = false
-
         //'[' expression ']'
         if (tokenizer.symbol() == '['){
             expExist = true
-
             writeXMLTag(myTokenType,'[')
-
             compileExpression()
-
             //']'
             tokenizer.advance()
             myTokenType = tokenizer.getTokenType()
@@ -435,16 +396,12 @@ class CompilationEngine {
             }
         }
         if (expExist) tokenizer.advance()
-
         //'='
         writeXMLTag(LE.SYMBOL,'=')
-
         //expression
         compileExpression()
-
         //';'
         requireSymbol(';')
-
         printWriter.print("${width * --Indentation}</letStatement>\n")
     }
 
@@ -454,16 +411,13 @@ class CompilationEngine {
      */
     private void compilesWhile(){
         printWriter.print("${width * Indentation++}<whileStatement>\n")
-
         writeXMLTag(LE.KEYWORD,'while')
-
         //'('
         requireSymbol('(')
         //expression
         compileExpression()
         //')'
         requireSymbol(')')
-
         //'{'
         requireSymbol('{')
         //statements
@@ -472,7 +426,6 @@ class CompilationEngine {
         printWriter.print("${width * --Indentation}</statements>\n")
         //'}'
         requireSymbol('}')
-
         printWriter.print("${width * --Indentation}</whileStatement>\n")
     }
 
@@ -482,12 +435,9 @@ class CompilationEngine {
      */
     private void compileReturn(){
         printWriter.print("${width * Indentation++}<returnStatement>\n")
-
         writeXMLTag(LE.KEYWORD,'return')
-
         //check if there is any expression
         tokenizer.advance()
-
         //no expression
         LE myTokenType = tokenizer.getTokenType()
         if (myTokenType == LE.SYMBOL && tokenizer.symbol() == ';'){
@@ -495,14 +445,11 @@ class CompilationEngine {
             printWriter.print("${width * --Indentation}</returnStatement>\n")
             return
         }
-
         tokenizer.pointerBack()
         //expression
         compileExpression()
-
         //';'
         requireSymbol(';')
-
         printWriter.print("${width * --Indentation}</returnStatement>\n")
     }
 
@@ -514,14 +461,12 @@ class CompilationEngine {
     private void compileIf(){
         printWriter.print("${width * Indentation++}<ifStatement>\n")
         writeXMLTag(LE.KEYWORD,'if')
-
         //'('
         requireSymbol('(')
         //expression
         compileExpression()
         //')'
         requireSymbol(')')
-
         //'{'
         requireSymbol('{')
         //statements
@@ -530,13 +475,11 @@ class CompilationEngine {
         printWriter.print("${width * --Indentation}</statements>\n")
         //'}'
         requireSymbol('}')
-
         //check if there is 'else'
         tokenizer.advance()
         LE myTokenType = tokenizer.getTokenType()
         if (myTokenType == LE.KEYWORD && tokenizer.keyWord() == KW.ELSE){
             writeXMLTag(myTokenType,'else')
-
             //'{'
             requireSymbol('{')
             //statements
@@ -545,10 +488,7 @@ class CompilationEngine {
             printWriter.print("${width * --Indentation}</statements>\n")
             //'}'
             requireSymbol('}')
-        } else {
-            tokenizer.pointerBack()
-        }
-
+        } else { tokenizer.pointerBack() }
         printWriter.print("${width * --Indentation}</ifStatement>\n")
     }
 
@@ -565,14 +505,12 @@ class CompilationEngine {
      */
     private void compileTerm(){
         printWriter.print("${width * Indentation++}<term>\n")
-
         tokenizer.advance()
         //check if it is an identifier
         LE tempTokenType = tokenizer.getTokenType()
         if (tempTokenType == LE.IDENTIFIER){
             //varName|varName '[' expression ']'|subroutineCall
             String tempCurrentToken = tokenizer.getCurrentToken()
-
             tokenizer.advance()
             LE myTokenType = tokenizer.getTokenType()
             String mySymbol = tokenizer.symbol()
@@ -591,7 +529,7 @@ class CompilationEngine {
                     compileExpression()
                     //']'
                     requireSymbol(']')
-                } else /*this is varName*/ tokenizer.pointerBack()
+                } else /*this is varName*/ { tokenizer.pointerBack() }
             }
         } else {
             //integerConstant|stringConstant|keywordConstant|'(' expression ')'|unaryOp term
@@ -629,7 +567,6 @@ class CompilationEngine {
             error("identifier")
         }
         writeXMLTag(myTokenType)
-
         tokenizer.advance()
         myTokenType = tokenizer.getTokenType()
         if (myTokenType == LE.SYMBOL && tokenizer.symbol() == '('){
@@ -709,9 +646,9 @@ class CompilationEngine {
             //(','expression)*
             do {
                 tokenizer.advance()
-                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ','){
-                    printWriter.print("<symbol>,</symbol>\n")
-                    tokenPrintWriter.print("<symbol>,</symbol>\n")
+                myTokenType = tokenizer.getTokenType()
+                if (myTokenType == LE.SYMBOL && tokenizer.symbol() == ','){
+                    writeXMLTag(myTokenType,',')
                     //expression
                     compileExpression()
                 } else {
