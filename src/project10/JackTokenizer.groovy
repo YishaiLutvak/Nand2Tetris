@@ -10,15 +10,15 @@ import java.util.regex.Pattern
  */
 class JackTokenizer {
     static enum LexicalElements {
-        LE_KEYWORD, LE_SYMBOL, LE_IDENTIFIER, LE_INT_CONST, LE_STRING_CONST, LE_NOTHING,
+        KEYWORD, SYMBOL, IDENTIFIER, INT_CONST, STRING_CONST, NOTHING,
     }
     static enum KeyWords{
-        KW_CLASS, KW_METHOD, KW_FUNCTION, KW_CONSTRUCTOR, KW_INT, KW_BOOLEAN, KW_CHAR, KW_VOID, KW_VAR, KW_STATIC,
-        KW_FIELD, KW_LET, KW_DO, KW_IF, KW_ELSE, KW_WHILE, KW_RETURN, KW_TRUE, KW_FALSE, KW_NULL, KW_THIS, KW_NOTHING,
+        CLASS, METHOD, FUNCTION, CONSTRUCTOR, INT, BOOLEAN, CHAR, VOID, VAR, STATIC,
+        FIELD, LET, DO, IF, ELSE, WHILE, RETURN, TRUE, FALSE, NULL, THIS, NOTHING,
     }
 
     private static String currentToken = ''
-    private static LexicalElements currentTokenType = LexicalElements.LE_NOTHING
+    private static LexicalElements currentTokenType = LexicalElements.NOTHING
     private static int pointer = 0
     private static def tokens = []
 
@@ -31,12 +31,12 @@ class JackTokenizer {
     private static Pattern tokenPatterns = ~(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
     private static def opSet = ['+','-','*','/','|','<','>','='] as Set
     static def myMap = [
-            class: KeyWords.KW_CLASS, constructor: KeyWords.KW_CONSTRUCTOR, function: KeyWords.KW_FUNCTION,
-            method: KeyWords.KW_METHOD, field : KeyWords.KW_FIELD, static: KeyWords.KW_STATIC,
-            var: KeyWords.KW_VAR, int: KeyWords.KW_INT, char: KeyWords.KW_CHAR, boolean: KeyWords.KW_BOOLEAN,
-            void: KeyWords.KW_VOID, true: KeyWords.KW_TRUE, false: KeyWords.KW_FALSE, null: KeyWords.KW_NULL,
-            this: KeyWords.KW_THIS, let: KeyWords.KW_LET, do: KeyWords.KW_DO, if: KeyWords.KW_IF,
-            else: KeyWords.KW_ELSE, while: KeyWords.KW_WHILE, return: KeyWords.KW_RETURN,
+            class: KeyWords.CLASS, constructor: KeyWords.CONSTRUCTOR, function: KeyWords.FUNCTION,
+            method: KeyWords.METHOD, field : KeyWords.FIELD, static: KeyWords.STATIC,
+            var: KeyWords.VAR, int: KeyWords.INT, char: KeyWords.CHAR, boolean: KeyWords.BOOLEAN,
+            void: KeyWords.VOID, true: KeyWords.TRUE, false: KeyWords.FALSE, null: KeyWords.NULL,
+            this: KeyWords.THIS, let: KeyWords.LET, do: KeyWords.DO, if: KeyWords.IF,
+            else: KeyWords.ELSE, while: KeyWords.WHILE, return: KeyWords.RETURN,
     ]
 
     /**
@@ -82,15 +82,15 @@ class JackTokenizer {
         }
         //println(currentToken)
         if(currentToken ==~ keyWordReg) {
-            currentTokenType = LexicalElements.LE_KEYWORD
-        } else if(currentToken ==~ symbolReg){
-            currentTokenType = LexicalElements.LE_SYMBOL
+            currentTokenType = LexicalElements.KEYWORD
+        } else if(currentToken ==~ symbolReg) {
+            currentTokenType = LexicalElements.SYMBOL
         } else if(currentToken ==~ intReg) {
-            currentTokenType = LexicalElements.LE_INT_CONST
+            currentTokenType = LexicalElements.INT_CONST
         } else if(currentToken ==~ strReg) {
-            currentTokenType = LexicalElements.LE_STRING_CONST
+            currentTokenType = LexicalElements.STRING_CONST
         } else if(currentToken ==~ idReg) {
-            currentTokenType = LexicalElements.LE_IDENTIFIER
+            currentTokenType = LexicalElements.IDENTIFIER
         } else {
             throw new IllegalArgumentException("Unknown token: $currentToken")
         }
@@ -114,7 +114,7 @@ class JackTokenizer {
      * @return
      */
     static KeyWords keyWord(){
-        if(currentTokenType == LexicalElements.LE_KEYWORD){
+        if(currentTokenType == LexicalElements.KEYWORD){
             myMap[currentToken]
         } else {
             throw new IllegalStateException("Current token is not a keyword!")
@@ -127,7 +127,7 @@ class JackTokenizer {
      * @return if current token is not a symbol return \0
      */
     static String symbol(){
-        if(currentTokenType == LexicalElements.LE_SYMBOL){
+        if(currentTokenType == LexicalElements.SYMBOL){
             currentToken
         } else {
             throw new IllegalStateException("Current token is not a symbol!")
@@ -140,7 +140,7 @@ class JackTokenizer {
      * @return
      */
     static String identifier(){
-        if(currentTokenType == LexicalElements.LE_IDENTIFIER){
+        if(currentTokenType == LexicalElements.IDENTIFIER){
             currentToken
         } else {
             throw new IllegalStateException("Current token is not an identifier!")
@@ -153,7 +153,7 @@ class JackTokenizer {
      * @return
      */
     static int intVal(){
-        if(currentTokenType == LexicalElements.LE_INT_CONST){
+        if(currentTokenType == LexicalElements.INT_CONST){
             currentToken as int
         } else {
             throw new IllegalStateException("Current token is not an integer constant!")
@@ -166,7 +166,7 @@ class JackTokenizer {
      * @return
      */
     static String stringVal(){
-        if(currentTokenType == LexicalElements.LE_STRING_CONST){
+        if(currentTokenType == LexicalElements.STRING_CONST){
             currentToken//[1,-1]
         } else {
             throw new IllegalStateException("Current token is not a string constant!")

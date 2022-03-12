@@ -1,4 +1,6 @@
 package project10
+import static project10.JackTokenizer.KeyWords as KW
+import static project10.JackTokenizer.LexicalElements as LE
 
 /**
  * recursive top-down parser
@@ -15,10 +17,23 @@ package project10
  * In both cases, the parsing logic and module API are exactly the same.
  */
 class CompilationEngine {
-    private PrintWriter printWriter
-    private PrintWriter tokenPrintWriter
-    private JackTokenizer tokenizer
 
+    private static PrintWriter printWriter
+    private static PrintWriter tokenPrintWriter
+    private static JackTokenizer tokenizer
+    private static int Indentation = 0
+    private static String width= '  '
+    static def reverseMap = [
+            (LE.KEYWORD): 'keyword', (LE.SYMBOL): 'symbol', (LE.IDENTIFIER): 'identifier',
+            (LE.INT_CONST): 'integerConstant', (LE.STRING_CONST): 'stringConstant',
+
+            (KW.CLASS):'class', /*(KW.CONSTRUCTOR): 'constructor', (KW.FUNCTION): 'function',*/
+            (KW.METHOD): 'method', (KW.FIELD): 'field', (KW.STATIC): 'static',
+            (KW.VAR): 'var', (KW.INT): 'int', (KW.CHAR): 'char', (KW.BOOLEAN): 'boolean',
+            (KW.VOID): 'void', (KW.TRUE): 'true', (KW.FALSE): 'false', (KW.NULL): 'null',
+            (KW.THIS): 'this', (KW.LET): 'let', (KW.DO): 'do', (KW.IF): 'if',
+            (KW.ELSE): 'else', (KW.WHILE): 'while', (KW.RETURN): 'return',
+    ]
     /**
      * Creates a new compilation engine with the given input and output.
      * The next routine called must be compileClass()
@@ -35,26 +50,25 @@ class CompilationEngine {
         }
     }
 
+
+    private static writeXMLTag(LE myTokenType= tokenizer.getTokenType(),def infoTag = tokenizer.getCurrentToken()){
+        String nameTag = reverseMap[myTokenType]
+        printWriter.print("${width * Indentation}<$nameTag> $infoTag </$nameTag>\n")
+        tokenPrintWriter.print("<$nameTag> $infoTag </$nameTag>\n")
+    }
+
     /**
      * Compiles a type
      */
-    private void compileType(){
+    private static void compileType(){
         tokenizer.advance()
-        boolean isType = false
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_KEYWORD &&
-                (tokenizer.keyWord() == JackTokenizer.KeyWords.KW_INT ||
-                tokenizer.keyWord() == JackTokenizer.KeyWords.KW_CHAR ||
-                tokenizer.keyWord() == JackTokenizer.KeyWords.KW_BOOLEAN)){
-            printWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-            tokenPrintWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-            isType = true
+        LE myTokenType =  tokenizer.getTokenType()
+        if ((myTokenType == LE.KEYWORD && tokenizer.keyWord() in [KW.INT,KW.CHAR,KW.BOOLEAN]) ||
+                myTokenType == LE.IDENTIFIER){
+            writeXMLTag(myTokenType)
+            return
         }
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_IDENTIFIER){
-            printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            isType = true
-        }
-        if (!isType) error("in|char|boolean|className")
+        error("int|char|boolean|className")
     }
 
     /**
@@ -62,39 +76,48 @@ class CompilationEngine {
      * class: 'class' className '{' classVarDec* subroutineDec* '}'
      */
      void compileClass(){
-        //'class'
-        tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD ||
-                tokenizer.keyWord() != JackTokenizer.KeyWords.KW_CLASS){
-            error("class")
-        }
-        printWriter.print("<class>\n")
-        tokenPrintWriter.print("<tokens>\n")
-        printWriter.print("<keyword>class</keyword>\n")
-        tokenPrintWriter.print("<keyword>class</keyword>\n")
-        //className
-        tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
-            error("className")
-        }
-        printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-        tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-        //'{'
-        requireSymbol('{')
-        //classVarDec* subroutineDec*
-        compileClassVarDec()
-        compileSubroutine()
-        //'}'
-        requireSymbol('}')
-        if (tokenizer.hasMoreTokens()){
-            throw new IllegalStateException("Unexpected tokens")
-        }
-        tokenPrintWriter.print("</tokens>\n")
-        printWriter.print("</class>\n")
-        //save file
-        printWriter.close()
-        tokenPrintWriter.close()
-    }
+          //'class'
+          tokenizer.advance()
+          LE myTokenType =  tokenizer.getTokenType()
+          if (myTokenType != LE.KEYWORD || tokenizer.keyWord() != KW.CLASS){
+               error("class")
+          }
+          
+          printWriter.print("<class>\n")
+          tokenPrintWriter.print("<tokens>\n")
+
+          ++Indentation
+          writeXMLTag(myTokenType)
+
+          //className
+          tokenizer.advance()
+          myTokenType =  tokenizer.getTokenType()
+          if (myTokenType != LE.IDENTIFIER){
+              error("className")
+          }
+          writeXMLTag(myTokenType)
+
+          //'{'
+          requireSymbol('{')
+
+          //classVarDec* subroutineDec*
+          compileClassVarDec()
+          compileSubroutine()
+
+          //'}'
+          requireSymbol('}')
+          if (tokenizer.hasMoreTokens()){
+              throw new IllegalStateException("Unexpected tokens")
+          }
+
+          --Indentation
+          tokenPrintWriter.print("</tokens>\n")
+          printWriter.print("</class>\n")
+
+          //save file
+          printWriter.close()
+          tokenPrintWriter.close()
+     }
 
     /**
      * Compiles a static declaration or a field declaration
@@ -103,29 +126,24 @@ class CompilationEngine {
     private void compileClassVarDec(){
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
-        //next is a '}'
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '}'){
+        LE myTokenType = tokenizer.getTokenType()
+        KW myKeyWord = tokenizer.keyWord()
+        //next is a '}' or subroutineDec
+        if ((myTokenType == LE.SYMBOL && tokenizer.symbol() == '}')||
+                (myKeyWord in [KW.CONSTRUCTOR, KW.FUNCTION, KW.METHOD])){
             tokenizer.pointerBack()
             return
         }
         //next is start subroutineDec or classVarDec, both start with keyword
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD){
+        if (myTokenType != LE.KEYWORD){
             error("Keywords")
         }
-        //next is subroutineDec
-        if (tokenizer.keyWord() == JackTokenizer.KeyWords.KW_CONSTRUCTOR ||
-                tokenizer.keyWord() == JackTokenizer.KeyWords.KW_FUNCTION ||
-                tokenizer.keyWord() == JackTokenizer.KeyWords.KW_METHOD){
-            tokenizer.pointerBack()
-            return
-        }
-        printWriter.print("<classVarDec>\n")
+        printWriter.print("${width * Indentation++}<classVarDec>\n")
         //classVarDec exists
-        if (tokenizer.keyWord() != JackTokenizer.STATIC && tokenizer.keyWord() != JackTokenizer.FIELD){
+        if (!(myKeyWord in [KW.STATIC, KW.FIELD])){
             error("static or field")
         }
-        printWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-        tokenPrintWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
+        writeXMLTag(myTokenType)
         //type
         compileType()
         //at least one varName
@@ -133,27 +151,24 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+            myTokenType = tokenizer.getTokenType()
+            if (myTokenType != LE.IDENTIFIER){
                 error("identifier")
             }
-            printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+            writeXMLTag(myTokenType)
             //',' or ';'
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL ||
-                    (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+            myTokenType = tokenizer.getTokenType()
+            String mySymbol = tokenizer.symbol()
+            if (myTokenType != LE.SYMBOL || !(mySymbol in [',',';'])){
                 error("',' or ';'")
             }
-            if (tokenizer.symbol() == ','){
-                printWriter.print("<symbol>,</symbol>\n")
-                tokenPrintWriter.print("<symbol>,</symbol>\n")
-            } else {
-                printWriter.print("<symbol>;</symbol>\n")
-                tokenPrintWriter.print("<symbol>;</symbol>\n")
+            writeXMLTag(myTokenType,mySymbol)
+            if (tokenizer.symbol() == ';'){
                 break
             }
         } while(true)
-        printWriter.print("</classVarDec>\n")
+        printWriter.print("${width * --Indentation}</classVarDec>\n")
         compileClassVarDec()
     }
 
@@ -163,49 +178,50 @@ class CompilationEngine {
     private void compileSubroutine(){
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
+        LE myTokenType = tokenizer.getTokenType()
         //next is a '}'
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '}'){
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             return
         }
         //start of a subroutine
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD ||
-                (tokenizer.keyWord() != JackTokenizer.KeyWords.KW_CONSTRUCTOR  &&
-                tokenizer.keyWord() != JackTokenizer.KeyWords.KW_FUNCTION &&
-                        tokenizer.keyWord() != JackTokenizer.KeyWords.KW_METHOD)){
+        if (myTokenType != LE.KEYWORD || (!(tokenizer.keyWord() in [KW.CONSTRUCTOR, KW.FUNCTION, KW.METHOD]))){
             error("constructor|function|method")
         }
-        printWriter.print("<subroutineDec>\n")
-        printWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-        tokenPrintWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-        //'void' or type
+        printWriter.print("${width * Indentation++}<subroutineDec>\n")
+        writeXMLTag(myTokenType)
+
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_KEYWORD &&
-                tokenizer.keyWord() == JackTokenizer.KeyWords.KW_VOID){
-            printWriter.print("<keyword>void</keyword>\n")
-            tokenPrintWriter.print("<keyword>void</keyword>\n")
+        myTokenType = tokenizer.getTokenType()
+        if (myTokenType == LE.KEYWORD &&
+                tokenizer.keyWord() == KW.VOID){
+            writeXMLTag(myTokenType,'void')
         } else {
             tokenizer.pointerBack()
             compileType()
         }
         //subroutineName which is a identifier
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+        myTokenType = tokenizer.getTokenType()
+        if (myTokenType != LE.IDENTIFIER){
             error("subroutineName")
         }
-        printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-        tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+        writeXMLTag(myTokenType)
+
         //'('
         requireSymbol('(')
+
         //parameterList
-        printWriter.print("<parameterList>\n")
+        printWriter.print("${width * Indentation++}<parameterList>\n")
         compileParameterList()
-        printWriter.print("</parameterList>\n")
+        printWriter.print("${width * --Indentation}</parameterList>\n")
+
         //')'
         requireSymbol(')')
+
         //subroutineBody
         compileSubroutineBody()
-        printWriter.print("</subroutineDec>\n")
+        printWriter.print("${width * --Indentation}</subroutineDec>\n")
         compileSubroutine()
     }
 
@@ -214,18 +230,25 @@ class CompilationEngine {
      * '{'  varDec* statements '}'
      */
     private void compileSubroutineBody(){
-        printWriter.print("<subroutineBody>\n")
+        printWriter.print("${width * Indentation}<subroutineBody>\n")
+        ++Indentation
+
         //'{'
         requireSymbol('{')
+
         //varDec*
         compileVarDec()
+
         //statements
-        printWriter.print("<statements>\n")
+        printWriter.print("${width * Indentation++}<statements>\n")
         compileStatement()
-        printWriter.print("</statements>\n")
+        printWriter.print("${width * --Indentation}</statements>\n")
+
         //'}'
         requireSymbol('}')
-        printWriter.print("</subroutineBody>\n")
+
+        --Indentation
+        printWriter.print("${width * Indentation}</subroutineBody>\n")
     }
 
     /**
@@ -234,22 +257,22 @@ class CompilationEngine {
     private void compileStatement(){
         //determine whether there is a statement_next can be a '}'
         tokenizer.advance()
-
+        LE myTokenType = tokenizer.getTokenType()
         //next is a '}'
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '}'){
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             return
         }
         //next is 'let'|'if'|'while'|'do'|'return'
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD){
+        if (myTokenType != LE.KEYWORD){
             error("keyword")
         } else {
             switch (tokenizer.keyWord()){
-                case JackTokenizer.KeyWords.KW_LET -> compileLet()
-                case JackTokenizer.KeyWords.KW_IF -> compileIf()
-                case JackTokenizer.KeyWords.KW_WHILE -> compilesWhile()
-                case JackTokenizer.KeyWords.KW_DO -> compileDo()
-                case JackTokenizer.KeyWords.KW_RETURN -> compileReturn()
+                case KW.LET -> compileLet()
+                case KW.IF -> compileIf()
+                case KW.WHILE -> compilesWhile()
+                case KW.DO -> compileDo()
+                case KW.RETURN -> compileReturn()
                 default -> error("'let'|'if'|'while'|'do'|'return'")
             }
         }
@@ -261,10 +284,11 @@ class CompilationEngine {
      * not including the enclosing "()"
      * ((type varName)(',' type varName)*)?
      */
-    private void compileParameterList(){
+    private static void compileParameterList(){
         //check if there is parameterList, if next token is ')' than go back
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ')'){
+        LE myTokenType = tokenizer.getTokenType()
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
             return
         }
@@ -274,22 +298,24 @@ class CompilationEngine {
         do {
             //type
             compileType()
+
             //varName
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+            myTokenType = tokenizer.getTokenType()
+            if (myTokenType != LE.IDENTIFIER){
                 error("identifier")
             }
-            printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+            writeXMLTag(myTokenType)
+
             //',' or ')'
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ')')){
+            myTokenType = tokenizer.getTokenType()
+            String mySimbol = tokenizer.symbol()
+            if (myTokenType != LE.SYMBOL || (!(mySimbol in [',',')']))){
                 error("',' or ')'")
             }
-
-            if (tokenizer.symbol() == ','){
-                printWriter.print("<symbol>,</symbol>\n")
-                tokenPrintWriter.print("<symbol>,</symbol>\n")
+            if (mySimbol == ','){
+                writeXMLTag(myTokenType,',')
             } else {
                 tokenizer.pointerBack()
                 break
@@ -304,14 +330,17 @@ class CompilationEngine {
     private void compileVarDec(){
         //determine if there is a varDec
         tokenizer.advance()
+        LE myTokenType = tokenizer.getTokenType()
         //no 'var' go back
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_KEYWORD || tokenizer.keyWord() != JackTokenizer.KeyWords.KW_VAR){
+        if (myTokenType != LE.KEYWORD || tokenizer.keyWord() != KW.VAR){
             tokenizer.pointerBack()
             return
         }
-        printWriter.print("<varDec>\n")
-        printWriter.print("<keyword>var</keyword>\n")
-        tokenPrintWriter.print("<keyword>var</keyword>\n")
+        printWriter.print("${width * Indentation}<varDec>\n")
+        ++Indentation
+
+        writeXMLTag(myTokenType,'var')
+
         //type
         compileType()
         //at least one varName
@@ -319,26 +348,27 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+            myTokenType = tokenizer.getTokenType()
+            if (myTokenType != LE.IDENTIFIER){
                 error("identifier")
             }
-            printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+            writeXMLTag(myTokenType)
+
             //',' or ';'
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+            myTokenType = tokenizer.getTokenType()
+            String mySymbol = tokenizer.symbol()
+            if (myTokenType != LE.SYMBOL || (!(mySymbol in [',',';']))){
                 error("',' or ';'")
             }
-            if (tokenizer.symbol() == ','){
-                printWriter.print("<symbol>,</symbol>\n")
-                tokenPrintWriter.print("<symbol>,</symbol>\n")
-            } else {
-                printWriter.print("<symbol>;</symbol>\n")
-                tokenPrintWriter.print("<symbol>;</symbol>\n")
+            writeXMLTag(myTokenType,mySymbol)
+            if (tokenizer.symbol() == ';'){
                 break
             }
         } while(true)
-        printWriter.print("</varDec>\n")
+
+        --Indentation
+        printWriter.print("${width * Indentation}</varDec>\n")
         compileVarDec()
     }
 
@@ -347,14 +377,19 @@ class CompilationEngine {
      * 'do' subroutineCall ';'
      */
     private void compileDo(){
-        printWriter.print("<doStatement>\n")
-        printWriter.print("<keyword>do</keyword>\n")
-        tokenPrintWriter.print("<keyword>do</keyword>\n")
+        printWriter.print("${width * Indentation}<doStatement>\n")
+        ++Indentation
+
+        writeXMLTag(LE.KEYWORD,'do')
+
         //subroutineCall
         compileSubroutineCall()
+
         //';'
         requireSymbol(';')
-        printWriter.print("</doStatement>\n")
+
+        --Indentation
+        printWriter.print("${width * Indentation}</doStatement>\n")
     }
 
     /**
@@ -362,47 +397,55 @@ class CompilationEngine {
      * 'let' varName ('[' ']')? '=' expression ';'
      */
     private void compileLet(){
-        printWriter.print("<letStatement>\n")
-        printWriter.print("<keyword>let</keyword>\n")
-        tokenPrintWriter.print("<keyword>let</keyword>\n")
+        printWriter.print("${width * Indentation++}<letStatement>\n")
+        writeXMLTag(LE.KEYWORD,'let')
+
         //varName
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+        LE myTokenType = tokenizer.getTokenType()
+        if (myTokenType != LE.IDENTIFIER){
             error("varName")
         }
-        printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-        tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+
+        writeXMLTag(myTokenType)
+
         //'[' or '='
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_SYMBOL ||
-                (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
+        myTokenType = tokenizer.getTokenType()
+        if (myTokenType != LE.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
             error("'['|'='")
         }
         boolean expExist = false
+
         //'[' expression ']'
         if (tokenizer.symbol() == '['){
             expExist = true
-            printWriter.print("<symbol>[</symbol>\n")
-            tokenPrintWriter.print("<symbol>[</symbol>\n")
+
+            writeXMLTag(myTokenType,'[')
+
             compileExpression()
+
             //']'
             tokenizer.advance()
-            if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ']'){
-                printWriter.print("<symbol>]</symbol>\n")
-                tokenPrintWriter.print("<symbol>]</symbol>\n")
+            myTokenType = tokenizer.getTokenType()
+            if (myTokenType == LE.SYMBOL && tokenizer.symbol() == ']'){
+                writeXMLTag(myTokenType,']')
             } else {
                 error("']'")
             }
         }
         if (expExist) tokenizer.advance()
+
         //'='
-        printWriter.print("<symbol>=</symbol>\n")
-        tokenPrintWriter.print("<symbol>=</symbol>\n")
+        writeXMLTag(LE.SYMBOL,'=')
+
         //expression
         compileExpression()
+
         //';'
         requireSymbol(';')
-        printWriter.print("</letStatement>\n")
+
+        printWriter.print("${width * --Indentation}</letStatement>\n")
     }
 
     /**
@@ -410,24 +453,27 @@ class CompilationEngine {
      * 'while' '(' expression ')' '{' statements '}'
      */
     private void compilesWhile(){
-        printWriter.print("<whileStatement>\n")
-        printWriter.print("<keyword>while</keyword>\n")
-        tokenPrintWriter.print("<keyword>while</keyword>\n")
+        printWriter.print("${width * Indentation++}<whileStatement>\n")
+
+        writeXMLTag(LE.KEYWORD,'while')
+
         //'('
         requireSymbol('(')
         //expression
         compileExpression()
         //')'
         requireSymbol(')')
+
         //'{'
         requireSymbol('{')
         //statements
-        printWriter.print("<statements>\n")
+        printWriter.print("${width * Indentation++}<statements>\n")
         compileStatement()
-        printWriter.print("</statements>\n")
+        printWriter.print("${width * --Indentation}</statements>\n")
         //'}'
         requireSymbol('}')
-        printWriter.print("</whileStatement>\n")
+
+        printWriter.print("${width * --Indentation}</whileStatement>\n")
     }
 
     /**
@@ -435,25 +481,29 @@ class CompilationEngine {
      * ‘return’ expression? ';'
      */
     private void compileReturn(){
-        printWriter.print("<returnStatement>\n")
-        printWriter.print("<keyword>return</keyword>\n")
-        tokenPrintWriter.print("<keyword>return</keyword>\n")
+        printWriter.print("${width * Indentation++}<returnStatement>\n")
+
+        writeXMLTag(LE.KEYWORD,'return')
 
         //check if there is any expression
         tokenizer.advance()
+
         //no expression
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ';'){
-            printWriter.print("<symbol>;</symbol>\n")
-            tokenPrintWriter.print("<symbol>;</symbol>\n")
-            printWriter.print("</returnStatement>\n")
+        LE myTokenType = tokenizer.getTokenType()
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == ';'){
+            writeXMLTag(myTokenType,';')
+            printWriter.print("${width * --Indentation}</returnStatement>\n")
             return
         }
+
         tokenizer.pointerBack()
         //expression
         compileExpression()
+
         //';'
         requireSymbol(';')
-        printWriter.print("</returnStatement>\n")
+
+        printWriter.print("${width * --Indentation}</returnStatement>\n")
     }
 
     /**
@@ -462,40 +512,44 @@ class CompilationEngine {
      * 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}')?
      */
     private void compileIf(){
-        printWriter.print("<ifStatement>\n")
-        printWriter.print("<keyword>if</keyword>\n")
-        tokenPrintWriter.print("<keyword>if</keyword>\n")
+        printWriter.print("${width * Indentation++}<ifStatement>\n")
+        writeXMLTag(LE.KEYWORD,'if')
+
         //'('
         requireSymbol('(')
         //expression
         compileExpression()
         //')'
         requireSymbol(')')
+
         //'{'
         requireSymbol('{')
         //statements
-        printWriter.print("<statements>\n")
+        printWriter.print("${width * Indentation++}<statements>\n")
         compileStatement()
-        printWriter.print("</statements>\n")
+        printWriter.print("${width * --Indentation}</statements>\n")
         //'}'
         requireSymbol('}')
+
         //check if there is 'else'
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_KEYWORD && tokenizer.keyWord() == JackTokenizer.KeyWords.KW_ELSE){
-            printWriter.print("<keyword>else</keyword>\n")
-            tokenPrintWriter.print("<keyword>else</keyword>\n")
+        LE myTokenType = tokenizer.getTokenType()
+        if (myTokenType == LE.KEYWORD && tokenizer.keyWord() == KW.ELSE){
+            writeXMLTag(myTokenType,'else')
+
             //'{'
             requireSymbol('{')
             //statements
-            printWriter.print("<statements>\n")
+            printWriter.print("${width * Indentation++}<statements>\n")
             compileStatement()
-            printWriter.print("</statements>\n")
+            printWriter.print("${width * --Indentation}</statements>\n")
             //'}'
             requireSymbol('}')
         } else {
             tokenizer.pointerBack()
         }
-        printWriter.print("</ifStatement>\n")
+
+        printWriter.print("${width * --Indentation}</ifStatement>\n")
     }
 
     /**
@@ -510,68 +564,58 @@ class CompilationEngine {
      * '(' expression ')'|unaryOp term
      */
     private void compileTerm(){
-        printWriter.print("<term>\n")
+        printWriter.print("${width * Indentation++}<term>\n")
+
         tokenizer.advance()
         //check if it is an identifier
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_IDENTIFIER){
+        LE tempTokenType = tokenizer.getTokenType()
+        if (tempTokenType == LE.IDENTIFIER){
             //varName|varName '[' expression ']'|subroutineCall
-            String tempId = tokenizer.identifier()
+            String tempCurrentToken = tokenizer.getCurrentToken()
+
             tokenizer.advance()
-            if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '['){
-                printWriter.print("<identifier>" + tempId + "</identifier>\n")
-                tokenPrintWriter.print("<identifier>" + tempId + "</identifier>\n")
-                //this is an array entry
-                printWriter.print("<symbol>[</symbol>\n")
-                tokenPrintWriter.print("<symbol>[</symbol>\n")
-                //expression
-                compileExpression()
-                //']'
-                requireSymbol(']')
-            } else if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL &&
-                    (tokenizer.symbol() == '(' || tokenizer.symbol() == '.')){
+            LE myTokenType = tokenizer.getTokenType()
+            String mySymbol = tokenizer.symbol()
+            if (myTokenType == LE.SYMBOL && (mySymbol in ['(','.'])){
                 //this is a subroutineCall
                 tokenizer.pointerBack()
                 tokenizer.pointerBack()
                 compileSubroutineCall()
             } else {
-                printWriter.print("<identifier>" + tempId + "</identifier>\n")
-                tokenPrintWriter.print("<identifier>" + tempId + "</identifier>\n")
-                //this is varName
-                tokenizer.pointerBack()
+                writeXMLTag(tempTokenType,tempCurrentToken)
+                if (myTokenType == LE.SYMBOL && mySymbol == '['){
+                    writeXMLTag(tempTokenType,tempCurrentToken)
+                    //this is an array entry
+                    writeXMLTag(myTokenType,'[')
+                    //expression
+                    compileExpression()
+                    //']'
+                    requireSymbol(']')
+                } else /*this is varName*/ tokenizer.pointerBack()
             }
         } else {
             //integerConstant|stringConstant|keywordConstant|'(' expression ')'|unaryOp term
-            if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_INT_CONST){
-                printWriter.print("<integerConstant>" + tokenizer.intVal() + "</integerConstant>\n")
-                tokenPrintWriter.print("<integerConstant>" + tokenizer.intVal() + "</integerConstant>\n")
-            } else if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_STRING_CONST){
-                printWriter.print("<stringConstant>" + tokenizer.stringVal() + "</stringConstant>\n")
-                tokenPrintWriter.print("<stringConstant>" + tokenizer.stringVal() + "</stringConstant>\n")
-            } else if(tokenizer.getTokenType() == JackTokenizer.KEYWORD &&
-                    (tokenizer.keyWord() == JackTokenizer.KeyWords.KW_TRUE ||
-                            tokenizer.keyWord() == JackTokenizer.KeyWords.KW_FALSE ||
-                            tokenizer.keyWord() == JackTokenizer.KeyWords.KW_NULL ||
-                            tokenizer.keyWord() == JackTokenizer.KeyWords.KW_THIS)){
-                printWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-                tokenPrintWriter.print("<keyword>" + tokenizer.getCurrentToken() + "</keyword>\n")
-            } else if (tokenizer.getTokenType() == JackTokenizer.SYMBOL && tokenizer.symbol() == '('){
-                printWriter.print("<symbol>(</symbol>\n")
-                tokenPrintWriter.print("<symbol>(</symbol>\n")
+            if (tempTokenType == LE.INT_CONST){
+                writeXMLTag(tempTokenType,tokenizer.intVal())
+            } else if (tempTokenType == LE.STRING_CONST){
+                writeXMLTag(tempTokenType,tokenizer.stringVal())
+            } else if(tempTokenType == LE.KEYWORD && (tokenizer.keyWord() in [KW.TRUE, KW.FALSE, KW.NULL, KW.THIS])){
+                writeXMLTag(tempTokenType)
+            } else if (tempTokenType == LE.SYMBOL && tokenizer.symbol() == '('){
+                writeXMLTag(tempTokenType,'(')
                 //expression
                 compileExpression()
                 //')'
                 requireSymbol(')')
-            } else if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL &&
-                    (tokenizer.symbol() == '-' || tokenizer.symbol() == '~')){
-                printWriter.print("<symbol>" + tokenizer.symbol() + "</symbol>\n")
-                tokenPrintWriter.print("<symbol>" + tokenizer.symbol() + "</symbol>\n")
+            } else if (tempTokenType == LE.SYMBOL && (tokenizer.symbol() in ['-','~'])){
+                writeXMLTag(tempTokenType)
                 //term
                 compileTerm()
             } else {
                 error("integerConstant|stringConstant|keywordConstant|'(' expression ')'|unaryOp term")
             }
         }
-        printWriter.print("</term>\n")
+        printWriter.print("${width * --Indentation}</term>\n")
     }
 
     /**
@@ -580,39 +624,39 @@ class CompilationEngine {
      */
     private void compileSubroutineCall(){
         tokenizer.advance()
-        if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+        LE myTokenType = tokenizer.getTokenType()
+        if (myTokenType != LE.IDENTIFIER){
             error("identifier")
         }
-        printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-        tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+        writeXMLTag(myTokenType)
+
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '('){
+        myTokenType = tokenizer.getTokenType()
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == '('){
             //'(' expressionList ')'
-            printWriter.print("<symbol>(</symbol>\n")
-            tokenPrintWriter.print("<symbol>(</symbol>\n")
+            writeXMLTag(myTokenType,'(')
             //expressionList
-            printWriter.print("<expressionList>\n")
+            printWriter.print("${width * Indentation++}<expressionList>\n")
             compileExpressionList()
-            printWriter.print("</expressionList>\n")
+            printWriter.print("${width * --Indentation}</expressionList>\n")
             //')'
             requireSymbol(')')
-        } else if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == '.'){
+        } else if (myTokenType == LE.SYMBOL && tokenizer.symbol() == '.'){
             //(className|varName) '.' subroutineName '(' expressionList ')'
-            printWriter.print("<symbol>.</symbol>\n")
-            tokenPrintWriter.print("<symbol>.</symbol>\n")
+            writeXMLTag(myTokenType,'.')
             //subroutineName
             tokenizer.advance()
-            if (tokenizer.getTokenType() != JackTokenizer.LexicalElements.LE_IDENTIFIER){
+            myTokenType = tokenizer.getTokenType()
+            if (myTokenType != LE.IDENTIFIER){
                 error("identifier")
             }
-            printWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
-            tokenPrintWriter.print("<identifier>" + tokenizer.identifier() + "</identifier>\n")
+            writeXMLTag(myTokenType)
             //'('
             requireSymbol('(')
             //expressionList
-            printWriter.print("<expressionList>\n")
+            printWriter.print("${width * Indentation++}<expressionList>\n")
             compileExpressionList()
-            printWriter.print("</expressionList>\n")
+            printWriter.print("${width * --Indentation}</expressionList>\n")
             //')'
             requireSymbol(')')
         } else {
@@ -625,26 +669,20 @@ class CompilationEngine {
      * term (op term)*
      */
     private void compileExpression(){
-        printWriter.print("<expression>\n")
+        printWriter.print("${width * Indentation++}<expression>\n")
         //term
         compileTerm()
         //(op term)*
         do {
             tokenizer.advance()
             //op
-            if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.isOp()){
-                if (tokenizer.symbol() == '>'){
-                    printWriter.print("<symbol>&gt;</symbol>\n")
-                    tokenPrintWriter.print("<symbol>&gt;</symbol>\n")
-                } else if (tokenizer.symbol() == '<'){
-                    printWriter.print("<symbol>&lt;</symbol>\n")
-                    tokenPrintWriter.print("<symbol>&lt;</symbol>\n")
-                } else if (tokenizer.symbol() == '&') {
-                    printWriter.print("<symbol>&amp;</symbol>\n")
-                    tokenPrintWriter.print("<symbol>&amp;</symbol>\n")
-                } else {
-                    printWriter.print("<symbol>" + tokenizer.symbol() + "</symbol>\n")
-                    tokenPrintWriter.print("<symbol>" + tokenizer.symbol() + "</symbol>\n")
+            LE myTokenType = tokenizer.getTokenType()
+            if (myTokenType == LE.SYMBOL && tokenizer.isOp()){
+                switch (tokenizer.symbol()){
+                    case '>' -> writeXMLTag(myTokenType,'&gt;')
+                    case '<' -> writeXMLTag(myTokenType,'&lt;')
+                    case '&' -> writeXMLTag(myTokenType,'&amp;')
+                    default -> writeXMLTag(myTokenType)
                 }
                 //term
                 compileTerm()
@@ -653,7 +691,7 @@ class CompilationEngine {
                 break
             }
         } while (true)
-        printWriter.print("</expression>\n")
+        printWriter.print("${width * --Indentation}</expression>\n")
     }
 
     /**
@@ -662,17 +700,16 @@ class CompilationEngine {
      */
     private void compileExpressionList(){
         tokenizer.advance()
+        LE myTokenType = tokenizer.getTokenType()
         //determine if there is any expression, if next is ')' then no
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ')'){
-            tokenizer.pointerBack()
-        } else {
-            tokenizer.pointerBack()
+        tokenizer.pointerBack()
+        if (!(myTokenType == LE.SYMBOL && tokenizer.symbol() == ')')){
             //expression
             compileExpression()
             //(','expression)*
             do {
                 tokenizer.advance()
-                if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == ','){
+                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ','){
                     printWriter.print("<symbol>,</symbol>\n")
                     tokenPrintWriter.print("<symbol>,</symbol>\n")
                     //expression
@@ -689,19 +726,19 @@ class CompilationEngine {
      * require symbol when we know there must be such symbol
      * @param symbol
      */
-    private void requireSymbol(symbol){
+    private static void requireSymbol(String symbol){
         tokenizer.advance()
-        if (tokenizer.getTokenType() == JackTokenizer.LexicalElements.LE_SYMBOL && tokenizer.symbol() == symbol){
-            printWriter.print("<symbol>" + symbol + "</symbol>\n")
-            tokenPrintWriter.print("<symbol>" + symbol + "</symbol>\n")
-        } else error("'" + symbol + "'")
+        LE myTokenType =  tokenizer.getTokenType()
+        if (myTokenType == LE.SYMBOL && tokenizer.symbol() == symbol){
+            writeXMLTag(myTokenType,symbol)
+        } else error("'$symbol'")
     }
 
     /**
      * throw an exception to report errors
      * @param val
      */
-    private void error(String val){
-        throw new IllegalStateException("Expected token missing : " + val + " Current token:" + tokenizer.getCurrentToken())
+    private static void error(String val){
+        throw new IllegalStateException("Expected token missing : $val Current token:  ${tokenizer.getCurrentToken()}")
     }
 }
