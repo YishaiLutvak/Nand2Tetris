@@ -29,7 +29,7 @@ class JackTokenizer {
     private static String strReg = '"[^"\n]*"'
     private static String idReg = /[\w_]+/
     private static Pattern tokenPatterns = ~(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
-    private static def opSet = ['+','-','*','/','|','<','>','='] as Set
+    private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def myMap = [
             class: KeyWords.CLASS, constructor: KeyWords.CONSTRUCTOR, function: KeyWords.FUNCTION,
             method: KeyWords.METHOD, field : KeyWords.FIELD, static: KeyWords.STATIC,
@@ -54,7 +54,7 @@ class JackTokenizer {
             Matcher matcher = preProcessed =~ tokenPatterns
             while(matcher.find()){
                 tokens += matcher.group()
-                println(tokens)
+                //println(tokens)
             }
         } catch(FileNotFoundException e) {
             e.printStackTrace()
@@ -167,7 +167,7 @@ class JackTokenizer {
      */
     static String stringVal(){
         if(currentTokenType == LexicalElements.STRING_CONST){
-            currentToken//[1,-1]
+            currentToken[1..-2]
         } else {
             throw new IllegalStateException("Current token is not a string constant!")
         }

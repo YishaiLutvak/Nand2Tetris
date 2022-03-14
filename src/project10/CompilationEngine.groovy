@@ -58,6 +58,7 @@ class CompilationEngine {
         String nameTag = reverseMap[myTokenType]
         printWriter.print("${width * Indentation}<$nameTag> $infoTag </$nameTag>\n")
         tokenPrintWriter.print("<$nameTag> $infoTag </$nameTag>\n")
+        println("<$nameTag> $infoTag </$nameTag>\n")
     }
 
     /**
@@ -522,7 +523,6 @@ class CompilationEngine {
             } else {
                 writeXMLTag(tempTokenType,tempCurrentToken)
                 if (myTokenType == LE.SYMBOL && mySymbol == '['){
-                    writeXMLTag(tempTokenType,tempCurrentToken)
                     //this is an array entry
                     writeXMLTag(myTokenType,'[')
                     //expression

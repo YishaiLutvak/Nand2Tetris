@@ -24,8 +24,8 @@ class JackAnalyzer{
 
         jackFiles.each {
             String fileName = it.name.split(/\./)[0]
-            String fileOutPath = "${fileName}.xml"
-            String tokenFileOutPath = "${fileName}T.xml"
+            String fileOutPath = "My_${fileName}.xml"
+            String tokenFileOutPath = "My_${fileName}T.xml"
             String parent = it.getParent()
 
             File fileOut = new File(parent,fileOutPath)
