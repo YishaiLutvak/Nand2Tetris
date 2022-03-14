@@ -23,7 +23,7 @@ class JackAnalyzer{
         def jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
 
         jackFiles.each {
-            String fileName = it.name.split(/\./)[0]
+            String fileName = it.name.split(/\.jack/)[0]
             String fileOutPath = "My_${fileName}.xml"
             String tokenFileOutPath = "My_${fileName}T.xml"
             String parent = it.getParent()

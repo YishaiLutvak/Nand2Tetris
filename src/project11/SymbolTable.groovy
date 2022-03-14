@@ -1,7 +1,7 @@
 package project11
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 /**
  * This module provides services for creating and using a symbol table.
@@ -22,7 +22,7 @@ import java.util.Map;
  *  The symbol table associates the identifier names found in the program with identifier properties needed for compilation:
  *  type, kind, and running index. The symbol table for Jack programs has two nested scopes (class/subroutine).
  */
-public class SymbolTable {
+class SymbolTable {
 
     private HashMap<String,Symbol> classSymbols;//for STATIC, FIELD
     private HashMap<String,Symbol> subroutineSymbols;//for ARG, VAR
@@ -32,7 +32,7 @@ public class SymbolTable {
      * creates a new empty symbol table
      * init all indices
      */
-    public SymbolTable() {
+    SymbolTable() {
         classSymbols = new HashMap<String, Symbol>();
         subroutineSymbols = new HashMap<String, Symbol>();
 
@@ -48,7 +48,7 @@ public class SymbolTable {
      * starts a new subroutine scope
      * resets the subroutine's symbol table
      */
-    public void startSubroutine(){
+    void startSubroutine(){
         subroutineSymbols.clear();
         indices.put(Symbol.KIND.VAR,0);
         indices.put(Symbol.KIND.ARG,0);
@@ -62,7 +62,7 @@ public class SymbolTable {
      * @param type
      * @param kind
      */
-    public void define(String name, String type, Symbol.KIND kind){
+    void define(String name, String type, Symbol.KIND kind){
 
         if (kind == Symbol.KIND.ARG || kind == Symbol.KIND.VAR){
 
@@ -87,7 +87,7 @@ public class SymbolTable {
      * @param kind
      * @return
      */
-    public int varCount(Symbol.KIND kind){
+    int varCount(Symbol.KIND kind){
         return indices.get(kind);
     }
 
@@ -97,7 +97,7 @@ public class SymbolTable {
      * @param name
      * @return
      */
-    public Symbol.KIND kindOf(String name){
+    Symbol.KIND kindOf(String name){
 
         Symbol symbol = lookUp(name);
 
@@ -111,7 +111,7 @@ public class SymbolTable {
      * @param name
      * @return
      */
-    public String typeOf(String name){
+    String typeOf(String name){
 
         Symbol symbol = lookUp(name);
 
@@ -125,7 +125,7 @@ public class SymbolTable {
      * @param name
      * @return
      */
-    public int indexOf(String name){
+    int indexOf(String name){
 
         Symbol symbol = lookUp(name);
 

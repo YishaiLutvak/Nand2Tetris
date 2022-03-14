@@ -1,17 +1,17 @@
 package project11
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.HashMap;
+//import java.io.File;
+//import java.io.FileNotFoundException;
+//import java.io.PrintWriter;
+//import java.util.HashMap;
 
 /**
  *
  */
-public class VMWriter {
+class VMWriter {
 
-    public static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE};
-    public static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT};
+    static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE};
+    static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT};
 
     private static HashMap<SEGMENT,String> segmentStringHashMap = new HashMap<SEGMENT, String>();
     private static HashMap<COMMAND,String> commandStringHashMap = new HashMap<COMMAND, String>();
@@ -43,7 +43,7 @@ public class VMWriter {
      * creates a new file and prepares it for writing
      * @param fOut
      */
-    public VMWriter(File fOut) {
+    VMWriter(File fOut) {
 
         try {
             printWriter = new PrintWriter(fOut);
@@ -58,7 +58,7 @@ public class VMWriter {
      * @param segment
      * @param index
      */
-    public void writePush(SEGMENT segment, int index){
+    void writePush(SEGMENT segment, int index){
         writeCommand("push",segmentStringHashMap.get(segment),String.valueOf(index));
     }
 
@@ -67,7 +67,7 @@ public class VMWriter {
      * @param segment
      * @param index
      */
-    public void writePop(SEGMENT segment, int index){
+    void writePop(SEGMENT segment, int index){
         writeCommand("pop",segmentStringHashMap.get(segment),String.valueOf(index));
     }
 
@@ -75,7 +75,7 @@ public class VMWriter {
      * writes a VM arithmetic command
      * @param command
      */
-    public void writeArithmetic(COMMAND command){
+    void writeArithmetic(COMMAND command){
         writeCommand(commandStringHashMap.get(command),"","");
     }
 
@@ -83,7 +83,7 @@ public class VMWriter {
      * writes a VM label command
      * @param label
      */
-    public void writeLabel(String label){
+    void writeLabel(String label){
         writeCommand("label",label,"");
     }
 
@@ -91,14 +91,14 @@ public class VMWriter {
      * writes a VM goto command
      * @param label
      */
-    public void writeGoto(String label){
+    void writeGoto(String label){
         writeCommand("goto",label,"");
     }
     /**
      * writes a VM if-goto command
      * @param label
      */
-    public void writeIf(String label){
+    void writeIf(String label){
         writeCommand("if-goto",label,"");
     }
 
@@ -107,7 +107,7 @@ public class VMWriter {
      * @param name
      * @param nArgs
      */
-    public void writeCall(String name, int nArgs){
+    void writeCall(String name, int nArgs){
         writeCommand("call",name,String.valueOf(nArgs));
     }
 
@@ -116,18 +116,18 @@ public class VMWriter {
      * @param name
      * @param nLocals
      */
-    public void writeFunction(String name, int nLocals){
+    void writeFunction(String name, int nLocals){
         writeCommand("function",name,String.valueOf(nLocals));
     }
 
     /**
      * writes a VM return command
      */
-    public void writeReturn(){
+    void writeReturn(){
         writeCommand("return","","");
     }
 
-    public void writeCommand(String cmd, String arg1, String arg2){
+    void writeCommand(String cmd, String arg1, String arg2){
 
         printWriter.print(cmd + " " + arg1 + " " + arg2 + "\n");
 
@@ -136,7 +136,7 @@ public class VMWriter {
     /**
      * close the output file
      */
-    public void close(){
+    void close(){
         printWriter.close();
     }
 

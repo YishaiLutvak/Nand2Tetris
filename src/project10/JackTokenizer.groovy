@@ -162,6 +162,7 @@ class JackTokenizer {
 
     /**
      * Returns the string value of the current token
+     * without the double quotes
      * should be called only when tokenType() is STRING_CONST
      * @return
      */
