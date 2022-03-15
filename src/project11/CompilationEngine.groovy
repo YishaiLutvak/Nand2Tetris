@@ -1,8 +1,7 @@
 package project11
 import static project11.JackTokenizer.KeyWords as KW
 import static project11.JackTokenizer.LexicalElements as LE
-
-//import java.io.File
+import static project11.Symbol.KIND
 
 /**
  * This class does the compilation itself.
@@ -15,13 +14,13 @@ import static project11.JackTokenizer.LexicalElements as LE
  */
 class CompilationEngine {
 
-    private VMWriter vmWriter
     private JackTokenizer tokenizer
-    private SymbolTable symbolTable
+    private VMWriter vmWriter
     private String currentClass
     private String currentSubroutine
+    private SymbolTable symbolTable = new SymbolTable()
+    private int labelIndex = 0
 
-    private int labelIndex
     /**
      * Creates a new compilation engine with the given input and output.
      * The next routine called must be compileClass()
@@ -29,13 +28,8 @@ class CompilationEngine {
      * @param outFile
      */
     CompilationEngine(File inFile, File outFile) {
-
         tokenizer = new JackTokenizer(inFile)
         vmWriter = new VMWriter(outFile)
-        symbolTable = new SymbolTable()
-
-        labelIndex = 0
-
     }
 
     /**
@@ -43,13 +37,9 @@ class CompilationEngine {
      * @return
      */
     private String currentFunction(){
-
         if (currentClass.length() != 0 && currentSubroutine.length() !=0){
-
             return currentClass + "." + currentSubroutine
-
         }
-
         return ""
     }
 
@@ -58,19 +48,14 @@ class CompilationEngine {
      * @return type
      */
     private String compileType(){
-
         tokenizer.advance()
-
         if (tokenizer.getTokenType() == LE.KEYWORD && (tokenizer.keyWord() == KW.INT || tokenizer.keyWord() == KW.CHAR || tokenizer.keyWord() == KW.BOOLEAN)){
             return tokenizer.getCurrentToken()
         }
-
         if (tokenizer.getTokenType() == LE.IDENTIFIER){
             return tokenizer.identifier()
         }
-
         error("in|char|boolean|className")
-
         return ""
     }
 
@@ -148,13 +133,13 @@ class CompilationEngine {
             error("static or field")
         }
 
-        Symbol.KIND kind = null
+        KIND kind = null
         String type
         String name
 
         switch (tokenizer.keyWord()){
-            case STATIC:kind = Symbol.KIND.STATIC;break
-            case FIELD:kind = Symbol.KIND.FIELD;break
+            case STATIC:kind = KIND.STATIC;break
+            case FIELD:kind = KIND.FIELD;break
         }
 
         //type
@@ -217,7 +202,7 @@ class CompilationEngine {
 
         //for method this is the first argument
         if (tokenizer.keyWord() == KW.METHOD){
-            symbolTable.define("this",currentClass, Symbol.KIND.ARG)
+            symbolTable.define("this",currentClass, KIND.ARG)
         }
 
         //#String type
@@ -277,7 +262,7 @@ class CompilationEngine {
      */
     private void writeFunctionDec(KW keyword){
 
-        vmWriter.writeFunction(currentFunction(),symbolTable.varCount(Symbol.KIND.VAR))
+        vmWriter.writeFunction(currentFunction(),symbolTable.varCount(KIND.VAR))
 
         //METHOD and CONSTRUCTOR need to load this pointer
         if (keyword == KW.METHOD){
@@ -286,9 +271,9 @@ class CompilationEngine {
             vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
 
-        }else if (keyword == KW.CONSTRUCTOR){
+        } else if (keyword == KW.CONSTRUCTOR){
             //A Jack function or constructor with k arguments is compiled into a VM function that operates on k arguments.
-            vmWriter.writePush(VMWriter.SEGMENT.CONST,symbolTable.varCount(Symbol.KIND.FIELD))
+            vmWriter.writePush(VMWriter.SEGMENT.CONST,symbolTable.varCount(KIND.FIELD))
             vmWriter.writeCall("Memory.alloc", 1)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
         }
@@ -353,7 +338,7 @@ class CompilationEngine {
                 error("identifier")
             }
 
-            symbolTable.define(tokenizer.identifier(),type, Symbol.KIND.ARG)
+            symbolTable.define(tokenizer.identifier(),type, KIND.ARG)
 
             //',' or ')'
             tokenizer.advance()
@@ -400,7 +385,7 @@ class CompilationEngine {
                 error("identifier")
             }
 
-            symbolTable.define(tokenizer.identifier(),type, Symbol.KIND.VAR)
+            symbolTable.define(tokenizer.identifier(),type, KIND.VAR)
 
             //',' or ';'
             tokenizer.advance()
@@ -503,13 +488,13 @@ class CompilationEngine {
      * @param kind
      * @return
      */
-    private VMWriter.SEGMENT getSeg(Symbol.KIND kind){
+    private static VMWriter.SEGMENT getSeg(KIND kind){
 
         switch (kind){
-            case FIELD:return VMWriter.SEGMENT.THIS
-            case STATIC:return VMWriter.SEGMENT.STATIC
-            case VAR:return VMWriter.SEGMENT.LOCAL
-            case ARG:return VMWriter.SEGMENT.ARG
+            case KIND.FIELD:return VMWriter.SEGMENT.THIS
+            case KIND.STATIC:return VMWriter.SEGMENT.STATIC
+            case KIND.VAR:return VMWriter.SEGMENT.LOCAL
+            case KIND.ARG:return VMWriter.SEGMENT.ARG
             default:return VMWriter.SEGMENT.NONE
         }
 

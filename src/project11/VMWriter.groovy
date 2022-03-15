@@ -1,56 +1,49 @@
 package project11
 
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.PrintWriter;
-//import java.util.HashMap;
 
 /**
  *
  */
 class VMWriter {
 
-    static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE};
-    static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT};
+    static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE}
+    static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT}
+    static private PrintWriter printWriter
 
-    private static HashMap<SEGMENT,String> segmentStringHashMap = new HashMap<SEGMENT, String>();
-    private static HashMap<COMMAND,String> commandStringHashMap = new HashMap<COMMAND, String>();
-    private PrintWriter printWriter;
+    private static segmentStringHashMap = [
+            (SEGMENT.CONST):"constant",
+            (SEGMENT.ARG):"argument",
+            (SEGMENT.LOCAL):"local",
+            (SEGMENT.STATIC):"static",
+            (SEGMENT.THIS):"this",
+            (SEGMENT.THAT):"that",
+            (SEGMENT.POINTER):"pointer",
+            (SEGMENT.TEMP):"temp",
+    ]
 
-    static {
+    private static commandStringHashMap = [
+            (COMMAND.ADD):"add",
+            (COMMAND.SUB):"sub",
+            (COMMAND.NEG):"neg",
+            (COMMAND.EQ):"eq",
+            (COMMAND.GT):"gt",
+            (COMMAND.LT):"lt",
+            (COMMAND.AND):"and",
+            (COMMAND.OR):"or",
+            (COMMAND.NOT):"not",
+    ]
 
-        segmentStringHashMap.put(SEGMENT.CONST,"constant");
-        segmentStringHashMap.put(SEGMENT.ARG,"argument");
-        segmentStringHashMap.put(SEGMENT.LOCAL,"local");
-        segmentStringHashMap.put(SEGMENT.STATIC,"static");
-        segmentStringHashMap.put(SEGMENT.THIS,"this");
-        segmentStringHashMap.put(SEGMENT.THAT,"that");
-        segmentStringHashMap.put(SEGMENT.POINTER,"pointer");
-        segmentStringHashMap.put(SEGMENT.TEMP,"temp");
-
-        commandStringHashMap.put(COMMAND.ADD,"add");
-        commandStringHashMap.put(COMMAND.SUB,"sub");
-        commandStringHashMap.put(COMMAND.NEG,"neg");
-        commandStringHashMap.put(COMMAND.EQ,"eq");
-        commandStringHashMap.put(COMMAND.GT,"gt");
-        commandStringHashMap.put(COMMAND.LT,"lt");
-        commandStringHashMap.put(COMMAND.AND,"and");
-        commandStringHashMap.put(COMMAND.OR,"or");
-        commandStringHashMap.put(COMMAND.NOT,"not");
-    }
 
     /**
      * creates a new file and prepares it for writing
-     * @param fOut
+     * @param outFile
      */
-    VMWriter(File fOut) {
-
+    VMWriter(File outFile) {
         try {
-            printWriter = new PrintWriter(fOut);
+            printWriter = new PrintWriter(outFile)
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
-
     }
 
     /**
@@ -58,8 +51,8 @@ class VMWriter {
      * @param segment
      * @param index
      */
-    void writePush(SEGMENT segment, int index){
-        writeCommand("push",segmentStringHashMap.get(segment),String.valueOf(index));
+    static void writePush(SEGMENT segment, int index){
+        writeCommand("push",segmentStringHashMap[segment], index as String)
     }
 
     /**
@@ -67,39 +60,40 @@ class VMWriter {
      * @param segment
      * @param index
      */
-    void writePop(SEGMENT segment, int index){
-        writeCommand("pop",segmentStringHashMap.get(segment),String.valueOf(index));
+    static void writePop(SEGMENT segment, int index){
+        writeCommand("pop",segmentStringHashMap[segment],index as String)
     }
 
     /**
      * writes a VM arithmetic command
      * @param command
      */
-    void writeArithmetic(COMMAND command){
-        writeCommand(commandStringHashMap.get(command),"","");
+    static void writeArithmetic(COMMAND command){
+        writeCommand(commandStringHashMap[command],"","")
     }
 
     /**
      * writes a VM label command
      * @param label
      */
-    void writeLabel(String label){
-        writeCommand("label",label,"");
+    static void writeLabel(String label){
+        writeCommand("label",label,"")
     }
 
     /**
      * writes a VM goto command
      * @param label
      */
-    void writeGoto(String label){
-        writeCommand("goto",label,"");
+    static void writeGoto(String label){
+        writeCommand("goto",label,"")
     }
+
     /**
      * writes a VM if-goto command
      * @param label
      */
-    void writeIf(String label){
-        writeCommand("if-goto",label,"");
+    static void writeIf(String label){
+        writeCommand("if-goto",label,"")
     }
 
     /**
@@ -107,8 +101,8 @@ class VMWriter {
      * @param name
      * @param nArgs
      */
-    void writeCall(String name, int nArgs){
-        writeCommand("call",name,String.valueOf(nArgs));
+    static void writeCall(String name, int nArgs){
+        writeCommand("call", name, nArgs as String)
     }
 
     /**
@@ -116,29 +110,31 @@ class VMWriter {
      * @param name
      * @param nLocals
      */
-    void writeFunction(String name, int nLocals){
-        writeCommand("function",name,String.valueOf(nLocals));
+    static void writeFunction(String name, int nLocals){
+        writeCommand("function", name, nLocals as String)
     }
 
     /**
      * writes a VM return command
      */
-    void writeReturn(){
-        writeCommand("return","","");
+    static void writeReturn(){
+        writeCommand("return","","")
     }
 
-    void writeCommand(String cmd, String arg1, String arg2){
-
-        printWriter.print(cmd + " " + arg1 + " " + arg2 + "\n");
-
+    /**
+     * write a VM command
+     * @param cmd
+     * @param arg1
+     * @param arg2
+     */
+    static void writeCommand(String cmd, String arg1, String arg2){
+        printWriter.print("$cmd $arg1 $arg2\n")
     }
 
     /**
      * close the output file
      */
-    void close(){
-        printWriter.close();
+    static void close(){
+        printWriter.close()
     }
-
-
 }
