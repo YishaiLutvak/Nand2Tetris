@@ -1,6 +1,6 @@
 package project07
 
-import project07.Constants07.CommandType
+import project07.Constants07.COMMAND_TYPE
 
 class CodeWriter07 {
 
@@ -9,7 +9,7 @@ class CodeWriter07 {
     private static eqCounter = 0
     private static gtICounter = 0
     private static ltCounter = 0
-    private static final myMap = [
+    private static final segmentMap = [
             local:'LCL',
             argument:'ARG',
             this:'THIS',
@@ -27,8 +27,7 @@ class CodeWriter07 {
             out = new FileWriter(new File(outputFile, "${outputFile.name}.asm"))
         }
         else {
-            out = new FileWriter(new File(
-                    outputFile.getParent(), "${outputFile.name.split(/\./)[0]}.asm"))
+            out = new FileWriter(new File(outputFile.getParent(), "${outputFile.name.split(/\./)[0]}.asm"))
         }
     }
 
@@ -61,20 +60,20 @@ class CodeWriter07 {
 
     /**
      * Writes to the output file the assembly code that implements the given command,
-     * where command is either C_PUSH or C_POP.
+     * where command is either PUSH or POP.
      * @param command - type of command - first word in command.
      * @param segment - name of segment - second word in command.
      * @param index - offset in segment - last word in command.
      */
-    static void writePushPop(CommandType command, String segment, int index) {
+    static void writePushPop(COMMAND_TYPE command, String segment, int index) {
         switch (command) {
-            //
-            case CommandType.C_PUSH-> switch (segment) {
+            // handle push
+            case COMMAND_TYPE.PUSH-> switch (segment) {
                 case 'constant' -> out << Constants07.PUSH_CONSTANT
                         .replace('{value}', "${index}")
                 case 'local', 'argument', 'this', 'that' -> out << Constants07.PUSH_LCL_ARG_THIS_THAT
                         .replace('{index}', "${index}")
-                        .replace('{segment}', "${myMap[segment]}")
+                        .replace('{segment}', "${segmentMap[segment]}")
                 case 'temp' -> out << Constants07.PUSH_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
@@ -83,12 +82,12 @@ class CodeWriter07 {
                 case 'static' -> out << Constants07.PUSH_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
-            //
-            case CommandType.C_POP -> switch (segment) {
+            // handle pop
+            case COMMAND_TYPE.POP -> switch (segment) {
                 case 'local', 'argument', 'this', 'that' -> out << Constants07.POP_LCL_ARG_THIS_THAT
                         .replace('{index}', 'A=A+1\n  ' * index)
                         .replace('{segment}',
-                                "${myMap[segment]}")
+                                "${segmentMap[segment]}")
                 case 'temp' -> out << Constants07.POP_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
@@ -107,7 +106,7 @@ class CodeWriter07 {
      * @param numberLine - number of line.
      */
     static void emitComment(String command, int numberLine) {
-        out << "// ${command}    (line ${numberLine})\n"
+        out << "// ${command}  (line ${numberLine})\n"
     }
 
     /**

@@ -1,17 +1,17 @@
 package project07
 
 class Constants07 {
-    static enum CommandType {
-        C_ARITHMETIC,
-        C_PUSH,
-        C_POP,
-        C_LABEL,
-        C_GOTO,
-        C_IF,
-        C_FUNCTION,
-        C_RETURN,
-        C_CALL,
-        C_NOTHING
+    static enum COMMAND_TYPE {
+        ARITHMETIC,
+        PUSH,
+        POP,
+        LABEL,
+        GOTO,
+        IF,
+        FUNCTION,
+        RETURN,
+        CALL,
+        NONE
     }
 
     static final String ADD = '''
