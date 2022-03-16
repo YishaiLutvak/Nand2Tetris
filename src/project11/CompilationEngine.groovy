@@ -138,8 +138,8 @@ class CompilationEngine {
         String name
 
         switch (tokenizer.keyWord()){
-            case STATIC:kind = KIND.STATIC;break
-            case FIELD:kind = KIND.FIELD;break
+            case KIND.STATIC -> kind = KIND.STATIC
+            case KIND.FIELD -> kind = KIND.FIELD
         }
 
         //type

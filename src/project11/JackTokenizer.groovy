@@ -25,7 +25,7 @@ class JackTokenizer {
     private static def tokens = []
 
     private static String keyWordReg =
-            'class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let |do |if|else|while|return|'
+            'class|constructor|function|method|field|static|var |int |char |boolean |void|true|false|null|this|let |do |if|else|while|return|'
     private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
@@ -35,7 +35,7 @@ class JackTokenizer {
     static def myMap = [
             class: KeyWords.CLASS, constructor: KeyWords.CONSTRUCTOR, function: KeyWords.FUNCTION,
             method: KeyWords.METHOD, field : KeyWords.FIELD, static: KeyWords.STATIC,
-            var: KeyWords.VAR, int: KeyWords.INT, char: KeyWords.CHAR, boolean: KeyWords.BOOLEAN,
+            'var ': KeyWords.VAR, 'int ': KeyWords.INT, 'char ': KeyWords.CHAR, 'boolean ': KeyWords.BOOLEAN,
             void: KeyWords.VOID, true: KeyWords.TRUE, false: KeyWords.FALSE, null: KeyWords.NULL,
             this: KeyWords.THIS, 'let ': KeyWords.LET, 'do ': KeyWords.DO, if: KeyWords.IF,
             else: KeyWords.ELSE, while: KeyWords.WHILE, return: KeyWords.RETURN,

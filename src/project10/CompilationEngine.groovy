@@ -676,6 +676,6 @@ class CompilationEngine {
      * @param val
      */
     private static void error(String val){
-        throw new IllegalStateException("Expected token missing : $val Current token:  ${tokenizer.getCurrentToken()}")
+        throw new IllegalStateException("Expected token missing: $val. Current token: ${tokenizer.getCurrentToken()}")
     }
 }
