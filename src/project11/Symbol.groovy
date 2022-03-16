@@ -1,12 +1,12 @@
 package project11
 
+
 /**
  *
  */
 class Symbol {
 
     static enum KIND {STATIC, FIELD, ARG, VAR, NONE};
-
     private String type
     private KIND kind
     private int index

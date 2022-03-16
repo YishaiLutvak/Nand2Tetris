@@ -184,6 +184,7 @@ class CompilationEngine {
 
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
+        println(tokenizer.getCurrentToken())
 
         //next is a '}'
         if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '}'){
@@ -209,15 +210,17 @@ class CompilationEngine {
 
         //'void' or type
         tokenizer.advance()
-        if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.VOID){
-            //#type = "void"
-        } else {
-            tokenizer.pointerBack()
-            //#type = compileType()
-        }
+        println(tokenizer.getCurrentToken())
+//        if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.VOID){
+//            type = "void"
+//        } else {
+//            tokenizer.pointerBack()
+//            type = compileType()
+//        }
 
         //subroutineName which is a identifier
         tokenizer.advance()
+        println(tokenizer.getCurrentToken())
         if (tokenizer.getTokenType() != LE.IDENTIFIER){
             error("subroutineName")
         }
@@ -862,7 +865,7 @@ class CompilationEngine {
      * @param val
      */
     private void error(String val){
-        throw new IllegalStateException("Expected token missing : " + val + " Current token:" + tokenizer.getCurrentToken())
+        throw new IllegalStateException("Expected token missing : " + val + ". Current token : " + tokenizer.getCurrentToken())
     }
 
     /**

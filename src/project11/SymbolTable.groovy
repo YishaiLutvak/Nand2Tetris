@@ -2,11 +2,11 @@ package project11
 
 
 /**
- * This module provides services for creating and using a symbol table.
- * Recall that each symbol has a scope from which it is visible in the source code.
- * The symbol table implements this abstraction by giving each symbol a running number (index) within the scope.
- * The index starts at 0, increments by 1 each time an identifier is added to the table, and resets to 0 when starting a new scope.
- * The following kinds of identifiers may appear in the symbol table:
+ *  This module provides services for creating and using a symbol table.
+ *  Recall that each symbol has a scope from which it is visible in the source code.
+ *  The symbol table implements this abstraction by giving each symbol a running number (index) within the scope.
+ *  The index starts at 0, increments by 1 each time an identifier is added to the table, and resets to 0 when starting a new scope.
+ *  The following kinds of identifiers may appear in the symbol table:
  *  Static: Scope: class.
  *  Field: Scope: class.
  *  Argument: Scope: subroutine (method/function/constructor).
@@ -25,28 +25,11 @@ class SymbolTable {
     private def classSymbols = [:] // for STATIC, FIELD
     private def subroutineSymbols =[:] // for ARG, VAR
     private def indices = [
-            (Symbol.KIND.ARG):0,
-            (Symbol.KIND.FIELD):0,
-            (Symbol.KIND.STATIC):0,
-            (Symbol.KIND.VAR):0,
+            (Symbol.KIND.ARG): 0,
+            (Symbol.KIND.FIELD): 0,
+            (Symbol.KIND.STATIC): 0,
+            (Symbol.KIND.VAR): 0,
     ]
-
-
-//    /**
-//     * creates a new empty symbol table
-//     * init all indices
-//     */
-//    SymbolTable() {
-//        classSymbols = new HashMap<String, Symbol>()
-//        subroutineSymbols = new HashMap<String, Symbol>()
-//
-//        indices = new HashMap<Symbol.KIND, Integer>()
-//        indices.put(Symbol.KIND.ARG,0)
-//        indices.put(Symbol.KIND.FIELD,0)
-//        indices.put(Symbol.KIND.STATIC,0)
-//        indices.put(Symbol.KIND.VAR,0)
-//
-//    }
 
     /**
      * starts a new subroutine scope
@@ -54,10 +37,8 @@ class SymbolTable {
      */
     void startSubroutine(){
         subroutineSymbols.clear()
-        indices = [
-                (Symbol.KIND.VAR):0,
-                (Symbol.KIND.ARG):0,
-        ]
+        indices.put(Symbol.KIND.VAR, 0)
+        indices.put(Symbol.KIND.ARG, 0)
     }
 
     /**
@@ -69,18 +50,16 @@ class SymbolTable {
      * @param kind
      */
     void define(String name, String type, Symbol.KIND kind){
-
         if (kind in [Symbol.KIND.ARG, Symbol.KIND.VAR]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
-            indices.put(kind,index+1)
-            subroutineSymbols.put(name,symbol)
-
-        } else if(kind == Symbol.KIND.STATIC || kind == Symbol.KIND.FIELD){
+            indices.put(kind, index+1)
+            subroutineSymbols.put(name, symbol)
+        } else if (kind in [Symbol.KIND.STATIC, kind == Symbol.KIND.FIELD]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
-            indices.put(kind,index+1)
-            classSymbols.put(name,symbol)
+            indices.put(kind, index+1)
+            classSymbols.put(name, symbol)
         }
     }
 
@@ -90,7 +69,7 @@ class SymbolTable {
      * @return
      */
     int varCount(Symbol.KIND kind){
-        indices[kind]
+        return indices[kind]
     }
 
     /**
@@ -101,8 +80,10 @@ class SymbolTable {
      */
     Symbol.KIND kindOf(String name){
         Symbol symbol = lookUp(name)
-        if (symbol != null) { return symbol.getKind() }
-        Symbol.KIND.NONE
+        if (symbol != null) {
+            return symbol.getKind()
+        }
+        return Symbol.KIND.NONE
     }
 
     /**
@@ -112,8 +93,10 @@ class SymbolTable {
      */
     String typeOf(String name){
         Symbol symbol = lookUp(name)
-        if (symbol != null) { return symbol.getType() }
-        ""
+        if (symbol != null) {
+            return symbol.getType()
+        }
+        return ""
     }
 
     /**
@@ -123,8 +106,10 @@ class SymbolTable {
      */
     int indexOf(String name){
         Symbol symbol = lookUp(name)
-        if (symbol != null) { return symbol.getIndex() }
-        -1
+        if (symbol != null) {
+            return symbol.getIndex()
+        }
+        return -1
     }
 
     /**
@@ -137,6 +122,8 @@ class SymbolTable {
             return classSymbols[name] as Symbol
         } else if (subroutineSymbols[name] != null){
             return subroutineSymbols[name] as Symbol
-        } else { null }
+        } else {
+            return null
+        }
     }
 }

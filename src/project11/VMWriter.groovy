@@ -9,7 +9,6 @@ class VMWriter {
     static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE}
     static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT}
     static private PrintWriter printWriter
-
     private static segmentStringHashMap = [
             (SEGMENT.CONST):"constant",
             (SEGMENT.ARG):"argument",
@@ -20,7 +19,6 @@ class VMWriter {
             (SEGMENT.POINTER):"pointer",
             (SEGMENT.TEMP):"temp",
     ]
-
     private static commandStringHashMap = [
             (COMMAND.ADD):"add",
             (COMMAND.SUB):"sub",
@@ -32,7 +30,6 @@ class VMWriter {
             (COMMAND.OR):"or",
             (COMMAND.NOT):"not",
     ]
-
 
     /**
      * creates a new file and prepares it for writing
@@ -69,7 +66,7 @@ class VMWriter {
      * @param command
      */
     static void writeArithmetic(COMMAND command){
-        writeCommand(commandStringHashMap[command],"","")
+        writeCommand(commandStringHashMap[command])
     }
 
     /**
@@ -77,7 +74,7 @@ class VMWriter {
      * @param label
      */
     static void writeLabel(String label){
-        writeCommand("label",label,"")
+        writeCommand("label",label)
     }
 
     /**
@@ -85,7 +82,7 @@ class VMWriter {
      * @param label
      */
     static void writeGoto(String label){
-        writeCommand("goto",label,"")
+        writeCommand("goto",label)
     }
 
     /**
@@ -93,7 +90,7 @@ class VMWriter {
      * @param label
      */
     static void writeIf(String label){
-        writeCommand("if-goto",label,"")
+        writeCommand("if-goto",label)
     }
 
     /**
@@ -118,7 +115,7 @@ class VMWriter {
      * writes a VM return command
      */
     static void writeReturn(){
-        writeCommand("return","","")
+        writeCommand("return")
     }
 
     /**
@@ -127,7 +124,7 @@ class VMWriter {
      * @param arg1
      * @param arg2
      */
-    static void writeCommand(String cmd, String arg1, String arg2){
+    static void writeCommand(String cmd, String arg1="", String arg2=""){
         printWriter.print("$cmd $arg1 $arg2\n")
     }
 
