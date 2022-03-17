@@ -55,7 +55,7 @@ class SymbolTable {
             Symbol symbol = new Symbol(type,kind,index)
             indices.put(kind, index+1)
             subroutineSymbols.put(name, symbol)
-        } else if (kind in [Symbol.KIND.STATIC, kind == Symbol.KIND.FIELD]){
+        } else if (kind in [Symbol.KIND.STATIC, Symbol.KIND.FIELD]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
             indices.put(kind, index+1)
@@ -83,6 +83,9 @@ class SymbolTable {
         if (symbol != null) {
             return symbol.getKind()
         }
+//        println("kindOf")
+//        println(name)
+//        println(symbol)
         return Symbol.KIND.NONE
     }
 
@@ -96,6 +99,9 @@ class SymbolTable {
         if (symbol != null) {
             return symbol.getType()
         }
+//        println("typeOf")
+//        println(name)
+//        println(symbol)
         return ""
     }
 
@@ -109,6 +115,10 @@ class SymbolTable {
         if (symbol != null) {
             return symbol.getIndex()
         }
+//        println("indexOf")
+//        println(name)
+//        println(symbol)
+//        println("-1-1-1-1-1-1-1-1-1-1-1-1")
         return -1
     }
 
@@ -118,11 +128,18 @@ class SymbolTable {
      * @return
      */
     private Symbol lookUp(String name){
+//        println("lookUp")
         if (classSymbols[name] != null){
+//            println(classSymbols)
+//            println(name)
             return classSymbols[name] as Symbol
         } else if (subroutineSymbols[name] != null){
+//            println(subroutineSymbols)
+//            println(name)
             return subroutineSymbols[name] as Symbol
         } else {
+//            println(classSymbols)
+//            println(subroutineSymbols)
             return null
         }
     }

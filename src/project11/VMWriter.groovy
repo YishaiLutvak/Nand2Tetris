@@ -49,6 +49,7 @@ class VMWriter {
      * @param index
      */
     static void writePush(SEGMENT segment, int index){
+//        println("hihihi: $segment ${segmentStringHashMap[segment]} $index")
         writeCommand("push",segmentStringHashMap[segment], index as String)
     }
 
@@ -58,7 +59,8 @@ class VMWriter {
      * @param index
      */
     static void writePop(SEGMENT segment, int index){
-        writeCommand("pop",segmentStringHashMap[segment],index as String)
+//        println("bybyby: $segment ${segmentStringHashMap[segment]} $index")
+        writeCommand("pop",segmentStringHashMap[segment], index as String)
     }
 
     /**
@@ -125,6 +127,7 @@ class VMWriter {
      * @param arg2
      */
     static void writeCommand(String cmd, String arg1="", String arg2=""){
+        println("$cmd $arg1 $arg2\n")
         printWriter.print("$cmd $arg1 $arg2\n")
     }
 

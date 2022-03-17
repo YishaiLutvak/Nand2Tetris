@@ -1,20 +1,21 @@
 function SquareGame.new 0
-push constant 0
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push constant 0
 push constant 0
 push constant 30
 call Square.new 3
-pop null -1
+pop this 3
 push constant 0
-pop null -1
+pop this 4
 push pointer 0
 return  
 function SquareGame.dispose 0
 push argument 0
 pop pointer 0
-call square.dispose 0
+push this 3
+call Square.dispose 1
 pop temp 0
 push pointer 0
 call Memory.deAlloc 1
@@ -24,42 +25,46 @@ return
 function SquareGame.moveSquare 0
 push argument 0
 pop pointer 0
-push null -1
+push this 4
 push constant 1
 eq  
 not  
 if-goto LABEL_0 
-call square.moveUp 0
+push this 3
+call Square.moveUp 1
 pop temp 0
 goto LABEL_1 
 label LABEL_0 
 label LABEL_1 
-push null -1
+push this 4
 push constant 2
 eq  
 not  
 if-goto LABEL_2 
-call square.moveDown 0
+push this 3
+call Square.moveDown 1
 pop temp 0
 goto LABEL_3 
 label LABEL_2 
 label LABEL_3 
-push null -1
+push this 4
 push constant 3
 eq  
 not  
 if-goto LABEL_4 
-call square.moveLeft 0
+push this 3
+call Square.moveLeft 1
 pop temp 0
 goto LABEL_5 
 label LABEL_4 
 label LABEL_5 
-push null -1
+push this 4
 push constant 4
 eq  
 not  
 if-goto LABEL_6 
-call square.moveRight 0
+push this 3
+call Square.moveRight 1
 pop temp 0
 goto LABEL_7 
 label LABEL_6 
@@ -108,7 +113,8 @@ push constant 90
 eq  
 not  
 if-goto LABEL_14 
-call square.decSize 0
+push this 3
+call Square.decSize 1
 pop temp 0
 goto LABEL_15 
 label LABEL_14 
@@ -118,7 +124,8 @@ push constant 88
 eq  
 not  
 if-goto LABEL_16 
-call square.incSize 0
+push this 3
+call Square.incSize 1
 pop temp 0
 goto LABEL_17 
 label LABEL_16 
@@ -129,7 +136,7 @@ eq
 not  
 if-goto LABEL_18 
 push constant 1
-pop null -1
+pop this 4
 goto LABEL_19 
 label LABEL_18 
 label LABEL_19 
@@ -139,7 +146,7 @@ eq
 not  
 if-goto LABEL_20 
 push constant 2
-pop null -1
+pop this 4
 goto LABEL_21 
 label LABEL_20 
 label LABEL_21 
@@ -149,7 +156,7 @@ eq
 not  
 if-goto LABEL_22 
 push constant 3
-pop null -1
+pop this 4
 goto LABEL_23 
 label LABEL_22 
 label LABEL_23 
@@ -159,7 +166,7 @@ eq
 not  
 if-goto LABEL_24 
 push constant 4
-pop null -1
+pop this 4
 goto LABEL_25 
 label LABEL_24 
 label LABEL_25 
