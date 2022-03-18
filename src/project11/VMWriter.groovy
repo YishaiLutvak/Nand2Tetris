@@ -1,5 +1,6 @@
 package project11
-
+import static project11.CompilationEngine.Indentation
+import static project11.CompilationEngine.width
 
 /**
  *
@@ -49,7 +50,6 @@ class VMWriter {
      * @param index
      */
     static void writePush(SEGMENT segment, int index){
-//        println("hihihi: $segment ${segmentStringHashMap[segment]} $index")
         writeCommand("push",segmentStringHashMap[segment], index as String)
     }
 
@@ -59,7 +59,6 @@ class VMWriter {
      * @param index
      */
     static void writePop(SEGMENT segment, int index){
-//        println("bybyby: $segment ${segmentStringHashMap[segment]} $index")
         writeCommand("pop",segmentStringHashMap[segment], index as String)
     }
 
@@ -127,7 +126,7 @@ class VMWriter {
      * @param arg2
      */
     static void writeCommand(String cmd, String arg1="", String arg2=""){
-        println("$cmd $arg1 $arg2\n")
+        println("${width*Indentation}-----{ $cmd $arg1 $arg2 }-----")
         printWriter.print("$cmd $arg1 $arg2\n")
     }
 
