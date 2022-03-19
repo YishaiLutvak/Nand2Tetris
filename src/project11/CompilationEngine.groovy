@@ -1,6 +1,6 @@
 package project11
-import static project11.JackTokenizer.KEY_WORDS as KW
-import static project11.JackTokenizer.LEXICAL_ELEMENTS as LE
+import static project11.JackTokenizer.KEYWORD
+import static project11.JackTokenizer.TYPE
 import static project11.Symbol.KIND
 
 /**
@@ -13,6 +13,7 @@ import static project11.Symbol.KIND
  * If xxx is a part of an expression and thus has a value, the emitted code should compute this value and leave it at the top of the VM stack
  */
 class CompilationEngine {
+
     private static JackTokenizer tokenizer
     private static VMWriter vmWriter
     private static String currentClass
@@ -28,7 +29,7 @@ class CompilationEngine {
      */
     static String currentFunction(){
         if (currentClass.length() != 0 && currentSubroutine.length() !=0){
-            return currentClass + "." + currentSubroutine
+            return "${currentClass}.${currentSubroutine}"
         }
         return ""
     }
@@ -65,14 +66,11 @@ class CompilationEngine {
     private static String compileType(){
         printOpenTagFunction("compileType")
         tokenizer.advance()
-                LE myTokenType =  tokenizer.getTokenType()
-        if (myTokenType == LE.KEYWORD && (tokenizer.keyWord() in [KW.INT, KW.CHAR, KW.BOOLEAN])){
+        TYPE myTokenType =  tokenizer.getTokenType()
+        if ((myTokenType == TYPE.KEYWORD && (tokenizer.keyWord() in [KEYWORD.INT, KEYWORD.CHAR, KEYWORD.BOOLEAN])) ||
+                (myTokenType == TYPE.IDENTIFIER)){
             printCloseTagFunction("compileType")
             return tokenizer.getCurrentToken()
-        }
-        if (tokenizer.getTokenType() == LE.IDENTIFIER){
-            printCloseTagFunction("compileType")
-            return tokenizer.identifier()
         }
         printCloseTagFunction("compileType")
         error("in|char|boolean|className")
@@ -87,12 +85,12 @@ class CompilationEngine {
         printOpenTagFunction("compileClass")
         //'class'
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.KEYWORD || tokenizer.keyWord() != KW.CLASS){
+        if (tokenizer.getTokenType() != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.CLASS){
             error("class")
         }
         //className
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.IDENTIFIER){
+        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("className")
         }
         //classname does not need to be put in symbol table
@@ -120,48 +118,49 @@ class CompilationEngine {
         printOpenTagFunction("compileClassVarDec")
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
-                //next is a '}'
-        if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '}'){
+        //next is a '}' or next is subroutineDec
+        TYPE myTokenType = tokenizer.getTokenType()
+        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileClassVarDec")
+            printCloseTagFunction("compileClassVarDec")
             return
         }
         //next is start subroutineDec or classVarDec, both start with keyword
-        if (tokenizer.getTokenType() != LE.KEYWORD){
+        if (myTokenType != TYPE.KEYWORD){
             error("Keywords")
         }
         //next is subroutineDec
-        if (tokenizer.keyWord() == KW.CONSTRUCTOR || tokenizer.keyWord() == KW.FUNCTION || tokenizer.keyWord() == KW.METHOD){
+        KEYWORD myTokenKeyword = tokenizer.keyWord()
+        if (myTokenKeyword in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD]){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileClassVarDec")
+            printCloseTagFunction("compileClassVarDec")
             return
         }
         //classVarDec exists
-        if (tokenizer.keyWord() != KW.STATIC && tokenizer.keyWord() != KW.FIELD){
+        if (!(myTokenKeyword in [KEYWORD.STATIC, KEYWORD.FIELD])){
             error("static or field")
         }
         KIND kind = null
-        String type
-        String name
-        switch (tokenizer.keyWord()){
-            case KW.STATIC -> kind = KIND.STATIC
-            case KW.FIELD -> kind = KIND.FIELD
+        switch (myTokenKeyword){
+            case KEYWORD.STATIC -> kind = KIND.STATIC
+            case KEYWORD.FIELD -> kind = KIND.FIELD
         }
         //type
-        type = compileType()
+        String type = compileType()
         //at least one varName
         //#boolean varNamesDone = false
+        String name
         do {
             //varName
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != LE.IDENTIFIER){
+            if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
-            name = tokenizer.identifier()
+            name = tokenizer.getCurrentToken()
             symbolTable.define(name,type,kind)
             //',' or ';'
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != LE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+            if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',';'])){
                 error("',' or ';'")
             }
             if (tokenizer.symbol() == ';'){
@@ -180,25 +179,25 @@ class CompilationEngine {
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
                 //next is a '}'
-        if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '}'){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
                         printCloseTagFunction("compileSubroutine")
             return
         }
         //start of a subroutine
-        if (tokenizer.getTokenType() != LE.KEYWORD || (tokenizer.keyWord() != KW.CONSTRUCTOR && tokenizer.keyWord() != KW.FUNCTION && tokenizer.keyWord() != KW.METHOD)){
+        if (tokenizer.getTokenType() != TYPE.KEYWORD || (tokenizer.keyWord() != KEYWORD.CONSTRUCTOR && tokenizer.keyWord() != KEYWORD.FUNCTION && tokenizer.keyWord() != KEYWORD.METHOD)){
             error("constructor|function|method")
         }
-        KW keyword = tokenizer.keyWord()
+        KEYWORD keyword = tokenizer.keyWord()
         symbolTable.startSubroutine()
         //for method this is the first argument
-        if (tokenizer.keyWord() == KW.METHOD){
+        if (tokenizer.keyWord() == KEYWORD.METHOD){
             symbolTable.define("this",currentClass, KIND.ARG)
         }
         //#String type
         //'void' or type
         tokenizer.advance()
-        //        if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.VOID){
+        //        if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
 //            type = "void"
 //        } else {
 //            tokenizer.pointerBack()
@@ -206,7 +205,7 @@ class CompilationEngine {
 //        }
         //subroutineName which is a identifier
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.IDENTIFIER){
+                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("subroutineName")
         }
         currentSubroutine = tokenizer.identifier()
@@ -226,7 +225,7 @@ class CompilationEngine {
      * Compiles the body of a subroutine
      * '{'  varDec* statements '}'
      */
-    private void compileSubroutineBody(KW keyword){
+    private void compileSubroutineBody(KEYWORD keyword){
         printOpenTagFunction("compileSubroutineBody")
         //'{'
         requireSymbol('{')
@@ -244,16 +243,16 @@ class CompilationEngine {
     /**
      * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
      */
-    private static void writeFunctionDec(KW keyword){
+    private static void writeFunctionDec(KEYWORD keyword){
         printOpenTagFunction("writeFunctionDec")
         vmWriter.writeFunction(currentFunction(),symbolTable.varCount(KIND.VAR))
         //METHOD and CONSTRUCTOR need to load this pointer
-        if (keyword == KW.METHOD){
+        if (keyword == KEYWORD.METHOD){
             //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
             // The first argument (argument number 0) always refers to the this object.
             vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
-        } else if (keyword == KW.CONSTRUCTOR){
+        } else if (keyword == KEYWORD.CONSTRUCTOR){
             //A Jack function or constructor with k arguments is compiled into a VM function that operates on k arguments.
             vmWriter.writePush(VMWriter.SEGMENT.CONST,symbolTable.varCount(KIND.FIELD))
             vmWriter.writeCall("Memory.alloc", 1)
@@ -270,21 +269,21 @@ class CompilationEngine {
         //determine whether there is a statement next can be a '}'
         tokenizer.advance()
                 //next is a '}'
-        if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '}'){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
                         printCloseTagFunction("compileStatement")
             return
         }
         //next is 'let'|'if'|'while'|'do'|'return'
-        if (tokenizer.getTokenType() != LE.KEYWORD){
+        if (tokenizer.getTokenType() != TYPE.KEYWORD){
             error("keyword")
         } else {
             switch (tokenizer.keyWord()){
-                case KW.LET   -> compileLet()
-                case KW.IF    -> compileIf()
-                case KW.WHILE -> compilesWhile()
-                case KW.DO    -> compileDo()
-                case KW.RETURN-> compileReturn()
+                case KEYWORD.LET   -> compileLet()
+                case KEYWORD.IF    -> compileIf()
+                case KEYWORD.WHILE -> compilesWhile()
+                case KEYWORD.DO    -> compileDo()
+                case KEYWORD.RETURN-> compileReturn()
                 default       -> error("'let'|'if'|'while'|'do'|'return'")
             }
         }
@@ -301,7 +300,7 @@ class CompilationEngine {
         printOpenTagFunction("compileParameterList")
         //check if there is parameterList, if next token is ')' than go back
         tokenizer.advance()
-                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ')'){
+                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
                         printCloseTagFunction("compileParameterList")
             return
@@ -314,14 +313,14 @@ class CompilationEngine {
             type = compileType()
             //varName
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != LE.IDENTIFIER){
+                        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
             symbolTable.define(tokenizer.identifier(),type, KIND.ARG)
             //',' or ')'
             tokenizer.advance()
             
-            if (tokenizer.getTokenType() != LE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ')')){
+            if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ')')){
                 error("',' or ')'")
             }
             if (tokenizer.symbol() == ')'){
@@ -341,7 +340,7 @@ class CompilationEngine {
         //determine if there is a varDec
         tokenizer.advance()
                 //no 'var' go back
-        if (tokenizer.getTokenType() != LE.KEYWORD || tokenizer.keyWord() != KW.VAR){
+        if (tokenizer.getTokenType() != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.VAR){
             tokenizer.pointerBack()
                         printCloseTagFunction("compileVarDec")
             return
@@ -353,13 +352,13 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != LE.IDENTIFIER){
+                        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
             symbolTable.define(tokenizer.identifier(),type, KIND.VAR)
             //',' or ';'
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != LE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+                        if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
                 error("',' or ';'")
             }
             if (tokenizer.symbol() == ';'){
@@ -393,13 +392,13 @@ class CompilationEngine {
         printOpenTagFunction("compileLet")
         //varName
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.IDENTIFIER){
+                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("varName")
         }
         String varName = tokenizer.identifier()
         //'[' or '='
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
+                if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
             error("'['|'='")
         }
         boolean expExist = false
@@ -501,7 +500,7 @@ class CompilationEngine {
         printOpenTagFunction("compileReturn")
         //check if there is any expression
         tokenizer.advance()
-                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ';'){
+                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ';'){
             //no expression push 0 to stack
             vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
         }else {
@@ -545,7 +544,7 @@ class CompilationEngine {
         vmWriter.writeLabel(elseLabel)
         //check if there is 'else'
         tokenizer.advance()
-                if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.ELSE){
+                if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.ELSE){
             //'{'
             requireSymbol('{')
             //statements
@@ -574,11 +573,11 @@ class CompilationEngine {
         printOpenTagFunction("compileTerm")
         tokenizer.advance()
                 //check if it is an identifier
-        if (tokenizer.getTokenType() == LE.IDENTIFIER){
+        if (tokenizer.getTokenType() == TYPE.IDENTIFIER){
             //varName|varName '[' expression ']'|subroutineCall
             String tempId = tokenizer.identifier()
             tokenizer.advance()
-                        if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '['){
+                        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '['){
                 //this is an array entry
                 //push array variable,base address into stack
                 vmWriter.writePush(getSeg(symbolTable.kindOf(tempId)),symbolTable.indexOf(tempId))
@@ -592,7 +591,7 @@ class CompilationEngine {
                 vmWriter.writePop(VMWriter.SEGMENT.POINTER,1)
                 //push *(base+index) onto stack
                 vmWriter.writePush(VMWriter.SEGMENT.THAT,0)
-            } else if (tokenizer.getTokenType() == LE.SYMBOL && (tokenizer.symbol() == '(' || tokenizer.symbol() == '.')){
+            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && (tokenizer.symbol() == '(' || tokenizer.symbol() == '.')){
                 //this is a subroutineCall
                 tokenizer.pointerBack()
                                 tokenizer.pointerBack()
@@ -605,10 +604,10 @@ class CompilationEngine {
             }
         } else {
             //integerConstant|stringConstant|keywordConstant|'(' expression ')'|unaryOp term
-            if (tokenizer.getTokenType() == LE.INT_CONST){
+            if (tokenizer.getTokenType() == TYPE.INT_CONST){
                 //integerConstant just push its value onto stack
                 vmWriter.writePush(VMWriter.SEGMENT.CONST,tokenizer.intVal())
-            }else if (tokenizer.getTokenType() == LE.STRING_CONST){
+            }else if (tokenizer.getTokenType() == TYPE.STRING_CONST){
                 //stringConstant new a string and append every char to the new stack
                 String str = tokenizer.stringVal()
                 vmWriter.writePush(VMWriter.SEGMENT.CONST,str.length())
@@ -617,22 +616,22 @@ class CompilationEngine {
                     vmWriter.writePush(VMWriter.SEGMENT.CONST,(int)str.charAt(i))
                     vmWriter.writeCall("String.appendChar",2)
                 }
-            } else if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.TRUE){
+            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.TRUE){
                 //~0 is true
                 vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
                 vmWriter.writeArithmetic(VMWriter.COMMAND.NOT)
-            } else if (tokenizer.getTokenType() == LE.KEYWORD && tokenizer.keyWord() == KW.THIS){
+            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.THIS){
                 //push this pointer onto stack
                 vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
-            } else if (tokenizer.getTokenType() == LE.KEYWORD && (tokenizer.keyWord() == KW.FALSE || tokenizer.keyWord() == KW.NULL)){
+            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && (tokenizer.keyWord() == KEYWORD.FALSE || tokenizer.keyWord() == KEYWORD.NULL)){
                 //0 for false and null
                 vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
-            } else if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '('){
+            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
                 //expression
                 compileExpression()
                 //')'
                 requireSymbol(')')
-            } else if (tokenizer.getTokenType() == LE.SYMBOL && (tokenizer.symbol() == '-' || tokenizer.symbol() == '~')){
+            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && (tokenizer.symbol() == '-' || tokenizer.symbol() == '~')){
                 def s = tokenizer.symbol()
                 //term
                 compileTerm()
@@ -655,13 +654,13 @@ class CompilationEngine {
     private void compileSubroutineCall(){
         printOpenTagFunction("compileSubroutineCall")
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.IDENTIFIER){
+                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("identifier")
         }
         String name = tokenizer.identifier()
         int nArgs = 0
         tokenizer.advance()
-                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '('){
+                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
             //push this pointer
             vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
             //'(' expressionList ')'
@@ -671,13 +670,13 @@ class CompilationEngine {
             requireSymbol(')')
             //call subroutine
             vmWriter.writeCall(currentClass + '.' + name, nArgs)
-        } else if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == '.'){
+        } else if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '.'){
             //(className|varName) '.' subroutineName '(' expressionList ')'
             String objName = name
             //subroutineName
             tokenizer.advance()
                         // System.out.println("subroutineName:" + tokenizer.identifier())
-            if (tokenizer.getTokenType() != LE.IDENTIFIER){
+            if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
             name = tokenizer.identifier()
@@ -719,7 +718,7 @@ class CompilationEngine {
         do {
             tokenizer.advance()
                         //op
-            if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.isOp()){
+            if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.isOp()){
                 String opCmd = ""
                 switch (tokenizer.symbol()){
                     case '+':opCmd = "add";break
@@ -754,7 +753,7 @@ class CompilationEngine {
         int nArgs = 0
         tokenizer.advance()
                 //determine if there is any expression, if next is ')' then no
-        if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ')'){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
                     } else {
             nArgs = 1
@@ -764,7 +763,7 @@ class CompilationEngine {
             //(','expression)*
             do {
                 tokenizer.advance()
-                                if (tokenizer.getTokenType() == LE.SYMBOL && tokenizer.symbol() == ','){
+                                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ','){
                     //expression
                     compileExpression()
                     nArgs++
@@ -792,7 +791,7 @@ class CompilationEngine {
      */
     private static void requireSymbol(String symbol){
         tokenizer.advance()
-                if (tokenizer.getTokenType() != LE.SYMBOL || tokenizer.symbol() != symbol){
+                if (tokenizer.getTokenType() != TYPE.SYMBOL || tokenizer.symbol() != symbol){
             error("'" + symbol + "'")
         }
     }

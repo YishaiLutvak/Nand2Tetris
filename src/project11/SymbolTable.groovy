@@ -50,16 +50,13 @@ class SymbolTable {
      * @param kind
      */
     void define(String name, String type, Symbol.KIND kind){
-        if (kind in [Symbol.KIND.ARG, Symbol.KIND.VAR]){
+        if (kind in [Symbol.KIND.ARG, Symbol.KIND.VAR, Symbol.KIND.STATIC, Symbol.KIND.FIELD]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
             indices.put(kind, index+1)
-            subroutineSymbols.put(name, symbol)
-        } else if (kind in [Symbol.KIND.STATIC, Symbol.KIND.FIELD]){
-            int index = indices[kind]
-            Symbol symbol = new Symbol(type,kind,index)
-            indices.put(kind, index+1)
-            classSymbols.put(name, symbol)
+            kind in [Symbol.KIND.ARG, Symbol.KIND.VAR] ?
+                    subroutineSymbols.put(name, symbol) :
+                    classSymbols.put(name, symbol)
         }
     }
 

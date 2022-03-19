@@ -7,7 +7,7 @@
 <identifier> square </identifier>
 <symbol> ; </symbol>
 <keyword> field </keyword>
-<keyword> int </keyword>
+<keyword> int  </keyword>
 <identifier> direction </identifier>
 <symbol> ; </symbol>
 <keyword> constructor </keyword>
@@ -147,11 +147,11 @@
 <symbol> ) </symbol>
 <symbol> { </symbol>
 <keyword> var </keyword>
-<keyword> char </keyword>
+<keyword> char  </keyword>
 <identifier> key </identifier>
 <symbol> ; </symbol>
 <keyword> var </keyword>
-<keyword> boolean </keyword>
+<keyword> boolean  </keyword>
 <identifier> exit </identifier>
 <symbol> ; </symbol>
 <keyword> let </keyword>

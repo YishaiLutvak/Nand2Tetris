@@ -4,7 +4,7 @@
   <symbol> { </symbol>
   <classVarDec>
     <keyword> static </keyword>
-    <keyword> boolean </keyword>
+    <keyword> boolean  </keyword>
     <identifier> test </identifier>
     <symbol> ; </symbol>
   </classVarDec>
@@ -84,7 +84,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int </keyword>
+        <keyword> int  </keyword>
         <identifier> i </identifier>
         <symbol> , </symbol>
         <identifier> j </identifier>

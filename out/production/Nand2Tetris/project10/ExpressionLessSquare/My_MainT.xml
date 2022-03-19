@@ -3,7 +3,7 @@
 <identifier> Main </identifier>
 <symbol> { </symbol>
 <keyword> static </keyword>
-<keyword> boolean </keyword>
+<keyword> boolean  </keyword>
 <identifier> test </identifier>
 <symbol> ; </symbol>
 <keyword> function </keyword>
@@ -45,7 +45,7 @@
 <symbol> ) </symbol>
 <symbol> { </symbol>
 <keyword> var </keyword>
-<keyword> boolean </keyword>
+<keyword> boolean  </keyword>
 <identifier> b </identifier>
 <symbol> ; </symbol>
 <keyword> if </keyword>

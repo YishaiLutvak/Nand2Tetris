@@ -10,7 +10,7 @@
   </classVarDec>
   <classVarDec>
     <keyword> field </keyword>
-    <keyword> int </keyword>
+    <keyword> int  </keyword>
     <identifier> direction </identifier>
     <symbol> ; </symbol>
   </classVarDec>
@@ -253,13 +253,13 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> char </keyword>
+        <keyword> char  </keyword>
         <identifier> key </identifier>
         <symbol> ; </symbol>
       </varDec>
       <varDec>
         <keyword> var </keyword>
-        <keyword> boolean </keyword>
+        <keyword> boolean  </keyword>
         <identifier> exit </identifier>
         <symbol> ; </symbol>
       </varDec>

@@ -13,11 +13,11 @@
 <identifier> a </identifier>
 <symbol> ; </symbol>
 <keyword> var </keyword>
-<keyword> int </keyword>
+<keyword> int  </keyword>
 <identifier> length </identifier>
 <symbol> ; </symbol>
 <keyword> var </keyword>
-<keyword> int </keyword>
+<keyword> int  </keyword>
 <identifier> i </identifier>
 <symbol> , </symbol>
 <identifier> sum </identifier>

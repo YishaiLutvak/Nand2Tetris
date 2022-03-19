@@ -4,7 +4,7 @@
   <symbol> { </symbol>
   <classVarDec>
     <keyword> field </keyword>
-    <keyword> int </keyword>
+    <keyword> int  </keyword>
     <identifier> x </identifier>
     <symbol> , </symbol>
     <identifier> y </identifier>
@@ -12,7 +12,7 @@
   </classVarDec>
   <classVarDec>
     <keyword> field </keyword>
-    <keyword> int </keyword>
+    <keyword> int  </keyword>
     <identifier> size </identifier>
     <symbol> ; </symbol>
   </classVarDec>
@@ -22,13 +22,13 @@
     <identifier> new </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int </keyword>
+      <keyword> int  </keyword>
       <identifier> Ax </identifier>
       <symbol> , </symbol>
-      <keyword> int </keyword>
+      <keyword> int  </keyword>
       <identifier> Ay </identifier>
       <symbol> , </symbol>
-      <keyword> int </keyword>
+      <keyword> int  </keyword>
       <identifier> Asize </identifier>
     </parameterList>
     <symbol> ) </symbol>
