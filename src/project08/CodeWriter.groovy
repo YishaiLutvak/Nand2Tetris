@@ -10,7 +10,7 @@ class CodeWriter {
     private static gtICounter = 0
     private static ltCounter = 0
     private static callCounter = 0
-    private static final myMap = [
+    private static final segmentMap = [
             local:'LCL',
             argument:'ARG',
             this:'THIS',
@@ -62,20 +62,20 @@ class CodeWriter {
 
     /**
      * Writes to the output file the assembly code that implements the given command,
-     * where command is either C_PUSH or C_POP.
+     * where command is either PUSH or POP.
      * @param command - type of command - first word in command.
      * @param segment - name of segment - second word in command.
      * @param index - offset in segment - last word in command.
      */
     static void writePushPop(CommandType command, String segment, int index) {
         switch (command) {
-        //
-            case CommandType.C_PUSH-> switch (segment) {
+            // handle push
+            case CommandType.PUSH-> switch (segment) {
                 case 'constant' -> out << Constants.PUSH_CONSTANT
                         .replace('{value}', "${index}")
                 case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
                         .replace('{index}', "${index}")
-                        .replace('{segment}', "${myMap[segment]}")
+                        .replace('{segment}', "${segmentMap[segment]}")
                 case 'temp' -> out << Constants.PUSH_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {
@@ -84,12 +84,12 @@ class CodeWriter {
                 case 'static' -> out << Constants.PUSH_STATIC
                         .replace('{index}', "${currentFileName}.${index}")
             }
-                //
-            case CommandType.C_POP -> switch (segment) {
+            // handle pop
+            case CommandType.POP -> switch (segment) {
                 case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
                         .replace('{index}', 'A=A+1\n  ' * index)
                         .replace('{segment}',
-                                "${myMap[segment]}")
+                                "${segmentMap[segment]}")
                 case 'temp' -> out << Constants.POP_TEMP
                         .replace('{index}', "${index}")
                 case 'pointer' -> switch (index) {

@@ -80,15 +80,15 @@ class VMTranslator {
                 parser.setCurrentCommand(line)
                 def commandType = parser.getCommandType()
                 switch (commandType) {
-                    case CommandType.C_ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
-                    case CommandType.C_PUSH,CommandType.C_POP ->
+                    case CommandType.ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
+                    case CommandType.PUSH,CommandType.POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
-                    case CommandType.C_LABEL -> writer.writeLabel(parser.arg1())
-                    case CommandType.C_GOTO -> writer.writeGoto(parser.arg1())
-                    case CommandType.C_IF -> writer.writeIf(parser.arg1())
-                    case CommandType.C_CALL -> writer.writeCall(parser.arg1(), parser.arg2())
-                    case CommandType.C_RETURN -> writer.writeReturn()
-                    case CommandType.C_FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
+                    case CommandType.LABEL -> writer.writeLabel(parser.arg1())
+                    case CommandType.GOTO -> writer.writeGoto(parser.arg1())
+                    case CommandType.IF -> writer.writeIf(parser.arg1())
+                    case CommandType.CALL -> writer.writeCall(parser.arg1(), parser.arg2())
+                    case CommandType.RETURN -> writer.writeReturn()
+                    case CommandType.FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
                 }
             } // else {println("(line==~\'^( *//).*\')" + " " + line)}
         }
