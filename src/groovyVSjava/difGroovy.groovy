@@ -23,7 +23,7 @@ class difGroovy {
      * whereas Groovy will choose at runtime, when the method is actually called. Since it is called with a String,
      * then the String version is called.
      */
-    static void main(String[] args){
+    public static void main(String[] args){
         Object o = "Object";
         int result = method(o);
         assertEquals(1, result)

@@ -76,27 +76,27 @@
 (Sys.init$RETURN0)
 
 // ++++++++++++++ END BOOTSTRAPPING ++++++++++++++
-// Main.vm
+// difJava.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
 // // by Nisan and Schocken, MIT Press.    (line 3)
-// // File name: projects/08/FunctionCalls/FibonacciElement/Main.vm    (line 4)
+// // File name: projects/08/FunctionCalls/FibonacciElement/difJava.vm    (line 4)
 //     (line 5)
 // // Computes the n'th element of the Fibonacci series, recursively.    (line 6)
 // // n is given in argument[0].  Called by the Sys.init function     (line 7)
 // // (part of the Sys.vm file), which also pushes the argument[0]     (line 8)
 // // parameter before this code starts running.    (line 9)
 //     (line 10)
-// function Main.fibonacci 0    (line 11)
+// function difJava.fibonacci 0    (line 11)
 
-  // *** label Main.fibonacci ***
+  // *** label difJava.fibonacci ***
 (Main.fibonacci)
 
   // *** initialize local variables ***
   @0
   D=A              //  D = 0
   @Main.fibonacci_End
-  D;JEQ            //  if (numberOfLocals == 0) jump to Main.fibonacci_End 
+  D;JEQ            //  if (numberOfLocals == 0) jump to difJava.fibonacci_End
 (Main.fibonacci_Loop)              
   @SP              //   A = 0             
   A=M              //   A = ram[0]        
@@ -104,7 +104,7 @@
   @SP              //   A = 0             
   M=M+1            //   ram[0] = ram[0]+1 
   @Main.fibonacci_Loop
-  D=D-1;JNE        //   if (numberOfLocals != 0) jump to Main.fibonacci_Loop 
+  D=D-1;JNE        //   if (numberOfLocals != 0) jump to difJava.fibonacci_Loop
 (Main.fibonacci_End) 
 
 // push argument 0    (line 12)
@@ -160,12 +160,12 @@
   A=M               //   A = ram[0]        
   D=M               //   D = ram[ram[0]]        
   @Main.IF_TRUE                                 
-  D;JNE             //   if (ram[ram[0]] != 0) jump to Main.IF_TRUE  
+  D;JNE             //   if (ram[ram[0]] != 0) jump to difJava.IF_TRUE
 
 // goto IF_FALSE    (line 16)
 
   @Main.IF_FALSE
-  0; JMP            //   jump to Main.IF_FALSE
+  0; JMP            //   jump to difJava.IF_FALSE
 
 // label IF_TRUE          // if n<2, return n    (line 17)
 
@@ -289,14 +289,14 @@
   @SP               //   A = 0                           
   M=M+1             //   ram[0] = ram[0]+1               
 
-// call Main.fibonacci 1  // computes fib(n-2)    (line 24)
+// call difJava.fibonacci 1  // computes fib(n-2)    (line 24)
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress0  
-  D=A               //   D = Main.fibonacci$ReturnAddress0        
+  D=A               //   D = difJava.fibonacci$ReturnAddress0
   @SP               //   A = 0              
   A=M               //   A = ram[0]         
-  M=D               //   ram[ram[0]] = Main.fibonacci$ReturnAddress0         
+  M=D               //   ram[ram[0]] = difJava.fibonacci$ReturnAddress0
   @SP               //   A = 0              
   M=M+1             //   ram[0] = ram[0]+1  
 
@@ -354,7 +354,7 @@
 
   // *** goto g *** 	
   @Main.fibonacci  
-  0;JMP            //   jump to Main.fibonacci
+  0;JMP            //   jump to difJava.fibonacci
 
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress0)  
@@ -394,14 +394,14 @@
   @SP               //   A = 0                           
   M=M+1             //   ram[0] = ram[0]+1               
 
-// call Main.fibonacci 1  // computes fib(n-1)    (line 28)
+// call difJava.fibonacci 1  // computes fib(n-1)    (line 28)
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress1  
-  D=A               //   D = Main.fibonacci$ReturnAddress1        
+  D=A               //   D = difJava.fibonacci$ReturnAddress1
   @SP               //   A = 0              
   A=M               //   A = ram[0]         
-  M=D               //   ram[ram[0]] = Main.fibonacci$ReturnAddress1         
+  M=D               //   ram[ram[0]] = difJava.fibonacci$ReturnAddress1
   @SP               //   A = 0              
   M=M+1             //   ram[0] = ram[0]+1  
 
@@ -459,7 +459,7 @@
 
   // *** goto g *** 	
   @Main.fibonacci  
-  0;JMP            //   jump to Main.fibonacci
+  0;JMP            //   jump to difJava.fibonacci
 
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress1)  
@@ -548,7 +548,7 @@
 // // by Nisan and Schocken, MIT Press.    (line 3)
 // // File name: projects/08/FunctionCalls/FibonacciElement/Sys.vm    (line 4)
 //     (line 5)
-// // Pushes a constant, say n, onto the stack, and calls the Main.fibonacii    (line 6)
+// // Pushes a constant, say n, onto the stack, and calls the difJava.fibonacii    (line 6)
 // // function, which computes the n'th element of the Fibonacci series.    (line 7)
 // // Note that by convention, the Sys.init function is called "automatically"     (line 8)
 // // by the bootstrap code.    (line 9)
@@ -583,14 +583,14 @@
   @SP               //   A = 0                  
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
-// call Main.fibonacci 1   // computes the 4'th fibonacci element    (line 13)
+// call difJava.fibonacci 1   // computes the 4'th fibonacci element    (line 13)
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress2  
-  D=A               //   D = Main.fibonacci$ReturnAddress2        
+  D=A               //   D = difJava.fibonacci$ReturnAddress2
   @SP               //   A = 0              
   A=M               //   A = ram[0]         
-  M=D               //   ram[ram[0]] = Main.fibonacci$ReturnAddress2         
+  M=D               //   ram[ram[0]] = difJava.fibonacci$ReturnAddress2
   @SP               //   A = 0              
   M=M+1             //   ram[0] = ram[0]+1  
 
@@ -648,7 +648,7 @@
 
   // *** goto g *** 	
   @Main.fibonacci  
-  0;JMP            //   jump to Main.fibonacci
+  0;JMP            //   jump to difJava.fibonacci
 
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress2)  
