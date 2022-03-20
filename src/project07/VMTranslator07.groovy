@@ -15,19 +15,19 @@ import project07.Constants07.COMMAND_TYPE
  */
 class VMTranslator07 {
 
-    static CodeWriter07 writer = null
-    static Parser07 parser = null
+    static CodeWriter07 writer
+    static Parser07 parser
 
     /**
      * Manages the translation of vm files into a hack file.
      * @param args - args from the command line.
      */
-    static void main(args) {
+    static void main(String[] args) {
         if(args.length == 0){
-            println("Missing argument!!!")
+            println('Missing argument!!!')
             return
         }
-        def inFile = new File(args[0])
+        File inFile = new File(args[0])
         inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
     }
 
@@ -48,9 +48,9 @@ class VMTranslator07 {
      */
     static void handleDirectory(File dir) {
         writer = new CodeWriter07(dir)
-        dir.eachFileMatch(~/.*\.vm/) {
-            writer.setCurrentFileName(it.name)
-            translateVmFile(it)
+        dir.eachFileMatch(~/.*\.vm/) {File vmFile ->
+            writer.setCurrentFileName(vmFile.name)
+            translateVmFile(vmFile)
         }
         writer.close()
     }
@@ -63,7 +63,7 @@ class VMTranslator07 {
      */
     static void translateVmFile(File vmFile) {
         parser = new Parser07(vmFile)
-        vmFile.eachLine { line, numberLine ->
+        vmFile.eachLine { String line, int numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
             if (!line.startsWith('//')) {

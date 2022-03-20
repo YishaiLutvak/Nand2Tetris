@@ -1,11 +1,9 @@
 package project08
 
-import project08.Constants.CommandType
-
 class CodeWriter {
 
-    private static FileWriter out = null
-    private static String currentFileName = null
+    private static FileWriter out
+    private static String currentFileName
     private static eqCounter = 0
     private static gtICounter = 0
     private static ltCounter = 0
@@ -67,10 +65,10 @@ class CodeWriter {
      * @param segment - name of segment - second word in command.
      * @param index - offset in segment - last word in command.
      */
-    static void writePushPop(CommandType command, String segment, int index) {
+    static void writePushPop(Constants.COMMAND_TYPE command, String segment, int index) {
         switch (command) {
             // handle push
-            case CommandType.PUSH-> switch (segment) {
+            case Constants.COMMAND_TYPE.PUSH-> switch (segment) {
                 case 'constant' -> out << Constants.PUSH_CONSTANT
                         .replace('{value}', "${index}")
                 case 'local', 'argument', 'this', 'that' -> out << Constants.PUSH_LCL_ARG_THIS_THAT
@@ -85,7 +83,7 @@ class CodeWriter {
                         .replace('{index}', "${currentFileName}.${index}")
             }
             // handle pop
-            case CommandType.POP -> switch (segment) {
+            case Constants.COMMAND_TYPE.POP -> switch (segment) {
                 case 'local', 'argument', 'this', 'that' -> out << Constants.POP_LCL_ARG_THIS_THAT
                         .replace('{index}', 'A=A+1\n  ' * index)
                         .replace('{segment}',

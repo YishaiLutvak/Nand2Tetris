@@ -1,10 +1,10 @@
 package project08
 
-import project08.Constants.CommandType
+import project08.Constants.COMMAND_TYPE
 
 class Parser {
 
-    private static File file = null
+    private static File file
     private static String currentCommand
 
     /**
@@ -21,7 +21,7 @@ class Parser {
      * @param cmd - string of cmd.
      */
     static void setCurrentCommand(String cmd) {
-        currentCommand = cmd.split("//")[0].trim() // for comments in end of line
+        currentCommand = cmd.split('//')[0].trim() // for comments in end of line
     }
 
     /**
@@ -29,26 +29,27 @@ class Parser {
      * @param cmd - string of cmd.
      */
     static String getCurrentCommand() {
-        currentCommand
+        return currentCommand
     }
 
     /**
-     * @return CommandType - a constant representing the type of the current command.
+     * @return COMMAND_TYPE - a constant representing the type of the current command.
      * ARITHMETIC is returned for all the arithmetic/logical commands.
      */
-    static def getCommandType() {
+    static COMMAND_TYPE getCommandType() {
+        COMMAND_TYPE commandType = COMMAND_TYPE.NONE
         switch (currentCommand.split(' ')[0]) {
-            case 'push'-> CommandType.PUSH
-            case 'pop'-> CommandType.POP
-            case 'add','sub','neg','eq','gt','lt','and','or','not'-> CommandType.ARITHMETIC
-            case 'label'-> CommandType.LABEL
-            case 'goto' -> CommandType.GOTO
-            case 'if-goto' -> CommandType.IF
-            case 'call' -> CommandType.CALL
-            case 'return' -> CommandType.RETURN
-            case 'function' -> CommandType.FUNCTION
-            default -> CommandType.NONE
+            case 'push'-> commandType = COMMAND_TYPE.PUSH
+            case 'pop' -> commandType = COMMAND_TYPE.POP
+            case 'add','sub','neg','eq','gt','lt','and','or','not'-> commandType = COMMAND_TYPE.ARITHMETIC
+            case 'label'-> commandType = COMMAND_TYPE.LABEL
+            case 'goto' -> commandType = COMMAND_TYPE.GOTO
+            case 'if-goto' -> commandType = COMMAND_TYPE.IF
+            case 'call' -> commandType = COMMAND_TYPE.CALL
+            case 'return' -> commandType = COMMAND_TYPE.RETURN
+            case 'function' -> commandType = COMMAND_TYPE.FUNCTION
         }
+        return commandType
     }
 
     /**
@@ -57,7 +58,7 @@ class Parser {
      * Should not be called if the current command is RETURN.
      */
     static String arg1() {
-        currentCommand.split(' ')[1]
+        return currentCommand.split(' ')[1]
     }
 
     /**
@@ -65,6 +66,6 @@ class Parser {
      * Should be called only if the current command is PUSH, POP, FUNCTION, or CALL.
      */
     static int arg2() {
-        currentCommand.split(' ')[2] as int
+        return currentCommand.split(' ')[2] as int
     }
 }

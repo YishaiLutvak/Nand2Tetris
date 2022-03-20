@@ -4,7 +4,7 @@ import project07.Constants07.COMMAND_TYPE
 
 class Parser07 {
 
-    private static File file = null
+    private static File file
     private static String currentCommand
 
     /**
@@ -21,7 +21,7 @@ class Parser07 {
      * @param cmd - string of cmd.
      */
     static void setCurrentCommand(String cmd) {
-        currentCommand = cmd.split("//")[0] // for comments in end of line
+        currentCommand = cmd.split('//')[0] // for comments in end of line
     }
 
     /**
@@ -33,16 +33,17 @@ class Parser07 {
     }
 
     /**
-     * @return CommandType - a constant representing the type of the current command.
+     * @return COMMAND_TYPE - a constant representing the type of the current command.
      * ARITHMETIC is returned for all the arithmetic/logical commands.
      */
-    static def getCommandType() {
+    static COMMAND_TYPE getCommandType() {
+        COMMAND_TYPE commandType = COMMAND_TYPE.NONE
         switch (currentCommand.split(' ')[0]) {
-            case 'push'-> COMMAND_TYPE.PUSH
-            case 'pop'-> COMMAND_TYPE.POP
-            case 'add','sub','neg','eq','gt','lt','and','or','not'-> COMMAND_TYPE.ARITHMETIC
-            default -> COMMAND_TYPE.NONE
+            case 'push'-> commandType = COMMAND_TYPE.PUSH
+            case 'pop'-> commandType = COMMAND_TYPE.POP
+            case 'add','sub','neg','eq','gt','lt','and','or','not'-> commandType = COMMAND_TYPE.ARITHMETIC
         }
+        return commandType
     }
 
     /**

@@ -4,8 +4,8 @@ import project07.Constants07.COMMAND_TYPE
 
 class CodeWriter07 {
 
-    private static FileWriter out = null
-    private static String currentFileName = null
+    private static FileWriter out
+    private static String currentFileName
     private static eqCounter = 0
     private static gtICounter = 0
     private static ltCounter = 0

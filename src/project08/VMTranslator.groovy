@@ -1,6 +1,6 @@
 package project08
 
-import project08.Constants.CommandType
+import project08.Constants.COMMAND_TYPE
 
 // input to tests
 // C:\Nand2Tetris\src\project08\FunctionCalls\FibonacciElement
@@ -22,19 +22,19 @@ import project08.Constants.CommandType
  */
 class VMTranslator {
 
-    static CodeWriter writer = null
-    static Parser parser = null
+    static CodeWriter writer
+    static Parser parser
 
     /**
      * Manages the translation of vm files into a hack file.
      * @param args - args from the command line.
      */
-    static void main(args) {
+    static void main(String[] args) {
         if(args.length == 0){
-            println("Missing argument!!!")
+            println('Missing argument!!!')
             return
         }
-        def inFile = new File(args[0])
+        File inFile = new File(args[0])
         inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
     }
 
@@ -55,12 +55,12 @@ class VMTranslator {
      */
     static void handleDirectory(File dir) {
         writer = new CodeWriter(dir)
-        if ((dir.listFiles().findAll{it.name.endsWith(".vm")}.size()) > 1){
+        if ((dir.listFiles().findAll{File file -> file.name.endsWith('.vm')}.size()) > 1){
             writer.writeInit()
         }
-        dir.eachFileMatch(~/.*\.vm/) {
-            writer.setCurrentFileName(it.name)
-            translateVmFile(it)
+        dir.eachFileMatch(~/.*\.vm/) { File vmFile ->
+            writer.setCurrentFileName(vmFile.name)
+            translateVmFile(vmFile)
         }
         writer.close()
     }
@@ -73,22 +73,22 @@ class VMTranslator {
      */
     static void translateVmFile(File vmFile) {
         parser = new Parser(vmFile)
-        vmFile.eachLine { line, numberLine ->
+        vmFile.eachLine { String line, int numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
             if (!(line==~'^( *//).*')) {
                 parser.setCurrentCommand(line)
-                def commandType = parser.getCommandType()
-                switch (commandType) {
-                    case CommandType.ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
-                    case CommandType.PUSH,CommandType.POP ->
-                        writer.writePushPop(commandType, parser.arg1(), parser.arg2())
-                    case CommandType.LABEL -> writer.writeLabel(parser.arg1())
-                    case CommandType.GOTO -> writer.writeGoto(parser.arg1())
-                    case CommandType.IF -> writer.writeIf(parser.arg1())
-                    case CommandType.CALL -> writer.writeCall(parser.arg1(), parser.arg2())
-                    case CommandType.RETURN -> writer.writeReturn()
-                    case CommandType.FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
+                COMMAND_TYPE myCommandType = parser.getCommandType()
+                switch (myCommandType) {
+                    case COMMAND_TYPE.ARITHMETIC -> writer.writeArithmetic(parser.getCurrentCommand()/*line*/)
+                    case COMMAND_TYPE.PUSH,COMMAND_TYPE.POP ->
+                        writer.writePushPop(myCommandType, parser.arg1(), parser.arg2())
+                    case COMMAND_TYPE.LABEL -> writer.writeLabel(parser.arg1())
+                    case COMMAND_TYPE.GOTO -> writer.writeGoto(parser.arg1())
+                    case COMMAND_TYPE.IF -> writer.writeIf(parser.arg1())
+                    case COMMAND_TYPE.CALL -> writer.writeCall(parser.arg1(), parser.arg2())
+                    case COMMAND_TYPE.RETURN -> writer.writeReturn()
+                    case COMMAND_TYPE.FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
                 }
             } // else {println("(line==~\'^( *//).*\')" + " " + line)}
         }

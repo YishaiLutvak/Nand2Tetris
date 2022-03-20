@@ -2,7 +2,7 @@ package project08
 
 class Constants {
 
-    static enum CommandType {
+    static enum COMMAND_TYPE {
         ARITHMETIC,
         PUSH,
         POP,
