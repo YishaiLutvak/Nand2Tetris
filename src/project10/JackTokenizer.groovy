@@ -10,7 +10,7 @@ import java.util.regex.Pattern
  */
 class JackTokenizer {
     static enum TYPE {
-        KEYWORD, SYMBOL, IDENTIFIER, INT_CONST, STRING_CONST, NOTHING,
+        KEYWORD, SYMBOL, IDENTIFIER, INT_CONST, STRING_CONST, NONE,
     }
     static enum KEYWORD {
         CLASS, METHOD, FUNCTION, CONSTRUCTOR, INT, BOOLEAN, CHAR, VOID, VAR, STATIC,
@@ -18,7 +18,7 @@ class JackTokenizer {
     }
 
     private static String currentToken = ''
-    private static TYPE currentTokenType = TYPE.NOTHING
+    private static TYPE currentTokenType = TYPE.NONE
     private static int pointer = 0
     private static def tokens = []
 
