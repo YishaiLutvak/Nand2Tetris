@@ -185,15 +185,14 @@ class CompilationEngine {
             return
         }
         //start of a subroutine
-        if (myTokenType != TYPE.KEYWORD || (!(tokenizer.keyWord() in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD]))){
+        if (myTokenType != TYPE.KEYWORD || !(tokenizer.keyWord() in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD])){
             error("constructor|function|method")
         }
         printWriter.print("${width * Indentation++}<subroutineDec>\n")
         writeXMLTag(myTokenType)
         tokenizer.advance()
         myTokenType = tokenizer.getTokenType()
-        if (myTokenType == TYPE.KEYWORD &&
-                tokenizer.keyWord() == KEYWORD.VOID){
+        if (myTokenType == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
             writeXMLTag(myTokenType,'void')
         } else {
             tokenizer.pointerBack()
@@ -295,11 +294,11 @@ class CompilationEngine {
             //',' or ')'
             tokenizer.advance()
             myTokenType = tokenizer.getTokenType()
-            String mySimbol = tokenizer.symbol()
-            if (myTokenType != TYPE.SYMBOL || (!(mySimbol in [',',')']))){
+            String mySymbol = tokenizer.symbol()
+            if (myTokenType != TYPE.SYMBOL || (!(mySymbol in [',',')']))){
                 error("',' or ')'")
             }
-            if (mySimbol == ','){
+            if (mySymbol == ','){
                 writeXMLTag(myTokenType,',')
             } else {
                 tokenizer.pointerBack()

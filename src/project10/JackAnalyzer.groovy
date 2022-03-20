@@ -1,6 +1,7 @@
 package project10
 
 //C:\Nand2Tetris\src\project10\ArrayTest
+//C:\Nand2Tetris\src\project10\Square
 
 /**
  * top-level driver that sets up and invokes the other modules

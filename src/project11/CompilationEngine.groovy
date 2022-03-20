@@ -64,16 +64,16 @@ class CompilationEngine {
      * @return type
      */
     private static String compileType(){
-        printOpenTagFunction("compileType")
+        printOpenTagFunction('compileType')
         tokenizer.advance()
         TYPE myTokenType =  tokenizer.getTokenType()
         if ((myTokenType == TYPE.KEYWORD && (tokenizer.keyWord() in [KEYWORD.INT, KEYWORD.CHAR, KEYWORD.BOOLEAN])) ||
                 (myTokenType == TYPE.IDENTIFIER)){
-            printCloseTagFunction("compileType")
+            printCloseTagFunction('compileType')
             return tokenizer.getCurrentToken()
         }
-        printCloseTagFunction("compileType")
-        error("in|char|boolean|className")
+        printCloseTagFunction('compileType')
+        error('in|char|boolean|className')
         return ""
     }
 
@@ -82,16 +82,16 @@ class CompilationEngine {
      * class: 'class' className '{' classVarDec* subroutineDec* '}'
      */
     void compileClass(){
-        printOpenTagFunction("compileClass")
+        printOpenTagFunction('compileClass')
         //'class'
         tokenizer.advance()
         if (tokenizer.getTokenType() != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.CLASS){
-            error("class")
+            error('class')
         }
         //className
         tokenizer.advance()
         if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
-            error("className")
+            error('className')
         }
         //classname does not need to be put in symbol table
         currentClass = tokenizer.identifier()
@@ -103,9 +103,9 @@ class CompilationEngine {
         //'}'
         requireSymbol('}')
         if (tokenizer.hasMoreTokens()){
-            throw new IllegalStateException("Unexpected tokens")
+            throw new IllegalStateException('Unexpected tokens')
         }
-        printCloseTagFunction("compileClass")
+        printCloseTagFunction('compileClass')
         //save file
         vmWriter.close()
     }
@@ -115,32 +115,32 @@ class CompilationEngine {
      * classVarDec ('static'|'field') type varName (','varNAme)* ';'
      */
     private void compileClassVarDec(){
-        printOpenTagFunction("compileClassVarDec")
+        printOpenTagFunction('compileClassVarDec')
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
         //next is a '}' or next is subroutineDec
         TYPE myTokenType = tokenizer.getTokenType()
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
-            printCloseTagFunction("compileClassVarDec")
+            printCloseTagFunction('compileClassVarDec')
             return
         }
         //next is start subroutineDec or classVarDec, both start with keyword
         if (myTokenType != TYPE.KEYWORD){
-            error("Keywords")
+            error('Keywords')
         }
         //next is subroutineDec
         KEYWORD myTokenKeyword = tokenizer.keyWord()
         if (myTokenKeyword in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD]){
             tokenizer.pointerBack()
-            printCloseTagFunction("compileClassVarDec")
+            printCloseTagFunction('compileClassVarDec')
             return
         }
         //classVarDec exists
         if (!(myTokenKeyword in [KEYWORD.STATIC, KEYWORD.FIELD])){
-            error("static or field")
+            error('static or field')
         }
-        KIND kind = null
+        KIND kind = KIND.NONE
         switch (myTokenKeyword){
             case KEYWORD.STATIC -> kind = KIND.STATIC
             case KEYWORD.FIELD -> kind = KIND.FIELD
@@ -154,7 +154,7 @@ class CompilationEngine {
             //varName
             tokenizer.advance()
             if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
-                error("identifier")
+                error('identifier')
             }
             name = tokenizer.getCurrentToken()
             symbolTable.define(name,type,kind)
@@ -168,47 +168,48 @@ class CompilationEngine {
             }
         } while(true)
         compileClassVarDec()
-        printCloseTagFunction("compileClassVarDec")
+        printCloseTagFunction('compileClassVarDec')
     }
 
     /**
      * Compiles a complete method function or constructor
      */
     private void compileSubroutine(){
-        printOpenTagFunction("compileSubroutine")
+        printOpenTagFunction('compileSubroutine')
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
-                //next is a '}'
-        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '}'){
+        TYPE myTokenType = tokenizer.getTokenType()
+        //next is a '}'
+        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileSubroutine")
+            printCloseTagFunction('compileSubroutine')
             return
         }
         //start of a subroutine
-        if (tokenizer.getTokenType() != TYPE.KEYWORD || (tokenizer.keyWord() != KEYWORD.CONSTRUCTOR && tokenizer.keyWord() != KEYWORD.FUNCTION && tokenizer.keyWord() != KEYWORD.METHOD)){
-            error("constructor|function|method")
+        if (myTokenType != TYPE.KEYWORD || !(tokenizer.keyWord() in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD])){
+            error('constructor|function|method')
         }
         KEYWORD keyword = tokenizer.keyWord()
         symbolTable.startSubroutine()
         //for method this is the first argument
-        if (tokenizer.keyWord() == KEYWORD.METHOD){
-            symbolTable.define("this",currentClass, KIND.ARG)
+        if (keyword == KEYWORD.METHOD){
+            symbolTable.define('this',currentClass, KIND.ARG)
         }
-        //#String type
-        //'void' or type
         tokenizer.advance()
-        //        if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
-//            type = "void"
-//        } else {
-//            tokenizer.pointerBack()
-//            type = compileType()
-//        }
+        /*String type*/
+        //'void' or type
+        if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
+            /*type = 'void'*/
+        } else {
+            tokenizer.pointerBack()
+            /*type = */compileType()
+        }
         //subroutineName which is a identifier
         tokenizer.advance()
-                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
-            error("subroutineName")
+        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
+            error('subroutineName')
         }
-        currentSubroutine = tokenizer.identifier()
+        currentSubroutine = tokenizer.getCurrentToken()
         //'('
         requireSymbol('(')
         //parameterList
@@ -218,7 +219,7 @@ class CompilationEngine {
         //subroutineBody
         compileSubroutineBody(keyword)
         compileSubroutine()
-        printCloseTagFunction("compileSubroutine")
+        printCloseTagFunction('compileSubroutine')
     }
 
     /**
