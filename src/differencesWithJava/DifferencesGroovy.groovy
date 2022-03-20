@@ -1,11 +1,11 @@
-package groovyVSjava
+package differencesWithJava
 
 import static groovy.test.GroovyTestCase.assertEquals
 
 /**
  * https://groovy-lang.org/differences.html
  */
-class difGroovy {
+class DifferencesGroovy {
 
     /**
      * 2. Multi-methods

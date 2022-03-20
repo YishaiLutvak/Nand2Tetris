@@ -1,8 +1,4 @@
-package regex
-
-import java.util.regex.Matcher
-
-
+package groovyRegex
 //********************************************
 //https://www.tutorialspoint.com/groovy/groovy_regular_expressions.htm
 //********************************************
