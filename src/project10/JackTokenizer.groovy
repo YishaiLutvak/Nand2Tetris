@@ -14,7 +14,7 @@ class JackTokenizer {
     }
     static enum KEYWORD {
         CLASS, METHOD, FUNCTION, CONSTRUCTOR, INT, BOOLEAN, CHAR, VOID, VAR, STATIC,
-        FIELD, LET, DO, IF, ELSE, WHILE, RETURN, TRUE, FALSE, NULL, THIS, NOTHING,
+        FIELD, LET, DO, IF, ELSE, WHILE, RETURN, TRUE, FALSE, NULL, THIS, NONE,
     }
 
     private static String currentToken = ''
