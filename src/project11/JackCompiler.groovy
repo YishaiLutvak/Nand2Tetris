@@ -1,7 +1,5 @@
 package project11
 
-//import java.io.File;
-//import java.util.ArrayList;
 
 /**
  * The compiler operates on a given source, where source is either a file name of the form Xxx.jack or a directory name containing one or more such files.
@@ -10,7 +8,7 @@ package project11
  */
 class JackCompiler {
 
-    static void main(args) {
+    static void main(String[] args) {
         if (args.length == 0){
             println("Usage:java JackCompiler [filename|directory]")
             return

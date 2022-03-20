@@ -14,7 +14,7 @@ package project10
  */
 class JackAnalyzer{
 
-    static void main(args) {
+    static void main(String[] args) {
         if(args.length == 0){
             println('Missing argument!!!')
             return
