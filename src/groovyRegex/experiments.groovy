@@ -89,4 +89,6 @@ println()
 
 //********************************************
 
-println($/"x" ==~ /[xyz]/ is ${"x" ==~ /[xyz]/}/$)
+println($/('y' ==~ /[xyz]/) is ${'y' ==~ /[xyz]/}/$)
+println($/('xyz' ==~ /[xyz]/) is ${'xyz' ==~ /[xyz]/}/$)
+println()
