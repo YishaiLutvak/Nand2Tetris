@@ -25,14 +25,17 @@ class JackTokenizer {
     private static def tokens = []
 
     private static String keyWordReg =
-            'class|constructor|function|method|field|static|var |int |char |boolean |void|true|false|null|this|let |do |if|else|while|return|'
+            'class|constructor|function|method|field|static|' +
+                    'var |int |char |boolean |' +
+                    'void|true|false|null|this|' +
+                    'let |do |if|else|while|return'
     private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
     private static String idReg = /[\w_]+/
-    private static Pattern tokenPatterns = ~(keyWordReg + symbolReg + "|" + intReg + "|" + strReg + "|" + idReg)
+    private static Pattern tokenPatterns = ~"$keyWordReg|$symbolReg|$intReg|$strReg|$idReg"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
-    static def myMap = [
+    static def keywordMap = [
             class : KEYWORD.CLASS, constructor: KEYWORD.CONSTRUCTOR, function: KEYWORD.FUNCTION,
             method: KEYWORD.METHOD, field: KEYWORD.FIELD, static: KEYWORD.STATIC,
             'var ': KEYWORD.VAR, 'int ': KEYWORD.INT, 'char ': KEYWORD.CHAR, 'boolean ': KEYWORD.BOOLEAN,
@@ -116,7 +119,7 @@ class JackTokenizer {
      */
     static KEYWORD keyWord(){
         if(currentTokenType == TYPE.KEYWORD){
-            return myMap[currentToken]
+            return keywordMap[currentToken]
         } else {
             throw new IllegalStateException("Current token is not a keyword!")
         }

@@ -1,5 +1,7 @@
 package groovyRegex
 
+import java.util.regex.Pattern
+
 
 //********************************************
 // https://stackoverflow.com/questions/10954870/groovy-remove-multiline-comment
@@ -91,4 +93,6 @@ println()
 
 println($/('y' ==~ /[xyz]/) is ${'y' ==~ /[xyz]/}/$)
 println($/('xyz' ==~ /[xyz]/) is ${'xyz' ==~ /[xyz]/}/$)
+println($/('xyz' ==~ /[xyz]?/) is ${'xyz' ==~ /[xyz]?/}/$)
+println("Pattern.matches('[xyz]?','xyz') is ${Pattern.matches('[xyz]?','xyz')}")
 println()
