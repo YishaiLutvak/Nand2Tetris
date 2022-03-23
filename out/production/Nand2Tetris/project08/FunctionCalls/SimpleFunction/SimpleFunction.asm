@@ -6,6 +6,7 @@
 //     (line 5)
 // // Performs a simple calculation and returns the result.    (line 6)
 // function SimpleFunction.test 2    (line 7)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label SimpleFunction.test ***
 (SimpleFunction.test)
@@ -24,6 +25,8 @@
   @SimpleFunction.test_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to SimpleFunction.test_Loop 
 (SimpleFunction.test_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push local 0    (line 8)
 
@@ -123,6 +126,7 @@
   M=M+1             //   ram[0] = ram[0]+1               
 
 // return    (line 16)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -187,4 +191,6 @@
   @13              //   A = 13              
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
+
+// ++++++++++++++ END RETURN ++++++++++++++
 
