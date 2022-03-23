@@ -293,7 +293,8 @@ class Constants {
 '''
 
 
-    static final String CALL = '''  
+    static final String CALL = '''// ++++++++++++++ CALL ++++++++++++++  
+  
   // *** push return-address *** 
   @{nameOfFunction}$ReturnAddress{index}  
   D=A               //   D = {nameOfFunction}$ReturnAddress{index}        
@@ -362,10 +363,12 @@ class Constants {
   // *** label return-address *** 
 ({nameOfFunction}$ReturnAddress{index})  
 
+// ++++++++++++++ END CALL ++++++++++++++  
 '''
 
 
-    static final String FUNCTION = '''
+    static final String FUNCTION = '''// ++++++++++++++ FUNCTION ++++++++++++++
+
   // *** label {nameOfFunction} ***
 ({nameOfFunction})
 
@@ -384,9 +387,11 @@ class Constants {
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to {nameOfFunction}_Loop 
 ({nameOfFunction}_End) 
 
+// ++++++++++++++ END FUNCTION ++++++++++++++
 '''
 
-    static final String RETURN = '''
+    static final String RETURN = '''// ++++++++++++++ RETURN ++++++++++++++
+
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
   D=M              //   D = ram[LCL] 
@@ -451,6 +456,7 @@ class Constants {
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
 '''
 
 
