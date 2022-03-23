@@ -1,3 +1,82 @@
+// ++++++++++++++ BOOTSTRAPPING ++++++++++++++
+
+  // *** SP = 256 ***
+  
+  @256
+  D=A
+  @SP
+  M=D
+
+  // *** call Sys.init ***
+  
+  // push return-address
+  @Sys.init$RETURN0  
+  D=A
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+
+  // push LCL
+  @LCL  
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+  
+  // push ARG
+  @ARG  
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+
+  // push THIS
+  @THIS
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+
+  // push THAT
+  @THAT
+  D=M
+  @SP
+  A=M
+  M=D
+  @SP
+  M=M+1
+
+  // ARG = SP-n-5 
+  @SP
+  D=M
+  @0
+  D=D-A
+  @5
+  D=D-A
+  @ARG
+  M=D
+
+  // LCL = SP 
+  @SP
+  D=M
+  @LCL
+  M=D
+
+  @Sys.init
+  0;JMP
+
+(Sys.init$RETURN0)
+
+// ++++++++++++++ END BOOTSTRAPPING ++++++++++++++
+
 // Class1.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
@@ -6,6 +85,7 @@
 //     (line 5)
 // // Stores two supplied arguments in static[0] and static[1].    (line 6)
 // function Class1.set 0    (line 7)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Class1.set ***
 (Class1.set)
@@ -24,6 +104,8 @@
   @Class1.set_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Class1.set_Loop 
 (Class1.set_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push argument 0    (line 8)
 
@@ -80,6 +162,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // return    (line 13)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -145,9 +228,12 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 //     (line 14)
 // // Returns static[0] - static[1].    (line 15)
 // function Class1.get 0    (line 16)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Class1.get ***
 (Class1.get)
@@ -166,6 +252,8 @@
   @Class1.get_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Class1.get_Loop 
 (Class1.get_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push static 0    (line 17)
 
@@ -200,6 +288,7 @@
   M=M+1             //   ram[0] = ram[0]+1               
 
 // return    (line 20)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -265,6 +354,8 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 // Class2.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
@@ -273,6 +364,7 @@
 //     (line 5)
 // // Stores two supplied arguments in static[0] and static[1].    (line 6)
 // function Class2.set 0    (line 7)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Class2.set ***
 (Class2.set)
@@ -291,6 +383,8 @@
   @Class2.set_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Class2.set_Loop 
 (Class2.set_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push argument 0    (line 8)
 
@@ -347,6 +441,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // return    (line 13)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -412,9 +507,12 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 //     (line 14)
 // // Returns static[0] - static[1].    (line 15)
 // function Class2.get 0    (line 16)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Class2.get ***
 (Class2.get)
@@ -433,6 +531,8 @@
   @Class2.get_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Class2.get_Loop 
 (Class2.get_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push static 0    (line 17)
 
@@ -467,6 +567,7 @@
   M=M+1             //   ram[0] = ram[0]+1               
 
 // return    (line 20)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -532,6 +633,8 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 // Sys.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
@@ -541,6 +644,7 @@
 // // Tests that different functions, stored in two different     (line 6)
 // // class files, manipulate the static segment correctly.     (line 7)
 // function Sys.init 0    (line 8)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Sys.init ***
 (Sys.init)
@@ -559,6 +663,8 @@
   @Sys.init_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Sys.init_Loop 
 (Sys.init_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push constant 6    (line 9)
 
@@ -581,6 +687,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // call Class1.set 2    (line 11)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Class1.set$ReturnAddress0  
@@ -650,6 +757,8 @@
   // *** label return-address *** 
 (Class1.set$ReturnAddress0)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // pop temp 0 // Dumps the return value    (line 12)
 
   @SP               //   A = 0
@@ -686,6 +795,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // call Class2.set 2    (line 15)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Class2.set$ReturnAddress1  
@@ -755,6 +865,8 @@
   // *** label return-address *** 
 (Class2.set$ReturnAddress1)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // pop temp 0 // Dumps the return value    (line 16)
 
   @SP               //   A = 0
@@ -771,6 +883,7 @@
   M=M-1             //   ram[0] = ram[0]-1
 
 // call Class1.get 0    (line 17)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Class1.get$ReturnAddress2  
@@ -840,7 +953,10 @@
   // *** label return-address *** 
 (Class1.get$ReturnAddress2)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // call Class2.get 0    (line 18)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Class2.get$ReturnAddress3  
@@ -909,6 +1025,8 @@
 
   // *** label return-address *** 
 (Class2.get$ReturnAddress3)  
+
+// ++++++++++++++ END CALL ++++++++++++++  
 
 // label WHILE    (line 19)
 

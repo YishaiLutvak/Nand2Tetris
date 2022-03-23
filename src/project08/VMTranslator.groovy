@@ -1,6 +1,6 @@
 package project08
 
-import project08.Constants.COMMAND_TYPE
+import static project08.Constants.COMMAND_TYPE
 
 // input to tests
 // C:\Nand2Tetris\src\project08\FunctionCalls\FibonacciElement

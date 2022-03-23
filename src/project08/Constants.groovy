@@ -364,6 +364,7 @@ class Constants {
 ({nameOfFunction}$ReturnAddress{index})  
 
 // ++++++++++++++ END CALL ++++++++++++++  
+
 '''
 
 
@@ -388,6 +389,7 @@ class Constants {
 ({nameOfFunction}_End) 
 
 // ++++++++++++++ END FUNCTION ++++++++++++++
+
 '''
 
     static final String RETURN = '''// ++++++++++++++ RETURN ++++++++++++++
@@ -457,6 +459,7 @@ class Constants {
   0; JMP           //   jump to ram[ram[13]] 
 
 // ++++++++++++++ END RETURN ++++++++++++++
+
 '''
 
 
@@ -538,6 +541,7 @@ class Constants {
 (Sys.init$RETURN0)
 
 // ++++++++++++++ END BOOTSTRAPPING ++++++++++++++
+
 '''
 
 }

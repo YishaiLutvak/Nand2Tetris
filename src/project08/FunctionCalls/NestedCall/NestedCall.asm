@@ -7,6 +7,7 @@
 // // Does not return.  (Enters infinite loop.)    (line 6)
 //     (line 7)
 // function Sys.init 0    (line 8)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Sys.init ***
 (Sys.init)
@@ -25,6 +26,8 @@
   @Sys.init_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Sys.init_Loop 
 (Sys.init_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push constant 4000// test THIS and THAT context save    (line 9)
 
@@ -67,6 +70,7 @@
   M=M-1             //   ram[0] = ram[0]-1
 
 // call Sys.main 0    (line 13)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Sys.main$ReturnAddress0  
@@ -136,6 +140,8 @@
   // *** label return-address *** 
 (Sys.main$ReturnAddress0)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // pop temp 1    (line 14)
 
   @SP               //   A = 0
@@ -170,6 +176,7 @@
 // // that locals were not mangled by function call.    (line 24)
 //     (line 25)
 // function Sys.main 5    (line 26)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Sys.main ***
 (Sys.main)
@@ -188,6 +195,8 @@
   @Sys.main_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Sys.main_Loop 
 (Sys.main_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push constant 4001    (line 27)
 
@@ -309,6 +318,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // call Sys.add12 1    (line 38)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Sys.add12$ReturnAddress1  
@@ -377,6 +387,8 @@
 
   // *** label return-address *** 
 (Sys.add12$ReturnAddress1)  
+
+// ++++++++++++++ END CALL ++++++++++++++  
 
 // pop temp 0    (line 39)
 
@@ -507,6 +519,7 @@
   M=M+1             //   ram[0] = ram[0]+1
 
 // return    (line 49)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -572,12 +585,15 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 //     (line 50)
 // // Sys.add12(int n)    (line 51)
 // //    (line 52)
 // // Returns n+12.    (line 53)
 //     (line 54)
 // function Sys.add12 0    (line 55)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Sys.add12 ***
 (Sys.add12)
@@ -596,6 +612,8 @@
   @Sys.add12_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Sys.add12_Loop 
 (Sys.add12_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push constant 4002    (line 56)
 
@@ -673,6 +691,7 @@
   M=M+1             //   ram[0] = ram[0]+1
 
 // return    (line 63)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -737,4 +756,6 @@
   @13              //   A = 13              
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
+
+// ++++++++++++++ END RETURN ++++++++++++++
 

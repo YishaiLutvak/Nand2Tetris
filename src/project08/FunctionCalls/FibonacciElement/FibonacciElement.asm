@@ -76,6 +76,7 @@
 (Sys.init$RETURN0)
 
 // ++++++++++++++ END BOOTSTRAPPING ++++++++++++++
+
 // Main.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
@@ -88,6 +89,7 @@
 // // parameter before this code starts running.    (line 9)
 //     (line 10)
 // function Main.fibonacci 0    (line 11)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Main.fibonacci ***
 (Main.fibonacci)
@@ -106,6 +108,8 @@
   @Main.fibonacci_Loop
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Main.fibonacci_Loop 
 (Main.fibonacci_End) 
+
+// ++++++++++++++ END FUNCTION ++++++++++++++
 
 // push argument 0    (line 12)
 
@@ -185,6 +189,7 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
 // return    (line 19)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -250,6 +255,8 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 // label IF_FALSE         // if n>=2, returns fib(n-2)+fib(n-1)    (line 20)
 
 (Main.IF_FALSE)
@@ -290,6 +297,7 @@
   M=M+1             //   ram[0] = ram[0]+1               
 
 // call Main.fibonacci 1  // computes fib(n-2)    (line 24)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress0  
@@ -359,6 +367,8 @@
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress0)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // push argument 0    (line 25)
 
   @0                        
@@ -395,6 +405,7 @@
   M=M+1             //   ram[0] = ram[0]+1               
 
 // call Main.fibonacci 1  // computes fib(n-1)    (line 28)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress1  
@@ -464,6 +475,8 @@
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress1)  
 
+// ++++++++++++++ END CALL ++++++++++++++  
+
 // add                    // returns fib(n-1) + fib(n-2)    (line 29)
 
   @SP               //   A = 0
@@ -477,6 +490,7 @@
   M=M+1             //   ram[0] = ram[0]+1
 
 // return    (line 30)
+// ++++++++++++++ RETURN ++++++++++++++
 
   // *** FRAME = LCL ***
   @LCL             //   A = LCL      
@@ -542,6 +556,8 @@
   A=M              //   A = ram[13]
   0; JMP           //   jump to ram[ram[13]] 
 
+// ++++++++++++++ END RETURN ++++++++++++++
+
 // Sys.vm
 // // This file is part of www.nand2tetris.org    (line 1)
 // // and the book "The Elements of Computing Systems"    (line 2)
@@ -554,6 +570,7 @@
 // // by the bootstrap code.    (line 9)
 //     (line 10)
 // function Sys.init 0    (line 11)
+// ++++++++++++++ FUNCTION ++++++++++++++
 
   // *** label Sys.init ***
 (Sys.init)
@@ -573,6 +590,8 @@
   D=D-1;JNE        //   if (numberOfLocals != 0) jump to Sys.init_Loop 
 (Sys.init_End) 
 
+// ++++++++++++++ END FUNCTION ++++++++++++++
+
 // push constant 4    (line 12)
 
   @4                                   
@@ -584,6 +603,7 @@
   M=M+1             //   ram[0] = ram[0]+1                     
                                              
 // call Main.fibonacci 1   // computes the 4'th fibonacci element    (line 13)
+// ++++++++++++++ CALL ++++++++++++++  
   
   // *** push return-address *** 
   @Main.fibonacci$ReturnAddress2  
@@ -652,6 +672,8 @@
 
   // *** label return-address *** 
 (Main.fibonacci$ReturnAddress2)  
+
+// ++++++++++++++ END CALL ++++++++++++++  
 
 // label WHILE    (line 14)
 
