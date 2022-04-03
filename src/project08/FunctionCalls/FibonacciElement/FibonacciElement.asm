@@ -309,8 +309,8 @@
   M=M+1             //   ram[0] = ram[0]+1  
 
   // *** push LCL ***	
-  @LCL  
-  D=M               //   D = LCL 
+  @LCL              //   A = LCL     
+  D=M               //   D = ram[LCL] 
   @SP               //   A = 0                                     
   A=M               //   A = ram[0]                                
   M=D               //   ram[ram[0]] = D                                
@@ -318,8 +318,8 @@
   M=M+1             //   ram[0] = ram[0]+1                         
 
   // *** push ARG *** 	
-  @ARG  
-  D=M               //   D = ARG           
+  @ARG              //   A = ARG      
+  D=M               //   D = ram[ARG]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -327,8 +327,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THIS *** 	
-  @THIS  
-  D=M               //   D = THIS           
+  @THIS             //   A = THIS     
+  D=M               //   D = ram[THIS]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -336,8 +336,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THAT ***   	
-  @THAT  
-  D=M               //   D = THAT           
+  @THAT             //   A = THAT
+  D=M               //   D = ram[THAT]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -417,8 +417,8 @@
   M=M+1             //   ram[0] = ram[0]+1  
 
   // *** push LCL ***	
-  @LCL  
-  D=M               //   D = LCL 
+  @LCL              //   A = LCL     
+  D=M               //   D = ram[LCL] 
   @SP               //   A = 0                                     
   A=M               //   A = ram[0]                                
   M=D               //   ram[ram[0]] = D                                
@@ -426,8 +426,8 @@
   M=M+1             //   ram[0] = ram[0]+1                         
 
   // *** push ARG *** 	
-  @ARG  
-  D=M               //   D = ARG           
+  @ARG              //   A = ARG      
+  D=M               //   D = ram[ARG]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -435,8 +435,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THIS *** 	
-  @THIS  
-  D=M               //   D = THIS           
+  @THIS             //   A = THIS     
+  D=M               //   D = ram[THIS]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -444,8 +444,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THAT ***   	
-  @THAT  
-  D=M               //   D = THAT           
+  @THAT             //   A = THAT
+  D=M               //   D = ram[THAT]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -615,8 +615,8 @@
   M=M+1             //   ram[0] = ram[0]+1  
 
   // *** push LCL ***	
-  @LCL  
-  D=M               //   D = LCL 
+  @LCL              //   A = LCL     
+  D=M               //   D = ram[LCL] 
   @SP               //   A = 0                                     
   A=M               //   A = ram[0]                                
   M=D               //   ram[ram[0]] = D                                
@@ -624,8 +624,8 @@
   M=M+1             //   ram[0] = ram[0]+1                         
 
   // *** push ARG *** 	
-  @ARG  
-  D=M               //   D = ARG           
+  @ARG              //   A = ARG      
+  D=M               //   D = ram[ARG]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -633,8 +633,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THIS *** 	
-  @THIS  
-  D=M               //   D = THIS           
+  @THIS             //   A = THIS     
+  D=M               //   D = ram[THIS]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        
@@ -642,8 +642,8 @@
   M=M+1             //   ram[0] = ram[0]+1 
 
   // *** push THAT ***   	
-  @THAT  
-  D=M               //   D = THAT           
+  @THAT             //   A = THAT
+  D=M               //   D = ram[THAT]           
   @SP               //   A = 0             
   A=M               //   A = ram[0]        
   M=D               //   ram[ram[0]] = D        

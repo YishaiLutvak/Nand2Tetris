@@ -2,13 +2,13 @@ package project07
 
 import project07.Constants07.COMMAND_TYPE
 
-//input to test
-//1. C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
-//2. C:\Nand2Tetris\src\project07\StackArithmetic\StackTest
-//3. C:\Nand2Tetris\src\project07\MemoryAccess\BasicTest
-//4. C:\Nand2Tetris\src\project07\MemoryAccess\PointerTest
-//5. C:\Nand2Tetris\src\project07\MemoryAccess\StaticTest
-
+/*input to test
+C:\Nand2Tetris\src\project07\StackArithmetic\SimpleAdd
+C:\Nand2Tetris\src\project07\StackArithmetic\StackTest
+C:\Nand2Tetris\src\project07\MemoryAccess\BasicTest
+C:\Nand2Tetris\src\project07\MemoryAccess\PointerTest
+C:\Nand2Tetris\src\project07\MemoryAccess\StaticTest
+*/
 
 /**
  * Translator from "vm" intermediate-language-code to hack assembly-language-code.
@@ -66,7 +66,8 @@ class VMTranslator07 {
         vmFile.eachLine { String line, int numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
-            if (!line.startsWith('//')) {
+            if (!(line ==~ '^( *//).*')) {
+            // If you do not want to use regex you can replace this line with the next line: "if (!line.startsWith('//')) {"
                 parser.setCurrentCommand(line)
                 COMMAND_TYPE commandType = parser.getCommandType()
                 switch (commandType) {
@@ -74,7 +75,7 @@ class VMTranslator07 {
                     case COMMAND_TYPE.PUSH, COMMAND_TYPE.POP ->
                         writer.writePushPop(commandType, parser.arg1(), parser.arg2())
                 }
-            }
+            } // else { println("(line ==~ \'^( *//).*\')" + " " + line) }
         }
     }
 }

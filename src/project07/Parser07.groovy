@@ -21,7 +21,7 @@ class Parser07 {
      * @param cmd - string of cmd.
      */
     static void setCurrentCommand(String cmd) {
-        currentCommand = cmd.split('//')[0] // for comments in end of line
+        currentCommand = cmd.split('//')[0].trim() // for comments in end of line
     }
 
     /**

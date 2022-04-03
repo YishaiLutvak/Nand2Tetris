@@ -22,7 +22,7 @@ class Parser {
      */
     static void setCurrentCommand(String cmd) {
         // currentCommand = cmd.split('//')[0].trim()
-        currentCommand = cmd.replaceFirst(~/\/\/.*/,'') // for comments in end of line
+        currentCommand = cmd.replaceFirst(~'//.*','').trim() // for comments in end of line
     }
 
     /**
