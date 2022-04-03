@@ -76,7 +76,7 @@ class VMTranslator {
         vmFile.eachLine { String line, int numberLine ->
             writer.emitComment(line, numberLine)
             // check if line is not comment
-            if (!(line==~'^( *//).*')) {
+            //if (!(line==~'^( *//).*')) {
                 parser.setCurrentCommand(line)
                 COMMAND_TYPE myCommandType = parser.getCommandType()
                 switch (myCommandType) {
@@ -90,7 +90,7 @@ class VMTranslator {
                     case COMMAND_TYPE.RETURN -> writer.writeReturn()
                     case COMMAND_TYPE.FUNCTION -> writer.writeFunction(parser.arg1(), parser.arg2())
                 }
-            } // else {println("(line==~\'^( *//).*\')" + " " + line)}
+            //} // else {println("(line==~\'^( *//).*\')" + " " + line)}
         }
     }
 }
