@@ -28,7 +28,7 @@ class CompilationEngine {
      * @return
      */
     static String currentFunction(){
-        if (currentClass.length() != 0 && currentSubroutine.length() !=0){
+        if (currentClass.length() != 0 && currentSubroutine.length() != 0){
             return "${currentClass}.${currentSubroutine}"
         }
         return ""
@@ -241,6 +241,7 @@ class CompilationEngine {
         printCloseTagFunction("compileSubroutineBody")
     }
 
+    // I am here!!!
     /**
      * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
      */
