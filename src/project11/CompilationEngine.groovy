@@ -19,8 +19,8 @@ class CompilationEngine {
     private static String currentClass
     private static String currentSubroutine
     private static SymbolTable symbolTable = new SymbolTable()
-    private static int Indentation = 0
-    private static String width= '    '
+    public static int Indentation = 0
+    public static String width= '    '
     private int labelIndex = 0
 
     /**
@@ -241,13 +241,12 @@ class CompilationEngine {
         printCloseTagFunction("compileSubroutineBody")
     }
 
-    // I am here!!!
     /**
      * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
      */
     private static void writeFunctionDec(KEYWORD keyword){
         printOpenTagFunction("writeFunctionDec")
-        vmWriter.writeFunction(currentFunction(),symbolTable.varCount(KIND.VAR))
+        vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
         //METHOD and CONSTRUCTOR need to load this pointer
         if (keyword == KEYWORD.METHOD){
             //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
@@ -256,7 +255,7 @@ class CompilationEngine {
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
         } else if (keyword == KEYWORD.CONSTRUCTOR){
             //A Jack function or constructor with k arguments is compiled into a VM function that operates on k arguments.
-            vmWriter.writePush(VMWriter.SEGMENT.CONST,symbolTable.varCount(KIND.FIELD))
+            vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
             vmWriter.writeCall("Memory.alloc", 1)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
         }
@@ -270,14 +269,15 @@ class CompilationEngine {
         printOpenTagFunction("compileStatement")
         //determine whether there is a statement next can be a '}'
         tokenizer.advance()
-                //next is a '}'
-        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '}'){
+        TYPE myTokenType = tokenizer.getTokenType()
+        //next is a '}'
+        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileStatement")
+            printCloseTagFunction("compileStatement")
             return
         }
         //next is 'let'|'if'|'while'|'do'|'return'
-        if (tokenizer.getTokenType() != TYPE.KEYWORD){
+        if (myTokenType != TYPE.KEYWORD){
             error("keyword")
         } else {
             switch (tokenizer.keyWord()){
@@ -286,7 +286,7 @@ class CompilationEngine {
                 case KEYWORD.WHILE -> compilesWhile()
                 case KEYWORD.DO    -> compileDo()
                 case KEYWORD.RETURN-> compileReturn()
-                default       -> error("'let'|'if'|'while'|'do'|'return'")
+                default            -> error("'let'|'if'|'while'|'do'|'return'")
             }
         }
         compileStatement()
@@ -302,32 +302,31 @@ class CompilationEngine {
         printOpenTagFunction("compileParameterList")
         //check if there is parameterList, if next token is ')' than go back
         tokenizer.advance()
-                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ')'){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileParameterList")
+            printCloseTagFunction("compileParameterList")
             return
         }
         String type
         //there is parameter, at least one varName
         tokenizer.pointerBack()
-                do {
+        do {
             //type
             type = compileType()
             //varName
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
+            if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
-            symbolTable.define(tokenizer.identifier(),type, KIND.ARG)
+            symbolTable.define(tokenizer.getCurrentToken(),type, KIND.ARG)
             //',' or ')'
             tokenizer.advance()
-            
-            if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ')')){
+            if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',')'])){
                 error("',' or ')'")
             }
             if (tokenizer.symbol() == ')'){
                 tokenizer.pointerBack()
-                                break
+                break
             }
         } while(true)
         printCloseTagFunction("compileParameterList")
@@ -341,26 +340,26 @@ class CompilationEngine {
         printOpenTagFunction("compileVarDec")
         //determine if there is a varDec
         tokenizer.advance()
-                //no 'var' go back
+        //no 'var' go back
         if (tokenizer.getTokenType() != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.VAR){
             tokenizer.pointerBack()
-                        printCloseTagFunction("compileVarDec")
+            printCloseTagFunction("compileVarDec")
             return
         }
         //type
         String type = compileType()
         //at least one varName
-        //#boolean varNamesDone = false
+        //# boolean varNamesDone = false
         do {
             //varName
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
+            if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
-            symbolTable.define(tokenizer.identifier(),type, KIND.VAR)
+            symbolTable.define(tokenizer.getCurrentToken(),type, KIND.VAR)
             //',' or ';'
             tokenizer.advance()
-                        if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != ',' && tokenizer.symbol() != ';')){
+            if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',';'])){
                 error("',' or ';'")
             }
             if (tokenizer.symbol() == ';'){
@@ -394,13 +393,13 @@ class CompilationEngine {
         printOpenTagFunction("compileLet")
         //varName
         tokenizer.advance()
-                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
+        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("varName")
         }
-        String varName = tokenizer.identifier()
+        String varName = tokenizer.getCurrentToken()
         //'[' or '='
         tokenizer.advance()
-                if (tokenizer.getTokenType() != TYPE.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
+        if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in ['[','='])){
             error("'['|'='")
         }
         boolean expExist = false
@@ -415,10 +414,8 @@ class CompilationEngine {
             requireSymbol(']')
             //base+offset
             vmWriter.writeArithmetic(VMWriter.COMMAND.ADD)
+            tokenizer.advance()
         }
-        if (expExist){
-              tokenizer.advance()
-                      }
         //expression
         compileExpression()
         //';'
@@ -448,11 +445,11 @@ class CompilationEngine {
         printOpenTagFunction("getSeg")
         VMWriter.SEGMENT mySegment
         switch (kind){
-            case KIND.FIELD ->  {mySegment=VMWriter.SEGMENT.THIS}
-            case KIND.STATIC -> {mySegment=VMWriter.SEGMENT.STATIC}
-            case KIND.VAR ->    {mySegment=VMWriter.SEGMENT.LOCAL}
-            case KIND.ARG ->    {mySegment=VMWriter.SEGMENT.ARG}
-            default ->          {mySegment=VMWriter.SEGMENT.NONE}
+            case KIND.FIELD ->  mySegment = VMWriter.SEGMENT.THIS
+            case KIND.STATIC -> mySegment = VMWriter.SEGMENT.STATIC
+            case KIND.VAR ->    mySegment = VMWriter.SEGMENT.LOCAL
+            case KIND.ARG ->    mySegment = VMWriter.SEGMENT.ARG
+            default ->          mySegment = VMWriter.SEGMENT.NONE
         }
         printCloseTagFunction("getSeg")
         return mySegment
@@ -502,13 +499,13 @@ class CompilationEngine {
         printOpenTagFunction("compileReturn")
         //check if there is any expression
         tokenizer.advance()
-                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ';'){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ';'){
             //no expression push 0 to stack
             vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
-        }else {
+        } else {
             //expression exist
             tokenizer.pointerBack()
-                        //expression
+            //expression
             compileExpression()
             //';'
             requireSymbol(';')
@@ -546,7 +543,7 @@ class CompilationEngine {
         vmWriter.writeLabel(elseLabel)
         //check if there is 'else'
         tokenizer.advance()
-                if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.ELSE){
+        if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.ELSE){
             //'{'
             requireSymbol('{')
             //statements
@@ -555,10 +552,12 @@ class CompilationEngine {
             requireSymbol('}')
         } else {
             tokenizer.pointerBack()
-                    }
+        }
         vmWriter.writeLabel(endLabel)
         printCloseTagFunction("compileIf")
     }
+
+    // I am here!!!
 
     /**
      * Compiles a term.
@@ -793,7 +792,7 @@ class CompilationEngine {
      */
     private static void requireSymbol(String symbol){
         tokenizer.advance()
-                if (tokenizer.getTokenType() != TYPE.SYMBOL || tokenizer.symbol() != symbol){
+        if (tokenizer.getTokenType() != TYPE.SYMBOL || tokenizer.symbol() != symbol){
             error("'" + symbol + "'")
         }
     }

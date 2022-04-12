@@ -57,7 +57,7 @@ class CompilationEngine {
     private static void writeXMLTag(TYPE myTokenType, def infoTag = tokenizer.getCurrentToken()){
         String nameTag = reverseMap[myTokenType]
         printWriter.print("${width * Indentation}<$nameTag> $infoTag </$nameTag>\n")
-        tokenPrintWriter.print("<$nameTag> $infoTag </$nameTag>\n")
+        tokenPrintWriter.print("$width<$nameTag> $infoTag </$nameTag>\n")
         //println("<$nameTag> $infoTag </$nameTag>\n")
     }
 
