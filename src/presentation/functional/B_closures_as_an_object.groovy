@@ -1,4 +1,4 @@
-package groovyClosures
+package presentation.functional
 
 def listener = { e -> println "Clicked on $e.source" }
 assert listener instanceof Closure

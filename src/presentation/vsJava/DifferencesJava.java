@@ -1,4 +1,4 @@
-package differencesWithJava;
+package presentation.vsJava;
 
 import static junit.framework.TestCase.assertEquals;
 

@@ -249,12 +249,12 @@ class CompilationEngine {
         vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
         //METHOD and CONSTRUCTOR need to load this pointer
         if (keyword == KEYWORD.METHOD){
-            //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
+            //A Jack method with DotAndParentheses arguments is compiled into a VM function that operates on DotAndParentheses + 1 arguments.
             // The first argument (argument number 0) always refers to the this object.
             vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
         } else if (keyword == KEYWORD.CONSTRUCTOR){
-            //A Jack function or constructor with k arguments is compiled into a VM function that operates on k arguments.
+            //A Jack function or constructor with DotAndParentheses arguments is compiled into a VM function that operates on DotAndParentheses arguments.
             vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
             vmWriter.writeCall("Memory.alloc", 1)
             vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
