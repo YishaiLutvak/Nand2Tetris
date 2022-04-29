@@ -22,7 +22,7 @@ class JackTokenizer {
     private static int pointer = 0
     private static def tokens = []
 
-    private static String keyWordReg =
+    private static String keywordReg =
             'class|constructor|function|method|field|static|' +
                     'var |int |char |boolean |' +
                     'void|true|false|null|this|' +
@@ -31,7 +31,7 @@ class JackTokenizer {
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
     private static String idReg = /[\w_]+/
-    private static Pattern tokenPatterns = ~"$keyWordReg|$symbolReg|$intReg|$strReg|$idReg"
+    private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
             class : KEYWORD.CLASS, constructor: KEYWORD.CONSTRUCTOR, function: KEYWORD.FUNCTION,
@@ -49,9 +49,9 @@ class JackTokenizer {
     JackTokenizer(File inFile) {
         try {
             String preProcessed = ''
-            inFile.eachLine {
-                String line = noComments(it).trim()
-                preProcessed += (line.length() > 0) ? "$line\n" : ''
+            inFile.eachLine {line ->
+                String lineWithoutComments = noComments(line).trim()
+                preProcessed += (line.length() > 0) ? "$lineWithoutComments\n" : ''
             }
             preProcessed = noBlockComments(preProcessed).trim()
             Matcher matcher = preProcessed =~ tokenPatterns
@@ -84,7 +84,7 @@ class JackTokenizer {
             throw new IllegalStateException("No more tokens")
         }
         //println(currentToken)
-        if(currentToken ==~ keyWordReg) {
+        if(currentToken ==~ keywordReg) {
             currentTokenType = TYPE.KEYWORD
         } else if(currentToken ==~ symbolReg) {
             currentTokenType = TYPE.SYMBOL
@@ -99,7 +99,7 @@ class JackTokenizer {
         }
     }
 
-    static String getCurrentToken() {
+    static String token() {
         currentToken
     }
 
@@ -107,7 +107,7 @@ class JackTokenizer {
      * Returns the type of the current token
      * @return
      */
-    static TYPE getTokenType(){
+    static TYPE tokenType(){
         currentTokenType
     }
 

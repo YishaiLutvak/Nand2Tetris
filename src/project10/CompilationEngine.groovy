@@ -54,7 +54,7 @@ class CompilationEngine {
     /**
      * Writes the appropriate tag in a Tokens file and a tree file
      */
-    private static void writeXMLTag(TYPE myTokenType, def infoTag = tokenizer.getCurrentToken()){
+    private static void writeXMLTag(TYPE myTokenType, def infoTag = tokenizer.token()){
         String nameTag = reverseMap[myTokenType]
         printWriter.print("${width * Indentation}<$nameTag> $infoTag </$nameTag>\n")
         tokenPrintWriter.print("$width<$nameTag> $infoTag </$nameTag>\n")
@@ -66,7 +66,7 @@ class CompilationEngine {
      */
     private static void compileType(){
         tokenizer.advance()
-        TYPE myTokenType =  tokenizer.getTokenType()
+        TYPE myTokenType =  tokenizer.tokenType()
         if ((myTokenType == TYPE.KEYWORD && tokenizer.keyWord() in [KEYWORD.INT,KEYWORD.CHAR,KEYWORD.BOOLEAN]) ||
                 myTokenType == TYPE.IDENTIFIER){
             writeXMLTag(myTokenType)
@@ -82,7 +82,7 @@ class CompilationEngine {
      void compileClass(){
           //'class'
           tokenizer.advance()
-          TYPE myTokenType =  tokenizer.getTokenType()
+          TYPE myTokenType =  tokenizer.tokenType()
           if (myTokenType != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.CLASS){
                error("class")
           }
@@ -92,7 +92,7 @@ class CompilationEngine {
           writeXMLTag(myTokenType)
           //className
           tokenizer.advance()
-          myTokenType =  tokenizer.getTokenType()
+          myTokenType =  tokenizer.tokenType()
           if (myTokenType != TYPE.IDENTIFIER){
               error("className")
           }
@@ -122,7 +122,7 @@ class CompilationEngine {
     private void compileClassVarDec(){
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         //next is a '}' or next is subroutineDec
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
@@ -151,14 +151,14 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             if (myTokenType != TYPE.IDENTIFIER){
                 error("identifier")
             }
             writeXMLTag(myTokenType)
             //',' or ';'
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             String mySymbol = tokenizer.symbol()
             if (myTokenType != TYPE.SYMBOL || !(mySymbol in [',',';'])){
                 error("',' or ';'")
@@ -178,7 +178,7 @@ class CompilationEngine {
     private void compileSubroutine(){
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         //next is a '}'
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
@@ -191,7 +191,7 @@ class CompilationEngine {
         printWriter.print("${width * Indentation++}<subroutineDec>\n")
         writeXMLTag(myTokenType)
         tokenizer.advance()
-        myTokenType = tokenizer.getTokenType()
+        myTokenType = tokenizer.tokenType()
         if (myTokenType == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
             writeXMLTag(myTokenType,'void')
         } else {
@@ -200,7 +200,7 @@ class CompilationEngine {
         }
         //subroutineName which is a identifier
         tokenizer.advance()
-        myTokenType = tokenizer.getTokenType()
+        myTokenType = tokenizer.tokenType()
         if (myTokenType != TYPE.IDENTIFIER){
             error("subroutineName")
         }
@@ -244,7 +244,7 @@ class CompilationEngine {
     private void compileStatement(){
         //determine whether there is a statement_next can be a '}'
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         //next is a '}'
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
@@ -274,7 +274,7 @@ class CompilationEngine {
     private static void compileParameterList(){
         //check if there is parameterList, if next token is ')' than go back
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
             return
@@ -286,14 +286,14 @@ class CompilationEngine {
             compileType()
             //varName
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             if (myTokenType != TYPE.IDENTIFIER){
                 error("identifier")
             }
             writeXMLTag(myTokenType)
             //',' or ')'
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             String mySymbol = tokenizer.symbol()
             if (myTokenType != TYPE.SYMBOL || (!(mySymbol in [',',')']))){
                 error("',' or ')'")
@@ -314,7 +314,7 @@ class CompilationEngine {
     private void compileVarDec(){
         //determine if there is a varDec
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         //no 'var' go back
         if (myTokenType != TYPE.KEYWORD || tokenizer.keyWord() != KEYWORD.VAR){
             tokenizer.pointerBack()
@@ -329,14 +329,14 @@ class CompilationEngine {
         do {
             //varName
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             if (myTokenType != TYPE.IDENTIFIER){
                 error("identifier")
             }
             writeXMLTag(myTokenType)
             //',' or ';'
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             String mySymbol = tokenizer.symbol()
             if (myTokenType != TYPE.SYMBOL || (!(mySymbol in [',',';']))){
                 error("',' or ';'")
@@ -373,14 +373,14 @@ class CompilationEngine {
         writeXMLTag(TYPE.KEYWORD,'let')
         //varName
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         if (myTokenType != TYPE.IDENTIFIER){
             error("varName")
         }
         writeXMLTag(myTokenType)
         //'[' or '='
         tokenizer.advance()
-        myTokenType = tokenizer.getTokenType()
+        myTokenType = tokenizer.tokenType()
         if (myTokenType != TYPE.SYMBOL || (tokenizer.symbol() != '[' && tokenizer.symbol() != '=')){
             error("'['|'='")
         }
@@ -392,7 +392,7 @@ class CompilationEngine {
             compileExpression()
             //']'
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == ']'){
                 writeXMLTag(myTokenType,']')
             } else {
@@ -443,7 +443,7 @@ class CompilationEngine {
         //check if there is any expression
         tokenizer.advance()
         //no expression
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == ';'){
             writeXMLTag(myTokenType,';')
             printWriter.print("${width * --Indentation}</returnStatement>\n")
@@ -481,7 +481,7 @@ class CompilationEngine {
         requireSymbol('}')
         //check if there is 'else'
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         if (myTokenType == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.ELSE){
             writeXMLTag(myTokenType,'else')
             //'{'
@@ -511,12 +511,12 @@ class CompilationEngine {
         printWriter.print("${width * Indentation++}<term>\n")
         tokenizer.advance()
         //check if it is an identifier
-        TYPE tempTokenType = tokenizer.getTokenType()
+        TYPE tempTokenType = tokenizer.tokenType()
         if (tempTokenType == TYPE.IDENTIFIER){
             //varName|varName '[' expression ']'|subroutineCall
-            String tempCurrentToken = tokenizer.getCurrentToken()
+            String tempCurrentToken = tokenizer.token()
             tokenizer.advance()
-            TYPE myTokenType = tokenizer.getTokenType()
+            TYPE myTokenType = tokenizer.tokenType()
             String mySymbol = tokenizer.symbol()
             if (myTokenType == TYPE.SYMBOL && (mySymbol in ['(','.'])){
                 //this is a subroutineCall
@@ -565,13 +565,13 @@ class CompilationEngine {
      */
     private void compileSubroutineCall(){
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         if (myTokenType != TYPE.IDENTIFIER){
             error("identifier")
         }
         writeXMLTag(myTokenType)
         tokenizer.advance()
-        myTokenType = tokenizer.getTokenType()
+        myTokenType = tokenizer.tokenType()
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '('){
             //'(' expressionList ')'
             writeXMLTag(myTokenType,'(')
@@ -586,7 +586,7 @@ class CompilationEngine {
             writeXMLTag(myTokenType,'.')
             //subroutineName
             tokenizer.advance()
-            myTokenType = tokenizer.getTokenType()
+            myTokenType = tokenizer.tokenType()
             if (myTokenType != TYPE.IDENTIFIER){
                 error("identifier")
             }
@@ -616,7 +616,7 @@ class CompilationEngine {
         do {
             tokenizer.advance()
             //op
-            TYPE myTokenType = tokenizer.getTokenType()
+            TYPE myTokenType = tokenizer.tokenType()
             if (myTokenType == TYPE.SYMBOL && tokenizer.isOp()){
                 switch (tokenizer.symbol()){
                     case '>' -> writeXMLTag(myTokenType,'&gt;')
@@ -640,7 +640,7 @@ class CompilationEngine {
      */
     private void compileExpressionList(){
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE myTokenType = tokenizer.tokenType()
         //determine if there is any expression, if next is ')' then no
         tokenizer.pointerBack()
         if (!(myTokenType == TYPE.SYMBOL && tokenizer.symbol() == ')')){
@@ -649,7 +649,7 @@ class CompilationEngine {
             //(','expression)*
             do {
                 tokenizer.advance()
-                myTokenType = tokenizer.getTokenType()
+                myTokenType = tokenizer.tokenType()
                 if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == ','){
                     writeXMLTag(myTokenType,',')
                     //expression
@@ -668,7 +668,7 @@ class CompilationEngine {
      */
     private static void requireSymbol(String symbol){
         tokenizer.advance()
-        TYPE myTokenType =  tokenizer.getTokenType()
+        TYPE myTokenType =  tokenizer.tokenType()
         if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == symbol){
             writeXMLTag(myTokenType,symbol)
         } else error("'$symbol'")
@@ -679,6 +679,6 @@ class CompilationEngine {
      * @param val
      */
     private static void error(String val){
-        throw new IllegalStateException("Expected token missing: $val. Current token: ${tokenizer.getCurrentToken()}")
+        throw new IllegalStateException("Expected token missing: $val. Current token: ${tokenizer.token()}")
     }
 }
