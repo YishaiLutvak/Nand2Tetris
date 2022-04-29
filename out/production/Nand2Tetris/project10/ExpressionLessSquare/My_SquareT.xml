@@ -1,18 +1,18 @@
 <tokens>
-  <keyword> class </keyword>
+  <keyword> class  </keyword>
   <identifier> Square </identifier>
   <symbol> { </symbol>
-  <keyword> field </keyword>
+  <keyword> field  </keyword>
   <keyword> int  </keyword>
   <identifier> x </identifier>
   <symbol> , </symbol>
   <identifier> y </identifier>
   <symbol> ; </symbol>
-  <keyword> field </keyword>
+  <keyword> field  </keyword>
   <keyword> int  </keyword>
   <identifier> size </identifier>
   <symbol> ; </symbol>
-  <keyword> constructor </keyword>
+  <keyword> constructor  </keyword>
   <identifier> Square </identifier>
   <identifier> new </identifier>
   <symbol> ( </symbol>
@@ -50,7 +50,7 @@
   <identifier> x </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> dispose </identifier>
   <symbol> ( </symbol>
@@ -67,7 +67,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> draw </identifier>
   <symbol> ( </symbol>
@@ -98,7 +98,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> erase </identifier>
   <symbol> ( </symbol>
@@ -129,7 +129,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> incSize </identifier>
   <symbol> ( </symbol>
@@ -159,7 +159,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> decSize </identifier>
   <symbol> ( </symbol>
@@ -189,7 +189,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> moveUp </identifier>
   <symbol> ( </symbol>
@@ -253,7 +253,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> moveDown </identifier>
   <symbol> ( </symbol>
@@ -317,7 +317,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> moveLeft </identifier>
   <symbol> ( </symbol>
@@ -381,7 +381,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method </keyword>
+  <keyword> method  </keyword>
   <keyword> void </keyword>
   <identifier> moveRight </identifier>
   <symbol> ( </symbol>
