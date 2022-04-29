@@ -1,5 +1,3 @@
-// Copyright 2012 Mark Armbrust. Permission granted for educational use.
-
 /** Random.jack -- A not so random PRNG. */
 
 class Random {

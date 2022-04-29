@@ -1,15 +1,28 @@
 package project10
 
-//C:\Nand2Tetris\src\project10\ArrayTest
-//C:\Nand2Tetris\src\project10\Square
+/*
+(project 10)
+C:\Nand2Tetris\src\project10\ArrayTest
+C:\Nand2Tetris\src\project10\ExpressionLessSquare
+C:\Nand2Tetris\src\project10\Square
+
+(project 11)
+C:\Nand2Tetris\src\project11\Average
+C:\Nand2Tetris\src\project11\ComplexArrays
+C:\Nand2Tetris\src\project11\ConvertToBin
+C:\Nand2Tetris\src\project11\Pong
+C:\Nand2Tetris\src\project11\Seven
+C:\Nand2Tetris\src\project11\Square
+*/
 
 /**
  * top-level driver that sets up and invokes the other modules
  *
- * The analyzer program operates on a given source, where source is either a file name of the form Xxx.jack or a directory name containing one or more such files.
+ * The analyzer program operates on a given source,
+ * where source is either a file name of the form Xxx.jack or a directory name containing one or more such files.
  * For each source Xxx.jack file, the analyzer goes through the following logic:
  * 1. Create a JackTokenizer from the Xxx.jack input file.
- * 2. Create an output file called Xxx.xml and prepare it for writing.
+ * 2. Create an output file called My_Xxx.xml and prepare it for writing.
  * 3. Use the CompilationEngine to compile the input JackTokenizer into the output file.”
  */
 class JackAnalyzer{
@@ -23,26 +36,26 @@ class JackAnalyzer{
         File inFile = new File(args[0])
         ArrayList<File> jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
 
-        jackFiles.each {
-            String fileName = it.name.split(/\.jack/)[0]
+        jackFiles.each { currentJackFile ->
+            String fileName = currentJackFile.name.split(/\.jack/)[0]
             String fileOutPath = "My_${fileName}.xml"
-            String tokenFileOutPath = "My_${fileName}T.xml"
-            String parent = it.getParent()
+            String tokensFileOutPath = "My_${fileName}T.xml"
+            String parent = currentJackFile.getParent()
 
             File fileOut = new File(parent,fileOutPath)
-            File tokenFileOut = new File(parent,tokenFileOutPath)
+            File tokensFileOut = new File(parent,tokensFileOutPath)
 
-            CompilationEngine compilationEngine = new CompilationEngine(it,fileOut,tokenFileOut)
+            CompilationEngine compilationEngine = new CompilationEngine(currentJackFile,fileOut,tokensFileOut)
             compilationEngine.compileClass()
 
             println("File created : $fileOutPath")
-            println("File created : $tokenFileOutPath")
+            println("File created : $tokensFileOutPath")
         }
     }
 
     /**
      * Handles a single jack file.
-     * @param vmFile - path of jack file.
+     * @param file - path of jack file.
      */
     static ArrayList<File> handleSingleFile(File file) {
         if (!file.name.endsWith('.jack')){
@@ -56,7 +69,7 @@ class JackAnalyzer{
      * @param dir - path of directory.
      */
     static ArrayList<File> handleDirectory(File dir) {
-        List<File> jackFiles = dir.listFiles().findAll{it.name.endsWith('.jack')}
+        List<File> jackFiles = dir.listFiles().findAll{file -> file.name.endsWith('.jack')}
         if (jackFiles.size() == 0){
             throw new IllegalArgumentException('No jack file in this directory')
         }

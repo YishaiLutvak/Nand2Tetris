@@ -23,21 +23,21 @@ class JackTokenizer {
     private static def tokens = []
 
     private static String keywordReg =
-            'class|constructor|function|method|field|static|' +
+            'class |constructor |function |method |field |static |' +
                     'var |int |char |boolean |' +
-                    'void|true|false|null|this|' +
+                    'void |true|false|null|this|' +
                     'let |do |if|else|while|return'
     private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
-    private static String idReg = /[\w_]+/
+    private static String idReg = /[\w]+/
     private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
-            class : KEYWORD.CLASS, constructor: KEYWORD.CONSTRUCTOR, function: KEYWORD.FUNCTION,
-            method: KEYWORD.METHOD, field: KEYWORD.FIELD, static: KEYWORD.STATIC,
+            'class ' : KEYWORD.CLASS, 'constructor ': KEYWORD.CONSTRUCTOR, 'function ': KEYWORD.FUNCTION,
+            'method ': KEYWORD.METHOD, 'field ': KEYWORD.FIELD, 'static ': KEYWORD.STATIC,
             'var ': KEYWORD.VAR, 'int ': KEYWORD.INT, 'char ': KEYWORD.CHAR, 'boolean ': KEYWORD.BOOLEAN,
-            void  : KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
+            'void ': KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
             this  : KEYWORD.THIS, 'let ': KEYWORD.LET, 'do ': KEYWORD.DO, if: KEYWORD.IF,
             else  : KEYWORD.ELSE, while: KEYWORD.WHILE, return: KEYWORD.RETURN,
     ]
@@ -50,10 +50,10 @@ class JackTokenizer {
         try {
             String preProcessed = ''
             inFile.eachLine {line ->
-                String lineWithoutComments = noComments(line).trim()
+                String lineWithoutComments = noComments(line)
                 preProcessed += (line.length() > 0) ? "$lineWithoutComments\n" : ''
             }
-            preProcessed = noBlockComments(preProcessed).trim()
+            preProcessed = noBlockComments(preProcessed)
             Matcher matcher = preProcessed =~ tokenPatterns
             while(matcher.find()){
                 tokens += matcher.group()
@@ -69,7 +69,7 @@ class JackTokenizer {
      * @return
      */
     static boolean hasMoreTokens() {
-        pointer < tokens.size()
+        return pointer < tokens.size()
     }
 
     /**
@@ -100,7 +100,7 @@ class JackTokenizer {
     }
 
     static String token() {
-        currentToken
+        return currentToken
     }
 
     /**
@@ -108,7 +108,7 @@ class JackTokenizer {
      * @return
      */
     static TYPE tokenType(){
-        currentTokenType
+        return currentTokenType
     }
 
     /**
@@ -118,7 +118,7 @@ class JackTokenizer {
      */
     static KEYWORD keyWord(){
         if(currentTokenType == TYPE.KEYWORD){
-            keywordMap[currentToken]
+            return keywordMap[currentToken]
         } else {
             throw new IllegalStateException("Current token is not a keyword!")
         }
@@ -131,7 +131,7 @@ class JackTokenizer {
      */
     static String symbol(){
         if(currentTokenType == TYPE.SYMBOL){
-            currentToken
+            return currentToken
         } else {
             throw new IllegalStateException("Current token is not a symbol!")
         }
@@ -144,7 +144,7 @@ class JackTokenizer {
      */
     static String identifier(){
         if(currentTokenType == TYPE.IDENTIFIER){
-            currentToken
+            return currentToken
         } else {
             throw new IllegalStateException("Current token is not an identifier!")
         }
@@ -157,7 +157,7 @@ class JackTokenizer {
      */
     static int intVal(){
         if(currentTokenType == TYPE.INT_CONST){
-            currentToken as int
+            return currentToken as int
         } else {
             throw new IllegalStateException("Current token is not an integer constant!")
         }
@@ -171,7 +171,7 @@ class JackTokenizer {
      */
     static String stringVal(){
         if(currentTokenType == TYPE.STRING_CONST){
-            currentToken[1..-2]
+            return currentToken[1..-2]
         } else {
             throw new IllegalStateException("Current token is not a string constant!")
         }
@@ -189,7 +189,7 @@ class JackTokenizer {
      * @return
      */
     static boolean isOp(){
-        symbol() in opSet
+        return symbol() in opSet
     }
 
     /**
@@ -198,7 +198,8 @@ class JackTokenizer {
      * @return
      */
     static String noComments(String strIn){
-        strIn.split('//')[0]
+        //strIn.split('//')[0].trim()
+        return strIn.replaceFirst(~'//.*','').trim()
     }
 
     /**
@@ -207,6 +208,6 @@ class JackTokenizer {
      * @return
      */
     static String noBlockComments(String strIn){
-        strIn.replaceAll('(?s)/\\*.*?\\*/','')
+        return strIn.replaceAll('(?s)/\\*.*?\\*/','').trim()
     }
 }

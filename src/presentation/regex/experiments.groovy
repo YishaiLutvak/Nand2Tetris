@@ -81,8 +81,12 @@ class SquareGame {
 }
 '''
 
-println(a.replaceAll('(?s)/\\*.*?\\*/',''))
+//println(a.replaceAll('(?s)/\\*.*?\\*/',''))
+println(a.replaceAll($/(?s)/\*.*?\*//$,''))
 
+// /\*.*\*/
+// /\*.*?\*/
+// (?s)/\*.*?\*/
 //********************************************
 
 println("groovy.java.jack".split(/\.jack/))
