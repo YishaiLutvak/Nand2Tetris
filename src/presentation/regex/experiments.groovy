@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 // https://stackoverflow.com/questions/10954870/groovy-remove-multiline-comment
 //********************************************
 
-String a = '''
+String program = '''
 /**
  * Implements the Square Dance game.
  * This simple game allows the user to move a black square around
@@ -40,7 +40,7 @@ class SquareGame {
       return;
    }
 
-   /** Moves the square in/* the current direction. */
+   /** Moves the square in the current direction. */
    method void moveSquare() {
       if (direction = 1) { do square.moveUp(); }
       if (direction = 2) { do square.moveDown(); }
@@ -80,9 +80,11 @@ class SquareGame {
    }
 }
 '''
-
-//println(a.replaceAll('(?s)/\\*.*?\\*/',''))
-println(a.replaceAll($/(?s)/\*.*?\*//$,''))
+println("\nprogram before tarstormations:\n\n$program")
+program = program.replaceAll(~'//.*','').trim()
+println("\nprogram after program.replaceAll(~'//.*','').trim():\n\n$program")
+program = program.replaceAll($/(?s)/\*.*?\*//$,'').trim()
+println("\nprogram after program.replaceAll(\$/(?s)/\\*.*?\\*//\$,'').trim():\n\n$program")
 
 // /\*.*\*/
 // /\*.*?\*/

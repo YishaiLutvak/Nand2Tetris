@@ -30,8 +30,8 @@ class JackTokenizer {
     private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
-    private static String idReg = /[\w]+/
-    private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
+    private static String idReg = /[a-zA-Z_][\w]*/
+    private static Pattern tokenPatterns = ~"($keywordReg)|($symbolReg)|($intReg)|($strReg)|($idReg)"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
             'class ' : KEYWORD.CLASS, 'constructor ': KEYWORD.CONSTRUCTOR, 'function ': KEYWORD.FUNCTION,
@@ -48,13 +48,12 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            String preProcessed = ''
-            inFile.eachLine {line ->
-                String lineWithoutComments = noComments(line)
-                preProcessed += (line.length() > 0) ? "$lineWithoutComments\n" : ''
-            }
+            println(tokenPatterns.toString())
+            String preProcessed = inFile.text
             preProcessed = noBlockComments(preProcessed)
+            preProcessed = noComments(preProcessed)
             Matcher matcher = preProcessed =~ tokenPatterns
+            // You can replace the next loop in the row: "tokens += matcher[0..-1]"
             while(matcher.find()){
                 tokens += matcher.group()
                 println(tokens)
@@ -193,21 +192,20 @@ class JackTokenizer {
     }
 
     /**
-     * Delete comments(String after "//") from a String
-     * @param strIn
-     * @return
-     */
-    static String noComments(String strIn){
-        //strIn.split('//')[0].trim()
-        return strIn.replaceFirst(~'//.*','').trim()
-    }
-
-    /**
-     * delete block comment
+     * Delete all block comment
      * @param strIn
      * @return
      */
     static String noBlockComments(String strIn){
         return strIn.replaceAll('(?s)/\\*.*?\\*/','').trim()
+    }
+
+    /**
+     * Delete all comments(String after "//" and "//" itself) from a String
+     * @param strIn
+     * @return
+     */
+    static String noComments(String strIn){
+        return strIn.replaceAll(~'//.*','').trim()
     }
 }
