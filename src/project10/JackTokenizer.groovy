@@ -57,7 +57,7 @@ class JackTokenizer {
                 tokens += matcher.group()
                 println(tokens)
             }
-            // You can replace the next loop in the row:
+            // You can replace the loop in the row:
             // tokens += matcher[0..-1]
         } catch(FileNotFoundException e) {
             e.printStackTrace()
