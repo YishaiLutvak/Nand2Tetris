@@ -53,11 +53,12 @@ class JackTokenizer {
             preProcessed = noBlockComments(preProcessed)
             preProcessed = noComments(preProcessed)
             Matcher matcher = preProcessed =~ tokenPatterns
-            // You can replace the next loop in the row: "tokens += matcher[0..-1]"
             while(matcher.find()){
                 tokens += matcher.group()
                 println(tokens)
             }
+            // You can replace the next loop in the row:
+            // tokens += matcher[0..-1]
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
