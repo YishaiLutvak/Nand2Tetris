@@ -3,13 +3,14 @@ package presentation.regex
 //********************************************
 //https://www.tutorialspoint.com/groovy/groovy_regular_expressions.htm
 //********************************************
+import java.util.regex.Pattern
 
 println('Groovy' =~ 'Groovy')
-println('Groovy'.matches('Groovy'))
+println(Pattern.compile('Groovy').matcher('Groovy'))
 println()
 
 println('Groovy' =~ 'oo')
-println('Groovy'.matches('oo'))
+println(Pattern.compile('oo').matcher('Groovy'))
 println()
 
 println('Groovy' ==~ 'Groovy')
@@ -21,26 +22,24 @@ println('Groovy'.matches('oo'))
 println()
 
 println('Groovy' =~ '∧G')
-println('Groovy'.matches('∧G'))
+println(Pattern.compile('∧G').matcher('Groovy'))
 println()
 
 println('Groovy' =~ 'G$'      )
-println('Groovy'.matches('G$'))
+println(Pattern.compile('G$').matcher('Groovy'))
 println()
 
 println('Groovy' =~ 'Gro*vy'  )
-println('Groovy'.matches('Gro*vy'))
+println(Pattern.compile('Gro*vy').matcher('Groovy'))
 println()
 
 println('Groovy' =~ 'Gro{2}vy')
-println('Groovy'.matches('Gro{2}vy'))
+println(Pattern.compile('Gro{2}vy').matcher('Groovy'))
 println()
 
 //********************************************
 //https://e.printstacktrace.blog/groovy-regular-expressions-the-definitive-guide/
 //********************************************
-
-import java.util.regex.Pattern
 
 def pattern1 = ~"[Gg]roovy"
 

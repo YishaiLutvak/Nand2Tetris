@@ -48,7 +48,7 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            println(tokenPatterns.toString())
+            println(tokenPatterns as String)
             String preProcessed = inFile.text
             preProcessed = noBlockComments(preProcessed)
             preProcessed = noComments(preProcessed)
