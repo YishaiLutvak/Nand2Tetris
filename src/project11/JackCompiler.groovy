@@ -1,9 +1,23 @@
 package project11
 
+/*
+(project 10)
+C:\Nand2Tetris\src\project10\ArrayTest
+C:\Nand2Tetris\src\project10\ExpressionLessSquare
+C:\Nand2Tetris\src\project10\Square
+
+(project 11)
+C:\Nand2Tetris\src\project11\Average
+C:\Nand2Tetris\src\project11\ComplexArrays
+C:\Nand2Tetris\src\project11\ConvertToBin
+C:\Nand2Tetris\src\project11\Pong
+C:\Nand2Tetris\src\project11\Seven
+C:\Nand2Tetris\src\project11\Square
+*/
 
 /**
- * The compiler operates on a given source, where source is either a file name of the form Xxx.jack or a directory name containing one or more such files.
- * For each Xxx . jack input file, the compiler creates a JackTokenizer and an output Xxx.vm file.
+ * The compiler operates on a given source, where source is either a file name of the form xxx.jack or a directory name containing one or more such files.
+ * For each xxx.jack input file, the compiler creates a JackTokenizer and an output xxx.vm file.
  * Next, the compiler uses the CompilationEngine, SymbolTable, and VMWriter modules to write the output file.
  */
 class JackCompiler {

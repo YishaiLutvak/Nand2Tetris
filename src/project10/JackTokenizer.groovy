@@ -27,11 +27,11 @@ class JackTokenizer {
                     'var |int |char |boolean |' +
                     'void |true|false|null|this|' +
                     'let |do |if|else|while|return'
-    private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
+    private static String symbolReg = '[\\&\\*\\+\\(\\)\\.\\/\\,\\-\\]\\;\\~\\}\\|\\{\\>\\=\\[\\<]'
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
-    private static String idReg = /[a-zA-Z_][\w]*/
-    private static Pattern tokenPatterns = ~"($keywordReg)|($symbolReg)|($intReg)|($strReg)|($idReg)"
+    private static String idReg = '[a-zA-Z_][\\w]*'
+    private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
             'class ' : KEYWORD.CLASS, 'constructor ': KEYWORD.CONSTRUCTOR, 'function ': KEYWORD.FUNCTION,
@@ -57,8 +57,6 @@ class JackTokenizer {
                 tokens += matcher.group()
                 println(tokens)
             }
-            // You can replace the loop in the row:
-            // tokens += matcher[0..-1]
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
@@ -83,7 +81,6 @@ class JackTokenizer {
         } else {
             throw new IllegalStateException("No more tokens")
         }
-        //println(currentToken)
         if(currentToken ==~ keywordReg) {
             currentTokenType = TYPE.KEYWORD
         } else if(currentToken ==~ symbolReg) {
@@ -202,7 +199,7 @@ class JackTokenizer {
     }
 
     /**
-     * Delete all comments(String after "//" and "//" itself) from a String
+     * Delete all comments (String after "//" and "//" itself) from a String
      * @param strIn
      * @return
      */

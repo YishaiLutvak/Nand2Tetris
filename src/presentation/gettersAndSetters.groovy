@@ -8,12 +8,18 @@ package presentation
  */
 class AGroovyBean {
     String color
+    String getColor(){
+        print('getColor is called\n')
+        return color
+    }
 }
 
 def myGroovyBean = new AGroovyBean()
 
 myGroovyBean.setColor('baby blue')
 assert myGroovyBean.getColor() == 'baby blue'
+
+println("----------")
 
 myGroovyBean.color = 'pewter'
 assert myGroovyBean.color == 'pewter'

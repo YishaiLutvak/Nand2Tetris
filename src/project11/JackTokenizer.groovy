@@ -24,22 +24,23 @@ class JackTokenizer {
     private static int pointer = 0
     private static def tokens = []
 
-    private static String keyWordReg =
-            'class|constructor|function|method|field|static|' +
+    private static String keywordReg =
+            'class |constructor |function |method |field |static |' +
                     'var |int |char |boolean |' +
-                    'void|true|false|null|this|' +
+                    'void |true|false|null|this|' +
                     'let |do |if|else|while|return'
-    private static String symbolReg = $/[\&\*\+\(\)\.\/\,\-\]\;\~\}\|\{\>\=\[\<]/$
+    private static String symbolReg = '[\\&\\*\\+\\(\\)\\.\\/\\,\\-\\]\\;\\~\\}\\|\\{\\>\\=\\[\\<]'
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
-    private static String idReg = /[\w_]+/
-    private static Pattern tokenPatterns = ~"$keyWordReg|$symbolReg|$intReg|$strReg|$idReg"
+    private static String idReg = '[a-zA-Z_][\\w]*'
+    private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
+
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
-            class : KEYWORD.CLASS, constructor: KEYWORD.CONSTRUCTOR, function: KEYWORD.FUNCTION,
-            method: KEYWORD.METHOD, field: KEYWORD.FIELD, static: KEYWORD.STATIC,
+            'class ' : KEYWORD.CLASS, 'constructor ': KEYWORD.CONSTRUCTOR, 'function ': KEYWORD.FUNCTION,
+            'method ': KEYWORD.METHOD, 'field ': KEYWORD.FIELD, 'static ': KEYWORD.STATIC,
             'var ': KEYWORD.VAR, 'int ': KEYWORD.INT, 'char ': KEYWORD.CHAR, 'boolean ': KEYWORD.BOOLEAN,
-            void  : KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
+            'void ': KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
             this  : KEYWORD.THIS, 'let ': KEYWORD.LET, 'do ': KEYWORD.DO, if: KEYWORD.IF,
             else  : KEYWORD.ELSE, while: KEYWORD.WHILE, return: KEYWORD.RETURN,
     ]
@@ -50,16 +51,13 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            def preProcessed = ""
-            inFile.eachLine {
-                def line = noComments(it).trim()
-                preProcessed += (line.length() > 0) ? "$line\n" : ""
-            }
-            preProcessed = noBlockComments(preProcessed).trim()
+            println(tokenPatterns as String)
+            String preProcessed = inFile.text
+            preProcessed = noBlockComments(preProcessed)
+            preProcessed = noComments(preProcessed)
             Matcher matcher = preProcessed =~ tokenPatterns
             tokens += matcher[0..-1]
             println(tokens)
-            /* while(matcher.find()){tokens += matcher.group(); println(tokens)} */
         } catch(FileNotFoundException e) {
             e.printStackTrace()
         }
@@ -84,8 +82,7 @@ class JackTokenizer {
         } else {
             throw new IllegalStateException("No more tokens")
         }
-        //println(currentToken)
-        if(currentToken ==~ keyWordReg) {
+        if(currentToken ==~ keywordReg) {
             currentTokenType = TYPE.KEYWORD
         } else if(currentToken ==~ symbolReg) {
             currentTokenType = TYPE.SYMBOL
@@ -194,20 +191,20 @@ class JackTokenizer {
     }
 
     /**
-     * Delete comments(String after "//") from a String
-     * @param strIn
-     * @return
-     */
-    static String noComments(String strIn){
-        return strIn.split('//')[0]
-    }
-
-    /**
      * delete block comment
      * @param strIn
      * @return
      */
     static String noBlockComments(String strIn){
-        return strIn.replaceAll('(?s)/\\*.*?\\*/','')
+        return strIn.replaceAll('(?s)/\\*.*?\\*/','').trim()
+    }
+
+    /**
+     * Delete comments(String after "//") from a String
+     * @param strIn
+     * @return
+     */
+    static String noComments(String strIn){
+        return strIn.replaceAll(~'//.*','').trim()
     }
 }
