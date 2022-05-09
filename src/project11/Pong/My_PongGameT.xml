@@ -1,40 +1,40 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> PongGame </identifier>
   <symbol> { </symbol>
-  <keyword> static  </keyword>
+  <keyword> static </keyword>
   <identifier> PongGame </identifier>
   <identifier> instance </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
+  <keyword> field </keyword>
   <identifier> Bat </identifier>
   <identifier> bat </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
+  <keyword> field </keyword>
   <identifier> Ball </identifier>
   <identifier> ball </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> wall </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> boolean  </keyword>
+  <keyword> field </keyword>
+  <keyword> boolean </keyword>
   <identifier> exit </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> score </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> lastWall </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> batWidth </identifier>
   <symbol> ; </symbol>
-  <keyword> constructor  </keyword>
+  <keyword> constructor </keyword>
   <identifier> PongGame </identifier>
   <identifier> new </identifier>
   <symbol> ( </symbol>
@@ -154,7 +154,7 @@
   <keyword> this </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> dispose </identifier>
   <symbol> ( </symbol>
@@ -185,7 +185,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <keyword> void </keyword>
   <identifier> newInstance </identifier>
   <symbol> ( </symbol>
@@ -203,7 +203,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <identifier> PongGame </identifier>
   <identifier> getInstance </identifier>
   <symbol> ( </symbol>
@@ -213,14 +213,14 @@
   <identifier> instance </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> run </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> char  </keyword>
+  <keyword> char </keyword>
   <identifier> key </identifier>
   <symbol> ; </symbol>
   <keyword> while </keyword>
@@ -399,14 +399,14 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> moveBall </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> bouncingDirection </identifier>
   <symbol> , </symbol>
   <identifier> batLeft </identifier>

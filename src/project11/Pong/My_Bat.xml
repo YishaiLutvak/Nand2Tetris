@@ -1,45 +1,45 @@
 <class>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Bat </identifier>
   <symbol> { </symbol>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> x </identifier>
     <symbol> , </symbol>
     <identifier> y </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> width </identifier>
     <symbol> , </symbol>
     <identifier> height </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> direction </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <subroutineDec>
-    <keyword> constructor  </keyword>
+    <keyword> constructor </keyword>
     <identifier> Bat </identifier>
     <identifier> new </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Ax </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Ay </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Awidth </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Aheight </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -124,7 +124,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> dispose </identifier>
     <symbol> ( </symbol>
@@ -159,7 +159,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> show </identifier>
     <symbol> ( </symbol>
@@ -203,7 +203,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> hide </identifier>
     <symbol> ( </symbol>
@@ -247,7 +247,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> draw </identifier>
     <symbol> ( </symbol>
@@ -308,12 +308,12 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> setDirection </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Adirection </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -340,8 +340,8 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
-    <keyword> int  </keyword>
+    <keyword> method </keyword>
+    <keyword> int </keyword>
     <identifier> getLeft </identifier>
     <symbol> ( </symbol>
     <parameterList>
@@ -364,8 +364,8 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
-    <keyword> int  </keyword>
+    <keyword> method </keyword>
+    <keyword> int </keyword>
     <identifier> getRight </identifier>
     <symbol> ( </symbol>
     <parameterList>
@@ -392,12 +392,12 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> setWidth </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Awidth </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -442,7 +442,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> move </identifier>
     <symbol> ( </symbol>

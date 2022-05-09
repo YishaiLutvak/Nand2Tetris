@@ -1,9 +1,9 @@
 <class>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Main </identifier>
   <symbol> { </symbol>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <keyword> void </keyword>
     <identifier> main </identifier>
     <symbol> ( </symbol>
@@ -20,13 +20,13 @@
       </varDec>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> length </identifier>
         <symbol> ; </symbol>
       </varDec>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> i </identifier>
         <symbol> , </symbol>
         <identifier> sum </identifier>

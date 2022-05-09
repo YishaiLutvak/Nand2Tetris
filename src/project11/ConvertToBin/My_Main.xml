@@ -1,9 +1,9 @@
 <class>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Main </identifier>
   <symbol> { </symbol>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <keyword> void </keyword>
     <identifier> main </identifier>
     <symbol> ( </symbol>
@@ -14,7 +14,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> value </identifier>
         <symbol> ; </symbol>
       </varDec>
@@ -97,12 +97,12 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <keyword> void </keyword>
     <identifier> convert </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> value </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -110,7 +110,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> mask </identifier>
         <symbol> , </symbol>
         <identifier> position </identifier>
@@ -118,7 +118,7 @@
       </varDec>
       <varDec>
         <keyword> var </keyword>
-        <keyword> boolean  </keyword>
+        <keyword> boolean </keyword>
         <identifier> loop </identifier>
         <symbol> ; </symbol>
       </varDec>
@@ -331,12 +331,12 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> function  </keyword>
-    <keyword> int  </keyword>
+    <keyword> function </keyword>
+    <keyword> int </keyword>
     <identifier> nextMask </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> mask </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -393,18 +393,18 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <keyword> void </keyword>
     <identifier> fillMemory </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> startAddress </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> length </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> value </identifier>
     </parameterList>
     <symbol> ) </symbol>

@@ -1,12 +1,12 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Main </identifier>
   <symbol> { </symbol>
-  <keyword> static  </keyword>
-  <keyword> boolean  </keyword>
+  <keyword> static </keyword>
+  <keyword> boolean </keyword>
   <identifier> test </identifier>
   <symbol> ; </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <keyword> void </keyword>
   <identifier> main </identifier>
   <symbol> ( </symbol>
@@ -38,14 +38,14 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <keyword> void </keyword>
   <identifier> more </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> boolean  </keyword>
+  <keyword> boolean </keyword>
   <identifier> b </identifier>
   <symbol> ; </symbol>
   <keyword> if </keyword>

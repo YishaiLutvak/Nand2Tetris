@@ -1,8 +1,8 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Main </identifier>
   <symbol> { </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <keyword> void </keyword>
   <identifier> main </identifier>
   <symbol> ( </symbol>
@@ -354,11 +354,11 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> function  </keyword>
-  <keyword> int  </keyword>
+  <keyword> function </keyword>
+  <keyword> int </keyword>
   <identifier> double </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> a </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
@@ -368,14 +368,14 @@
   <integerConstant> 2 </integerConstant>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> function  </keyword>
+  <keyword> function </keyword>
   <keyword> void </keyword>
   <identifier> fill </identifier>
   <symbol> ( </symbol>
   <identifier> Array </identifier>
   <identifier> a </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> size </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>

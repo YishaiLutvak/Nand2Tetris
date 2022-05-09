@@ -1,37 +1,37 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Bat </identifier>
   <symbol> { </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> x </identifier>
   <symbol> , </symbol>
   <identifier> y </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> width </identifier>
   <symbol> , </symbol>
   <identifier> height </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> direction </identifier>
   <symbol> ; </symbol>
-  <keyword> constructor  </keyword>
+  <keyword> constructor </keyword>
   <identifier> Bat </identifier>
   <identifier> new </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Ax </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Ay </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Awidth </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Aheight </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
@@ -69,7 +69,7 @@
   <keyword> this </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> dispose </identifier>
   <symbol> ( </symbol>
@@ -86,7 +86,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> show </identifier>
   <symbol> ( </symbol>
@@ -108,7 +108,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> hide </identifier>
   <symbol> ( </symbol>
@@ -130,7 +130,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> draw </identifier>
   <symbol> ( </symbol>
@@ -157,11 +157,11 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> setDirection </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Adirection </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
@@ -173,8 +173,8 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
-  <keyword> int  </keyword>
+  <keyword> method </keyword>
+  <keyword> int </keyword>
   <identifier> getLeft </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
@@ -183,8 +183,8 @@
   <identifier> x </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
-  <keyword> int  </keyword>
+  <keyword> method </keyword>
+  <keyword> int </keyword>
   <identifier> getRight </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
@@ -195,11 +195,11 @@
   <identifier> width </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> setWidth </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Awidth </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
@@ -221,7 +221,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> move </identifier>
   <symbol> ( </symbol>
