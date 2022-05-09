@@ -1,16 +1,16 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> SquareGame </identifier>
   <symbol> { </symbol>
-  <keyword> field  </keyword>
+  <keyword> field </keyword>
   <identifier> Square </identifier>
   <identifier> square </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> direction </identifier>
   <symbol> ; </symbol>
-  <keyword> constructor  </keyword>
+  <keyword> constructor </keyword>
   <identifier> SquareGame </identifier>
   <identifier> new </identifier>
   <symbol> ( </symbol>
@@ -39,7 +39,7 @@
   <keyword> this </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> dispose </identifier>
   <symbol> ( </symbol>
@@ -63,7 +63,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> moveSquare </identifier>
   <symbol> ( </symbol>
@@ -140,18 +140,18 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> run </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> char  </keyword>
+  <keyword> char </keyword>
   <identifier> key </identifier>
   <symbol> ; </symbol>
   <keyword> var </keyword>
-  <keyword> boolean  </keyword>
+  <keyword> boolean </keyword>
   <identifier> exit </identifier>
   <symbol> ; </symbol>
   <keyword> let </keyword>

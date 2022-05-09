@@ -1,37 +1,37 @@
 <tokens>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Ball </identifier>
   <symbol> { </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> x </identifier>
   <symbol> , </symbol>
   <identifier> y </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> lengthx </identifier>
   <symbol> , </symbol>
   <identifier> lengthy </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> d </identifier>
   <symbol> , </symbol>
   <identifier> straightD </identifier>
   <symbol> , </symbol>
   <identifier> diagonalD </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> boolean  </keyword>
+  <keyword> field </keyword>
+  <keyword> boolean </keyword>
   <identifier> invert </identifier>
   <symbol> , </symbol>
   <identifier> positivex </identifier>
   <symbol> , </symbol>
   <identifier> positivey </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> leftWall </identifier>
   <symbol> , </symbol>
   <identifier> rightWall </identifier>
@@ -40,30 +40,30 @@
   <symbol> , </symbol>
   <identifier> bottomWall </identifier>
   <symbol> ; </symbol>
-  <keyword> field  </keyword>
-  <keyword> int  </keyword>
+  <keyword> field </keyword>
+  <keyword> int </keyword>
   <identifier> wall </identifier>
   <symbol> ; </symbol>
-  <keyword> constructor  </keyword>
+  <keyword> constructor </keyword>
   <identifier> Ball </identifier>
   <identifier> new </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Ax </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> Ay </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> AleftWall </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> ArightWall </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> AtopWall </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> AbottomWall </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
@@ -115,7 +115,7 @@
   <keyword> this </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> dispose </identifier>
   <symbol> ( </symbol>
@@ -132,7 +132,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> show </identifier>
   <symbol> ( </symbol>
@@ -154,7 +154,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> hide </identifier>
   <symbol> ( </symbol>
@@ -176,7 +176,7 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> draw </identifier>
   <symbol> ( </symbol>
@@ -203,8 +203,8 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
-  <keyword> int  </keyword>
+  <keyword> method </keyword>
+  <keyword> int </keyword>
   <identifier> getLeft </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
@@ -213,8 +213,8 @@
   <identifier> x </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
-  <keyword> int  </keyword>
+  <keyword> method </keyword>
+  <keyword> int </keyword>
   <identifier> getRight </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
@@ -225,19 +225,19 @@
   <integerConstant> 5 </integerConstant>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> setDestination </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> destx </identifier>
   <symbol> , </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> desty </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> dx </identifier>
   <symbol> , </symbol>
   <identifier> dy </identifier>
@@ -379,8 +379,8 @@
   <keyword> return </keyword>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
-  <keyword> int  </keyword>
+  <keyword> method </keyword>
+  <keyword> int </keyword>
   <identifier> move </identifier>
   <symbol> ( </symbol>
   <symbol> ) </symbol>
@@ -618,16 +618,16 @@
   <identifier> wall </identifier>
   <symbol> ; </symbol>
   <symbol> } </symbol>
-  <keyword> method  </keyword>
+  <keyword> method </keyword>
   <keyword> void </keyword>
   <identifier> bounce </identifier>
   <symbol> ( </symbol>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> bouncingDirection </identifier>
   <symbol> ) </symbol>
   <symbol> { </symbol>
   <keyword> var </keyword>
-  <keyword> int  </keyword>
+  <keyword> int </keyword>
   <identifier> newx </identifier>
   <symbol> , </symbol>
   <identifier> newy </identifier>

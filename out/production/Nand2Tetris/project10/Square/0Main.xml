@@ -222,23 +222,15 @@
                 <term>
                   <identifier> i </identifier>
                 </term>
-                <symbol> | </symbol>
-                <term>
-                  <identifier> j </identifier>
-                </term>
               </expression>
-              <symbol> ; </symbol>
+              <identifier> j </identifier>
             </letStatement>
           </statements>
-          <symbol> } </symbol>
-        </ifStatement>
-        <returnStatement>
-          <keyword> return </keyword>
           <symbol> ; </symbol>
-        </returnStatement>
+        </ifStatement>
       </statements>
       <symbol> } </symbol>
     </subroutineBody>
   </subroutineDec>
-  <symbol> } </symbol>
+  <keyword> return </keyword>
 </class>

@@ -1,57 +1,57 @@
 <class>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> PongGame </identifier>
   <symbol> { </symbol>
   <classVarDec>
-    <keyword> static  </keyword>
+    <keyword> static </keyword>
     <identifier> PongGame </identifier>
     <identifier> instance </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
+    <keyword> field </keyword>
     <identifier> Bat </identifier>
     <identifier> bat </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
+    <keyword> field </keyword>
     <identifier> Ball </identifier>
     <identifier> ball </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> wall </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> boolean  </keyword>
+    <keyword> field </keyword>
+    <keyword> boolean </keyword>
     <identifier> exit </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> score </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> lastWall </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> batWidth </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <subroutineDec>
-    <keyword> constructor  </keyword>
+    <keyword> constructor </keyword>
     <identifier> PongGame </identifier>
     <identifier> new </identifier>
     <symbol> ( </symbol>
@@ -327,7 +327,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> dispose </identifier>
     <symbol> ( </symbol>
@@ -384,7 +384,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <keyword> void </keyword>
     <identifier> newInstance </identifier>
     <symbol> ( </symbol>
@@ -420,7 +420,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> function  </keyword>
+    <keyword> function </keyword>
     <identifier> PongGame </identifier>
     <identifier> getInstance </identifier>
     <symbol> ( </symbol>
@@ -444,7 +444,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> run </identifier>
     <symbol> ( </symbol>
@@ -455,7 +455,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> char  </keyword>
+        <keyword> char </keyword>
         <identifier> key </identifier>
         <symbol> ; </symbol>
       </varDec>
@@ -834,7 +834,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> moveBall </identifier>
     <symbol> ( </symbol>
@@ -845,7 +845,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> bouncingDirection </identifier>
         <symbol> , </symbol>
         <identifier> batLeft </identifier>

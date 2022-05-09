@@ -1,26 +1,26 @@
 <class>
-  <keyword> class  </keyword>
+  <keyword> class </keyword>
   <identifier> Ball </identifier>
   <symbol> { </symbol>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> x </identifier>
     <symbol> , </symbol>
     <identifier> y </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> lengthx </identifier>
     <symbol> , </symbol>
     <identifier> lengthy </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> d </identifier>
     <symbol> , </symbol>
     <identifier> straightD </identifier>
@@ -29,8 +29,8 @@
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> boolean  </keyword>
+    <keyword> field </keyword>
+    <keyword> boolean </keyword>
     <identifier> invert </identifier>
     <symbol> , </symbol>
     <identifier> positivex </identifier>
@@ -39,8 +39,8 @@
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> leftWall </identifier>
     <symbol> , </symbol>
     <identifier> rightWall </identifier>
@@ -51,33 +51,33 @@
     <symbol> ; </symbol>
   </classVarDec>
   <classVarDec>
-    <keyword> field  </keyword>
-    <keyword> int  </keyword>
+    <keyword> field </keyword>
+    <keyword> int </keyword>
     <identifier> wall </identifier>
     <symbol> ; </symbol>
   </classVarDec>
   <subroutineDec>
-    <keyword> constructor  </keyword>
+    <keyword> constructor </keyword>
     <identifier> Ball </identifier>
     <identifier> new </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Ax </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> Ay </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> AleftWall </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> ArightWall </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> AtopWall </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> AbottomWall </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -192,7 +192,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> dispose </identifier>
     <symbol> ( </symbol>
@@ -227,7 +227,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> show </identifier>
     <symbol> ( </symbol>
@@ -271,7 +271,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> hide </identifier>
     <symbol> ( </symbol>
@@ -315,7 +315,7 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> draw </identifier>
     <symbol> ( </symbol>
@@ -376,8 +376,8 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
-    <keyword> int  </keyword>
+    <keyword> method </keyword>
+    <keyword> int </keyword>
     <identifier> getLeft </identifier>
     <symbol> ( </symbol>
     <parameterList>
@@ -400,8 +400,8 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
-    <keyword> int  </keyword>
+    <keyword> method </keyword>
+    <keyword> int </keyword>
     <identifier> getRight </identifier>
     <symbol> ( </symbol>
     <parameterList>
@@ -428,15 +428,15 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> setDestination </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> destx </identifier>
       <symbol> , </symbol>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> desty </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -444,7 +444,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> dx </identifier>
         <symbol> , </symbol>
         <identifier> dy </identifier>
@@ -758,8 +758,8 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
-    <keyword> int  </keyword>
+    <keyword> method </keyword>
+    <keyword> int </keyword>
     <identifier> move </identifier>
     <symbol> ( </symbol>
     <parameterList>
@@ -1283,12 +1283,12 @@
     </subroutineBody>
   </subroutineDec>
   <subroutineDec>
-    <keyword> method  </keyword>
+    <keyword> method </keyword>
     <keyword> void </keyword>
     <identifier> bounce </identifier>
     <symbol> ( </symbol>
     <parameterList>
-      <keyword> int  </keyword>
+      <keyword> int </keyword>
       <identifier> bouncingDirection </identifier>
     </parameterList>
     <symbol> ) </symbol>
@@ -1296,7 +1296,7 @@
       <symbol> { </symbol>
       <varDec>
         <keyword> var </keyword>
-        <keyword> int  </keyword>
+        <keyword> int </keyword>
         <identifier> newx </identifier>
         <symbol> , </symbol>
         <identifier> newy </identifier>
