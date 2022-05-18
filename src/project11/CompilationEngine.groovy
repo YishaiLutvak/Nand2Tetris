@@ -544,7 +544,7 @@ class CompilationEngine {
      * Compiles a term.
      * This routine is faced with a slight difficulty when trying to decide between some of the alternative parsing rules.
      * Specifically, if the current token is an identifier
-     *      the routine must distinguish between a variable, an array entry and a subroutine call
+     * the routine must distinguish between a variable, an array entry and a subroutine call
      * A single look-ahead token, which may be one of "[" "(" "." suffices to distinguish between the three possibilities
      * Any other token is not part of this term and should not be advanced over
      *
@@ -745,7 +745,7 @@ class CompilationEngine {
         } else {
             nArgs = 1
             tokenizer.pointerBack()
-                        //expression
+            //expression
             compileExpression()
             //(','expression)*
             do {
