@@ -647,7 +647,8 @@ class CompilationEngine {
         String name = tokenizer.identifier()
         int nArgs = 0
         tokenizer.advance()
-        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
+        TYPE tokenType = tokenizer.getTokenType()
+        if (tokenType == TYPE.SYMBOL && tokenizer.symbol() == '('){
             //push this pointer
             vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
             //'(' expressionList ')'
@@ -657,7 +658,7 @@ class CompilationEngine {
             requireSymbol(')')
             //call subroutine
             vmWriter.writeCall(currentClass + '.' + name, nArgs)
-        } else if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '.'){
+        } else if (tokenType == TYPE.SYMBOL && tokenizer.symbol() == '.'){
             //(className|varName) '.' subroutineName '(' expressionList ')'
             String objName = name
             //subroutineName
@@ -668,16 +669,16 @@ class CompilationEngine {
             }
             name = tokenizer.identifier()
             //check for if it is built-in type
-            String type = symbolTable.typeOf(objName)
-            if ((type in["int","boolean","char","void"])){
+            String symbolType = symbolTable.typeOf(objName)
+            if ((symbolType in ["int","boolean","char","void"])){
                 error("no built-in type")
-            } else if (type==""){
-                name = objName + "." + name
+            } else if (symbolType==""){
+                name = "$objName.$name"
             } else {
                 nArgs = 1
                 //push variable directly onto stack
                 vmWriter.writePush(getSeg(symbolTable.kindOf(objName)), symbolTable.indexOf(objName))
-                name = symbolTable.typeOf(objName) + "." + name
+                name = "${symbolTable.typeOf(objName)}.$name"
             }
             //'('
             requireSymbol('(')
@@ -786,21 +787,21 @@ class CompilationEngine {
     }
 
     /**
-     * throw an exception to report errors
-     * @param val
-     */
-    private static void error(String val){
-        throw new IllegalStateException("Expected token missing : " + val + ". Current token : " + tokenizer.getCurrentToken())
-    }
-
-    /**
      * require symbol when we know there must be such symbol
      * @param symbol
      */
     private static void requireSymbol(String symbol){
         tokenizer.advance()
         if (tokenizer.getTokenType() != TYPE.SYMBOL || tokenizer.symbol() != symbol){
-            error("'" + symbol + "'")
+            error("'$symbol'")
         }
+    }
+
+    /**
+     * throw an exception to report errors
+     * @param val
+     */
+    private static void error(String val){
+        throw new IllegalStateException("Expected token missing : $val. Current token : ${tokenizer.getCurrentToken()}")
     }
 }
