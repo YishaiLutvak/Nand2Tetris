@@ -59,6 +59,8 @@ class CompilationEngine {
         vmWriter = new VMWriter(outFile)
     }
 
+    //-------------------compile_xxx ( ) routines - recursive descent-------------------//
+
     /**
      * Compiles a type
      * @return type
@@ -437,25 +439,6 @@ class CompilationEngine {
     }
 
     /**
-     * return corresponding seg for input kind
-     * @param kind
-     * @return
-     */
-    private static VMWriter.SEGMENT getSeg(KIND kind){
-        printOpenTagFunction("getSeg")
-        VMWriter.SEGMENT mySegment
-        switch (kind){
-            case KIND.FIELD ->  mySegment = VMWriter.SEGMENT.THIS
-            case KIND.STATIC -> mySegment = VMWriter.SEGMENT.STATIC
-            case KIND.VAR ->    mySegment = VMWriter.SEGMENT.LOCAL
-            case KIND.ARG ->    mySegment = VMWriter.SEGMENT.ARG
-            default ->          mySegment = VMWriter.SEGMENT.NONE
-        }
-        printCloseTagFunction("getSeg")
-        return mySegment
-    }
-
-    /**
      * Compiles a while statement
      * 'while' '(' expression ')' '{' statements '}'
      */
@@ -557,8 +540,6 @@ class CompilationEngine {
         printCloseTagFunction("compileIf")
     }
 
-    // I am here!!!
-
     /**
      * Compiles a term.
      * This routine is faced with a slight difficulty when trying to decide between some of the alternative parsing rules.
@@ -567,73 +548,76 @@ class CompilationEngine {
      * A single look-ahead token, which may be one of "[" "(" "." suffices to distinguish between the three possibilities
      * Any other token is not part of this term and should not be advanced over
      *
-     * integerConstant|stringConstant|keywordConstant|varName|varName '[' expression ']'|subroutineCall|
+     * integerConstant|stringConstant|keywordConstant|
+     * varName|varName '[' expression ']'|subroutineCall|
      * '(' expression ')'|unaryOp term
      */
     private void compileTerm(){
         printOpenTagFunction("compileTerm")
         tokenizer.advance()
-                //check if it is an identifier
-        if (tokenizer.getTokenType() == TYPE.IDENTIFIER){
+        TYPE type1 = tokenizer.getTokenType()
+        //check if it is an identifier
+        if (type1 == TYPE.IDENTIFIER){
             //varName|varName '[' expression ']'|subroutineCall
-            String tempId = tokenizer.identifier()
+            String token1 = tokenizer.getCurrentToken()
             tokenizer.advance()
-                        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '['){
-                //this is an array entry
-                //push array variable,base address into stack
-                vmWriter.writePush(getSeg(symbolTable.kindOf(tempId)),symbolTable.indexOf(tempId))
-                //expression
-                compileExpression()
-                //']'
-                requireSymbol(']')
-                //base+offset
-                vmWriter.writeArithmetic(VMWriter.COMMAND.ADD)
-                //pop into 'that' pointer
-                vmWriter.writePop(VMWriter.SEGMENT.POINTER,1)
-                //push *(base+index) onto stack
-                vmWriter.writePush(VMWriter.SEGMENT.THAT,0)
-            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && (tokenizer.symbol() == '(' || tokenizer.symbol() == '.')){
+            TYPE type2 = tokenizer.getTokenType()
+            String token2 = tokenizer.getCurrentToken()
+            if (type2 == TYPE.SYMBOL && (token2 in ['(', '.'])){
                 //this is a subroutineCall
                 tokenizer.pointerBack()
-                                tokenizer.pointerBack()
-                                compileSubroutineCall()
-            } else {
-                //this is varName
                 tokenizer.pointerBack()
-                                //push variable directly onto stack
-                vmWriter.writePush(getSeg(symbolTable.kindOf(tempId)), symbolTable.indexOf(tempId))
+                compileSubroutineCall()
+            } else {
+                //this is an array entry or varName <=> varName|varName '[' expression ']'
+                //if this is an array entry push array variable,base address into stack
+                //if this is varName push variable directly onto stack
+                vmWriter.writePush(getSeg(symbolTable.kindOf(token1)), symbolTable.indexOf(token1))
+                if (type2 == TYPE.SYMBOL && token2 == '['){
+                    //this is an array entry <=> varName '[' expression ']'
+                    //expression
+                    compileExpression()
+                    //']'
+                    requireSymbol(']')
+                    //base+offset
+                    vmWriter.writeArithmetic(VMWriter.COMMAND.ADD)
+                    //pop into 'that' pointer
+                    vmWriter.writePop(VMWriter.SEGMENT.POINTER,1)
+                    //push *(base+index) onto stack
+                    vmWriter.writePush(VMWriter.SEGMENT.THAT,0)
+                } else { tokenizer.pointerBack() } //this is varName
             }
         } else {
             //integerConstant|stringConstant|keywordConstant|'(' expression ')'|unaryOp term
-            if (tokenizer.getTokenType() == TYPE.INT_CONST){
+            if (type1 == TYPE.INT_CONST){
                 //integerConstant just push its value onto stack
-                vmWriter.writePush(VMWriter.SEGMENT.CONST,tokenizer.intVal())
-            }else if (tokenizer.getTokenType() == TYPE.STRING_CONST){
+                vmWriter.writePush(VMWriter.SEGMENT.CONST, tokenizer.intVal())
+            } else if (type1 == TYPE.STRING_CONST){
                 //stringConstant new a string and append every char to the new stack
                 String str = tokenizer.stringVal()
-                vmWriter.writePush(VMWriter.SEGMENT.CONST,str.length())
+                vmWriter.writePush(VMWriter.SEGMENT.CONST, str.length())
                 vmWriter.writeCall("String.new",1)
-                for (int i = 0; i < str.length(); i++){
-                    vmWriter.writePush(VMWriter.SEGMENT.CONST,(int)str.charAt(i))
+                for (String ch in str){
+                    vmWriter.writePush(VMWriter.SEGMENT.CONST, ch as char as int)
                     vmWriter.writeCall("String.appendChar",2)
                 }
-            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.TRUE){
+            } else if (type1 == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.TRUE){
                 //~0 is true
-                vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
+                vmWriter.writePush(VMWriter.SEGMENT.CONST, 0)
                 vmWriter.writeArithmetic(VMWriter.COMMAND.NOT)
-            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.THIS){
+            } else if (type1 == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.THIS){
                 //push this pointer onto stack
-                vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
-            } else if (tokenizer.getTokenType() == TYPE.KEYWORD && (tokenizer.keyWord() == KEYWORD.FALSE || tokenizer.keyWord() == KEYWORD.NULL)){
+                vmWriter.writePush(VMWriter.SEGMENT.POINTER, 0)
+            } else if (type1 == TYPE.KEYWORD && (tokenizer.keyWord() in [KEYWORD.FALSE, KEYWORD.NULL])){
                 //0 for false and null
                 vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
-            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
+            } else if (type1 == TYPE.SYMBOL && tokenizer.symbol() == '('){
                 //expression
                 compileExpression()
                 //')'
                 requireSymbol(')')
-            } else if (tokenizer.getTokenType() == TYPE.SYMBOL && (tokenizer.symbol() == '-' || tokenizer.symbol() == '~')){
-                def s = tokenizer.symbol()
+            } else if (type1 == TYPE.SYMBOL && (tokenizer.symbol() in ['-','~'])){
+                String s = tokenizer.symbol()
                 //term
                 compileTerm()
                 if (s == '-'){
@@ -648,6 +632,8 @@ class CompilationEngine {
         printCloseTagFunction("compileTerm")
     }
 
+    // I am here!!!
+
     /**
      * Compiles a subroutine call
      * subroutineName '(' expressionList ')' | (className|varName) '.' subroutineName '(' expressionList ')'
@@ -655,13 +641,13 @@ class CompilationEngine {
     private void compileSubroutineCall(){
         printOpenTagFunction("compileSubroutineCall")
         tokenizer.advance()
-                if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
+        if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
             error("identifier")
         }
         String name = tokenizer.identifier()
         int nArgs = 0
         tokenizer.advance()
-                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
+        if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == '('){
             //push this pointer
             vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
             //'(' expressionList ')'
@@ -676,7 +662,7 @@ class CompilationEngine {
             String objName = name
             //subroutineName
             tokenizer.advance()
-                        // System.out.println("subroutineName:" + tokenizer.identifier())
+            // System.out.println("subroutineName:" + tokenizer.identifier())
             if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
@@ -718,7 +704,7 @@ class CompilationEngine {
         //(op term)*
         do {
             tokenizer.advance()
-                        //op
+            //op
             if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.isOp()){
                 String opCmd = ""
                 switch (tokenizer.symbol()){
@@ -738,7 +724,7 @@ class CompilationEngine {
                 vmWriter.writeCommand(opCmd)
             } else {
                 tokenizer.pointerBack()
-                                break
+                break
             }
         } while (true)
         printCloseTagFunction("compileExpression")
@@ -753,10 +739,10 @@ class CompilationEngine {
         printOpenTagFunction("compileExpressionList")
         int nArgs = 0
         tokenizer.advance()
-                //determine if there is any expression, if next is ')' then no
+        //determine if there is any expression, if next is ')' then no
         if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ')'){
             tokenizer.pointerBack()
-                    } else {
+        } else {
             nArgs = 1
             tokenizer.pointerBack()
                         //expression
@@ -764,18 +750,39 @@ class CompilationEngine {
             //(','expression)*
             do {
                 tokenizer.advance()
-                                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ','){
+                if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ','){
                     //expression
                     compileExpression()
                     nArgs++
                 } else {
                     tokenizer.pointerBack()
-                                        break
+                    break
                 }
             } while (true)
         }
         printCloseTagFunction("compileExpressionList")
         return nArgs
+    }
+
+    //---------------------------------Auxiliary functions---------------------------------//
+
+    /**
+     * return corresponding seg for input kind
+     * @param kind
+     * @return
+     */
+    private static VMWriter.SEGMENT getSeg(KIND kind){
+        printOpenTagFunction("getSeg")
+        VMWriter.SEGMENT mySegment
+        switch (kind){
+            case KIND.FIELD  -> mySegment = VMWriter.SEGMENT.THIS
+            case KIND.STATIC -> mySegment = VMWriter.SEGMENT.STATIC
+            case KIND.VAR    -> mySegment = VMWriter.SEGMENT.LOCAL
+            case KIND.ARG    -> mySegment = VMWriter.SEGMENT.ARG
+            default          -> mySegment = VMWriter.SEGMENT.NONE
+        }
+        printCloseTagFunction("getSeg")
+        return mySegment
     }
 
     /**

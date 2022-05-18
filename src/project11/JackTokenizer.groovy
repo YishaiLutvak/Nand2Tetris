@@ -25,23 +25,22 @@ class JackTokenizer {
     private static def tokens = []
 
     private static String keywordReg =
-            'class |constructor |function |method |field |static |' +
-                    'var |int |char |boolean |' +
-                    'void |true|false|null|this|' +
-                    'let |do |if|else|while|return'
+            'class|constructor|function|method|field|static|' +
+                    'var|int|char|boolean|' +
+                    'void|true|false|null|this|' +
+                    'let|do|if|else|while|return'
     private static String symbolReg = '[\\&\\*\\+\\(\\)\\.\\/\\,\\-\\]\\;\\~\\}\\|\\{\\>\\=\\[\\<]'
     private static String intReg = '[0-9]+'
     private static String strReg = '"[^"\n]*"'
     private static String idReg = '[a-zA-Z_][\\w]*'
-    private static Pattern tokenPatterns = ~"$keywordReg|$symbolReg|$intReg|$strReg|$idReg"
-
+    private static Pattern tokenPatterns = ~"$symbolReg|$intReg|$strReg|$idReg"
     private static def opSet = ['+','-','*','/','|','<','>','=','&'] as Set
     static def keywordMap = [
-            'class ' : KEYWORD.CLASS, 'constructor ': KEYWORD.CONSTRUCTOR, 'function ': KEYWORD.FUNCTION,
-            'method ': KEYWORD.METHOD, 'field ': KEYWORD.FIELD, 'static ': KEYWORD.STATIC,
-            'var ': KEYWORD.VAR, 'int ': KEYWORD.INT, 'char ': KEYWORD.CHAR, 'boolean ': KEYWORD.BOOLEAN,
-            'void ': KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
-            this  : KEYWORD.THIS, 'let ': KEYWORD.LET, 'do ': KEYWORD.DO, if: KEYWORD.IF,
+            class : KEYWORD.CLASS, constructor: KEYWORD.CONSTRUCTOR, function: KEYWORD.FUNCTION,
+            method: KEYWORD.METHOD, field: KEYWORD.FIELD, static: KEYWORD.STATIC,
+            var: KEYWORD.VAR, int: KEYWORD.INT, char: KEYWORD.CHAR, boolean: KEYWORD.BOOLEAN,
+            void: KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
+            this  : KEYWORD.THIS, let: KEYWORD.LET, do: KEYWORD.DO, if: KEYWORD.IF,
             else  : KEYWORD.ELSE, while: KEYWORD.WHILE, return: KEYWORD.RETURN,
     ]
 
@@ -51,7 +50,6 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            println(tokenPatterns as String)
             String preProcessed = inFile.text
             preProcessed = noBlockComments(preProcessed)
             preProcessed = noComments(preProcessed)

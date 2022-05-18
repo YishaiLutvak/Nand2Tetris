@@ -38,7 +38,7 @@ class JackTokenizer {
             method: KEYWORD.METHOD, field: KEYWORD.FIELD, static: KEYWORD.STATIC,
             var: KEYWORD.VAR, int: KEYWORD.INT, char: KEYWORD.CHAR, boolean: KEYWORD.BOOLEAN,
             void: KEYWORD.VOID, true: KEYWORD.TRUE, false: KEYWORD.FALSE, null: KEYWORD.NULL,
-            this  : KEYWORD.THIS, 'let': KEYWORD.LET, 'do': KEYWORD.DO, if: KEYWORD.IF,
+            this  : KEYWORD.THIS, let: KEYWORD.LET, do: KEYWORD.DO, if: KEYWORD.IF,
             else  : KEYWORD.ELSE, while: KEYWORD.WHILE, return: KEYWORD.RETURN,
     ]
 
@@ -48,7 +48,6 @@ class JackTokenizer {
      */
     JackTokenizer(File inFile) {
         try {
-            // println(tokenPatterns as String)
             String preProcessed = inFile.text
             preProcessed = noBlockComments(preProcessed)
             preProcessed = noComments(preProcessed)

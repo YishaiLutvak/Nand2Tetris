@@ -71,7 +71,7 @@ class CompilationEngine {
      * Complies a complete class
      * class: 'class' className '{' classVarDec* subroutineDec* '}'
      */
-     void compileClass(){
+     static void compileClass(){
           //'class'
           tokenizer.advance()
           TYPE type =  tokenizer.tokenType()
@@ -111,7 +111,7 @@ class CompilationEngine {
      * Compiles a static declaration or a field declaration
      * classVarDec ('static'|'field') type varName (','varName)* ';'
      */
-    private void compileClassVarDec(){
+    private static void compileClassVarDec(){
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
         TYPE type = tokenizer.tokenType()
@@ -286,11 +286,10 @@ class CompilationEngine {
             //',' or ')'
             tokenizer.advance()
             type = tokenizer.tokenType()
-            String symbol = tokenizer.symbol()
-            if (type != TYPE.SYMBOL || (!(symbol in [',',')']))){
+            if (type != TYPE.SYMBOL || !(tokenizer.symbol() in [',',')'])){
                 error("',' or ')'")
             }
-            if (symbol == ','){
+            if (tokenizer.symbol() == ','){
                 writeXMLTag(type,',')
             } else {
                 tokenizer.pointerBack()
@@ -329,11 +328,10 @@ class CompilationEngine {
             //',' or ';'
             tokenizer.advance()
             type = tokenizer.tokenType()
-            String symbol = tokenizer.symbol()
-            if (type != TYPE.SYMBOL || (!(symbol in [',',';']))){
+            if (type != TYPE.SYMBOL || !(tokenizer.symbol() in [',',';'])){
                 error("',' or ';'")
             }
-            writeXMLTag(type, symbol)
+            writeXMLTag(type, tokenizer.symbol())
             if (tokenizer.symbol() == ';'){
                 break
             }
