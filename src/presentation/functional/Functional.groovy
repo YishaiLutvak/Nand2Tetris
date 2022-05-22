@@ -3,7 +3,7 @@ package presentation.functional
 /**
  * https://en.wikipedia.org/wiki/Apache_Groovy
  * Functional programming
- * Although Groovy is mostly an object-oriented language, it also offers functional programming features.
+ * Although Groovy is mostly an object-oriented language, it also offers Functional programming features.
  */
 
 /**
