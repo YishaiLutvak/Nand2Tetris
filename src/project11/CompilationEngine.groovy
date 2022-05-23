@@ -16,37 +16,15 @@ class CompilationEngine {
 
     private static JackTokenizer tokenizer
     private static VMWriter vmWriter
+    private static SymbolTable symbolTable
+    private static int labelIndex = 0
+
     private static String currentClass
     private static String currentSubroutine
-    private static SymbolTable symbolTable = new SymbolTable()
+
     public static int Indentation = 0
     public static String width= '    '
-    private int labelIndex = 0
 
-    /**
-     * return current function name, className.subroutineName
-     * @return
-     */
-    static String currentFunction(){
-        if (currentClass.length() != 0 && currentSubroutine.length() != 0){
-            return "${currentClass}.${currentSubroutine}"
-        }
-        return ""
-    }
-
-    /**
-     *
-     */
-    private static void printOpenTagFunction(String nameFunction){
-        println("${width * Indentation++}<$nameFunction>")
-    }
-
-    /**
-     *
-     */
-    private static void printCloseTagFunction(String nameFunction){
-        println("${width * --Indentation}<$nameFunction/>")
-    }
 
     /**
      * Creates a new compilation engine with the given input and output.
@@ -57,6 +35,8 @@ class CompilationEngine {
     CompilationEngine(File inFile, File outFile) {
         tokenizer = new JackTokenizer(inFile)
         vmWriter = new VMWriter(outFile)
+        symbolTable = new SymbolTable()
+        labelIndex = 0
     }
 
     //-------------------compile_xxx ( ) routines - recursive descent-------------------//
@@ -83,7 +63,7 @@ class CompilationEngine {
      * Complies a complete class
      * class: 'class' className '{' classVarDec* subroutineDec* '}'
      */
-    void compileClass(){
+    static void compileClass(){
         printOpenTagFunction('compileClass')
         //'class'
         tokenizer.advance()
@@ -116,7 +96,7 @@ class CompilationEngine {
      * Compiles a static declaration or a field declaration
      * classVarDec ('static'|'field') type varName (','varNAme)* ';'
      */
-    private void compileClassVarDec(){
+    static private void compileClassVarDec(){
         printOpenTagFunction('compileClassVarDec')
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
@@ -176,7 +156,7 @@ class CompilationEngine {
     /**
      * Compiles a complete method function or constructor
      */
-    private void compileSubroutine(){
+    static private void compileSubroutine(){
         printOpenTagFunction('compileSubroutine')
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
@@ -228,7 +208,7 @@ class CompilationEngine {
      * Compiles the body of a subroutine
      * '{'  varDec* statements '}'
      */
-    private void compileSubroutineBody(KEYWORD keyword){
+    static private void compileSubroutineBody(KEYWORD keyword){
         printOpenTagFunction("compileSubroutineBody")
         //'{'
         requireSymbol('{')
@@ -267,7 +247,7 @@ class CompilationEngine {
     /**
      * Compiles a single statement
      */
-    private void compileStatement(){
+    static private void compileStatement(){
         printOpenTagFunction("compileStatement")
         //determine whether there is a statement next can be a '}'
         tokenizer.advance()
@@ -338,7 +318,7 @@ class CompilationEngine {
      * Compiles a var declaration
      * 'var' type varName (',' varName)*;
      */
-    private void compileVarDec(){
+    static private void compileVarDec(){
         printOpenTagFunction("compileVarDec")
         //determine if there is a varDec
         tokenizer.advance()
@@ -376,7 +356,7 @@ class CompilationEngine {
      * Compiles a do statement
      * 'do' subroutineCall ';'
      */
-    private void compileDo(){
+    static private void compileDo(){
         printOpenTagFunction("compileDo")
         //subroutineCall
         compileSubroutineCall()
@@ -391,7 +371,7 @@ class CompilationEngine {
      * Compiles a let statement
      * 'let' varName ('[' ']')? '=' expression ';'
      */
-    private void compileLet(){
+    static private void compileLet(){
         printOpenTagFunction("compileLet")
         //varName
         tokenizer.advance()
@@ -442,7 +422,7 @@ class CompilationEngine {
      * Compiles a while statement
      * 'while' '(' expression ')' '{' statements '}'
      */
-    private void compilesWhile(){
+    static private void compilesWhile(){
         printOpenTagFunction("compilesWhile")
         String continueLabel = newLabel()
         String topLabel = newLabel()
@@ -470,7 +450,7 @@ class CompilationEngine {
         printCloseTagFunction("compilesWhile")
     }
 
-    private String newLabel(){
+    static private String newLabel(){
         return "LABEL_" + (labelIndex++)
     }
 
@@ -478,7 +458,7 @@ class CompilationEngine {
      * Compiles a return statement
      * ‘return’ expression? ';'
      */
-    private void compileReturn(){
+    static private void compileReturn(){
         printOpenTagFunction("compileReturn")
         //check if there is any expression
         tokenizer.advance()
@@ -502,7 +482,7 @@ class CompilationEngine {
      * possibly with a trailing else clause
      * 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}')?
      */
-    private void compileIf(){
+    static private void compileIf(){
         printOpenTagFunction("compileIf")
         String elseLabel = newLabel()
         String endLabel = newLabel()
@@ -552,7 +532,7 @@ class CompilationEngine {
      * varName|varName '[' expression ']'|subroutineCall|
      * '(' expression ')'|unaryOp term
      */
-    private void compileTerm(){
+    static private void compileTerm(){
         printOpenTagFunction("compileTerm")
         tokenizer.advance()
         TYPE type1 = tokenizer.getTokenType()
@@ -638,7 +618,7 @@ class CompilationEngine {
      * Compiles a subroutine call
      * subroutineName '(' expressionList ')' | (className|varName) '.' subroutineName '(' expressionList ')'
      */
-    private void compileSubroutineCall(){
+    static private void compileSubroutineCall(){
         printOpenTagFunction("compileSubroutineCall")
         tokenizer.advance()
         if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
@@ -698,7 +678,7 @@ class CompilationEngine {
      * Compiles an expression
      * term (op term)*
      */
-    private void compileExpression(){
+    static private void compileExpression(){
         printOpenTagFunction("compileExpression")
         //term
         compileTerm()
@@ -736,7 +716,7 @@ class CompilationEngine {
      * (expression(','expression)*)?
      * @return nArgs
      */
-    private int compileExpressionList(){
+    static private int compileExpressionList(){
         printOpenTagFunction("compileExpressionList")
         int nArgs = 0
         tokenizer.advance()
@@ -803,5 +783,30 @@ class CompilationEngine {
      */
     private static void error(String val){
         throw new IllegalStateException("Expected token missing : $val. Current token : ${tokenizer.getCurrentToken()}")
+    }
+
+    /**
+     * return current function name, className.subroutineName
+     * @return
+     */
+    static String currentFunction(){
+        if (currentClass.length() != 0 && currentSubroutine.length() != 0){
+            return "${currentClass}.${currentSubroutine}"
+        }
+        return ""
+    }
+
+    /**
+     *
+     */
+    private static void printOpenTagFunction(String nameFunction){
+        println("${width * Indentation++}<$nameFunction>")
+    }
+
+    /**
+     *
+     */
+    private static void printCloseTagFunction(String nameFunction){
+        println("${width * --Indentation}<$nameFunction/>")
     }
 }

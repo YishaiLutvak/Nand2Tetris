@@ -29,12 +29,12 @@ class JackCompiler {
         }
 
         File inFile = new File(args[0])
-        def jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
+        ArrayList<File> jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
 
-        jackFiles.each {
-            String outFileName = it.name.split(/\.jack/)[0]
-            File outFile = new File(it.getParent(),"${outFileName}.vm")
-            CompilationEngine compilationEngine = new CompilationEngine(it, outFile)
+        jackFiles.each { File currentJackFile ->
+            String outFileName = currentJackFile.name.split(/\.jack/)[0]
+            File outFile = new File(currentJackFile.getParent(),"${outFileName}.vm")
+            CompilationEngine compilationEngine = new CompilationEngine(currentJackFile, outFile)
             compilationEngine.compileClass()
             println("File created : " + outFileName)
         }
@@ -56,7 +56,7 @@ class JackCompiler {
      * @param dir - path of directory.
      */
     static ArrayList<File> handleDirectory(File dir) {
-        def jackFiles = dir.listFiles().findAll{it.name.endsWith('.jack')}
+        List<File> jackFiles = dir.listFiles().findAll{ File file -> file.name.endsWith('.jack')}
         if (jackFiles.size() == 0){
             throw new IllegalArgumentException('No jack file in this directory')
         }

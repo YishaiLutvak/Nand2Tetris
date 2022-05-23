@@ -36,7 +36,7 @@ class JackAnalyzer{
         File inFile = new File(args[0])
         ArrayList<File> jackFiles = inFile.isDirectory() ? handleDirectory(inFile) : handleSingleFile(inFile)
 
-        jackFiles.each { currentJackFile ->
+        jackFiles.each { File currentJackFile ->
             String fileName = currentJackFile.name.split(/\.jack/)[0]
             String fileOutPath = "My_${fileName}.xml"
             String tokensFileOutPath = "My_${fileName}T.xml"
@@ -69,7 +69,7 @@ class JackAnalyzer{
      * @param dir - path of directory.
      */
     static ArrayList<File> handleDirectory(File dir) {
-        List<File> jackFiles = dir.listFiles().findAll{file -> file.name.endsWith('.jack')}
+        List<File> jackFiles = dir.listFiles().findAll{ File file -> file.name.endsWith('.jack')}
         if (jackFiles.size() == 0){
             throw new IllegalArgumentException('No jack file in this directory')
         }

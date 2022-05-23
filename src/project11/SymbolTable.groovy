@@ -115,10 +115,15 @@ class SymbolTable {
      * @return
      */
     private Symbol lookUp(String name){
-        if (classSymbols[name] != null){
-            return classSymbols[name] as Symbol
-        } else if (subroutineSymbols[name] != null){
+        /**
+         * Note! It is necessary to look in the symbol table of the function before the table of symbols of the class,
+         * because the inner scoop should precede the outer scoop
+         * (in case there is a variable in the class and a variable in the function that has the same name).
+         */
+        if (subroutineSymbols[name] != null){
             return subroutineSymbols[name] as Symbol
+        } else if (classSymbols[name] != null){
+            return classSymbols[name] as Symbol
         } else {
             return null
         }
