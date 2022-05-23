@@ -1,4 +1,6 @@
-package presentation.functional
+package presentation.functional.closures.A_syntax
+
+//https://groovy-lang.org/closures.html
 
 def listener = { e -> println "Clicked on $e.source" }
 assert listener instanceof Closure

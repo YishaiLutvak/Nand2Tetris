@@ -1,4 +1,6 @@
-package presentation.functional
+package presentation.functional.closures.A_syntax
+
+//https://groovy-lang.org/closures.html
 
 { item++ }
 
