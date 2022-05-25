@@ -10,13 +10,13 @@ push argument 2
 pop this 10
 push argument 3
 push constant 6
-sub  
+sub
 pop this 11
 push argument 4
 pop this 12
 push argument 5
 push constant 6
-sub  
+sub
 pop this 13
 push constant 0
 pop this 14
@@ -24,7 +24,7 @@ push pointer 0
 call Ball.show 1
 pop temp 0
 push pointer 0
-return  
+return
 function Ball.dispose 0
 push argument 0
 pop pointer 0
@@ -32,19 +32,19 @@ push pointer 0
 call Memory.deAlloc 1
 pop temp 0
 push constant 0
-return  
+return
 function Ball.show 0
 push argument 0
 pop pointer 0
 push constant 0
-not  
+not
 call Screen.setColor 1
 pop temp 0
 push pointer 0
 call Ball.draw 1
 pop temp 0
 push constant 0
-return  
+return
 function Ball.hide 0
 push argument 0
 pop pointer 0
@@ -55,7 +55,7 @@ push pointer 0
 call Ball.draw 1
 pop temp 0
 push constant 0
-return  
+return
 function Ball.draw 0
 push argument 0
 pop pointer 0
@@ -63,36 +63,36 @@ push this 0
 push this 1
 push this 0
 push constant 5
-add  
+add
 push this 1
 push constant 5
-add  
+add
 call Screen.drawRectangle 4
 pop temp 0
 push constant 0
-return  
+return
 function Ball.getLeft 0
 push argument 0
 pop pointer 0
 push this 0
-return  
+return
 function Ball.getRight 0
 push argument 0
 pop pointer 0
 push this 0
 push constant 5
-add  
-return  
+add
+return
 function Ball.setDestination 3
 push argument 0
 pop pointer 0
 push argument 1
 push this 0
-sub  
+sub
 pop this 2
 push argument 2
 push this 1
-sub  
+sub
 pop this 3
 push this 2
 call Math.abs 1
@@ -102,11 +102,12 @@ call Math.abs 1
 pop local 1
 push local 0
 push local 1
-lt  
+lt
 pop this 7
 push this 7
-not  
-if-goto LABEL_0 
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push local 0
 pop local 2
 push local 1
@@ -115,41 +116,41 @@ push local 2
 pop local 1
 push this 1
 push argument 2
-lt  
+lt
 pop this 8
 push this 0
 push argument 1
-lt  
+lt
 pop this 9
-goto LABEL_1 
-label LABEL_0 
+goto IF_END0
+label IF_FALSE0
 push this 0
 push argument 1
-lt  
+lt
 pop this 8
 push this 1
 push argument 2
-lt  
+lt
 pop this 9
-label LABEL_1 
+label IF_END0
 push constant 2
 push local 1
-call Math.multiply 2  
+call Math.multiply 2
 push local 0
-sub  
+sub
 pop this 4
 push constant 2
 push local 1
-call Math.multiply 2  
+call Math.multiply 2
 pop this 5
 push constant 2
 push local 1
 push local 0
-sub  
-call Math.multiply 2  
+sub
+call Math.multiply 2
 pop this 6
 push constant 0
-return  
+return
 function Ball.move 0
 push argument 0
 pop pointer 0
@@ -158,278 +159,286 @@ call Ball.hide 1
 pop temp 0
 push this 4
 push constant 0
-lt  
-not  
-if-goto LABEL_2 
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push this 4
 push this 5
-add  
+add
 pop this 4
-goto LABEL_3 
-label LABEL_2 
+goto IF_END0
+label IF_FALSE0
 push this 4
 push this 6
-add  
+add
 pop this 4
 push this 9
-not  
-if-goto LABEL_4 
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push this 7
-not  
-if-goto LABEL_6 
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push this 0
 push constant 4
-add  
+add
 pop this 0
-goto LABEL_7 
-label LABEL_6 
+goto IF_END2
+label IF_FALSE2
 push this 1
 push constant 4
-add  
+add
 pop this 1
-label LABEL_7 
-goto LABEL_5 
-label LABEL_4 
+label IF_END2
+goto IF_END1
+label IF_FALSE1
 push this 7
-not  
-if-goto LABEL_8 
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push this 0
 push constant 4
-sub  
+sub
 pop this 0
-goto LABEL_9 
-label LABEL_8 
+goto IF_END3
+label IF_FALSE3
 push this 1
 push constant 4
-sub  
+sub
 pop this 1
-label LABEL_9 
-label LABEL_5 
-label LABEL_3 
+label IF_END3
+label IF_END1
+label IF_END0
 push this 8
-not  
-if-goto LABEL_10 
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push this 7
-not  
-if-goto LABEL_12 
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
 push this 1
 push constant 4
-add  
+add
 pop this 1
-goto LABEL_13 
-label LABEL_12 
+goto IF_END5
+label IF_FALSE5
 push this 0
 push constant 4
-add  
+add
 pop this 0
-label LABEL_13 
-goto LABEL_11 
-label LABEL_10 
+label IF_END5
+goto IF_END4
+label IF_FALSE4
 push this 7
-not  
-if-goto LABEL_14 
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
 push this 1
 push constant 4
-sub  
+sub
 pop this 1
-goto LABEL_15 
-label LABEL_14 
+goto IF_END6
+label IF_FALSE6
 push this 0
 push constant 4
-sub  
+sub
 pop this 0
-label LABEL_15 
-label LABEL_11 
+label IF_END6
+label IF_END4
 push this 0
 push this 10
-gt  
-not  
-not  
-if-goto LABEL_16 
+gt
+not
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
 push constant 1
 pop this 14
 push this 10
 pop this 0
-goto LABEL_17 
-label LABEL_16 
-label LABEL_17 
+label IF_FALSE7
 push this 0
 push this 11
-lt  
-not  
-not  
-if-goto LABEL_18 
+lt
+not
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
 push constant 2
 pop this 14
 push this 11
 pop this 0
-goto LABEL_19 
-label LABEL_18 
-label LABEL_19 
+label IF_FALSE8
 push this 1
 push this 12
-gt  
-not  
-not  
-if-goto LABEL_20 
+gt
+not
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
 push constant 3
 pop this 14
 push this 12
 pop this 1
-goto LABEL_21 
-label LABEL_20 
-label LABEL_21 
+label IF_FALSE9
 push this 1
 push this 13
-lt  
-not  
-not  
-if-goto LABEL_22 
+lt
+not
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
 push constant 4
 pop this 14
 push this 13
 pop this 1
-goto LABEL_23 
-label LABEL_22 
-label LABEL_23 
+label IF_FALSE10
 push pointer 0
 call Ball.show 1
 pop temp 0
 push this 14
-return  
+return
 function Ball.bounce 5
 push argument 0
 pop pointer 0
 push this 2
 push constant 10
-call Math.divide 2  
+call Math.divide 2
 pop local 2
 push this 3
 push constant 10
-call Math.divide 2  
+call Math.divide 2
 pop local 3
 push argument 1
 push constant 0
-eq  
-not  
-if-goto LABEL_24 
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push constant 10
 pop local 4
-goto LABEL_25 
-label LABEL_24 
+goto IF_END0
+label IF_FALSE0
 push this 2
 push constant 0
-lt  
-not  
+lt
+not
 push argument 1
 push constant 1
-eq  
-and  
+eq
+and
 push this 2
 push constant 0
-lt  
+lt
 push argument 1
 push constant 1
-neg  
-eq  
-and  
-or  
-not  
-if-goto LABEL_26 
+neg
+eq
+and
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push constant 20
 pop local 4
-goto LABEL_27 
-label LABEL_26 
+goto IF_END1
+label IF_FALSE1
 push constant 5
 pop local 4
-label LABEL_27 
-label LABEL_25 
+label IF_END1
+label IF_END0
 push this 14
 push constant 1
-eq  
-not  
-if-goto LABEL_28 
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 506
 pop local 0
 push local 3
 push constant 50
-neg  
-call Math.multiply 2  
+neg
+call Math.multiply 2
 push local 2
-call Math.divide 2  
+call Math.divide 2
 pop local 1
 push this 1
 push local 1
 push local 4
-call Math.multiply 2  
-add  
+call Math.multiply 2
+add
 pop local 1
-goto LABEL_29 
-label LABEL_28 
+goto IF_END2
+label IF_FALSE2
 push this 14
 push constant 2
-eq  
-not  
-if-goto LABEL_30 
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 pop local 0
 push local 3
 push constant 50
-call Math.multiply 2  
+call Math.multiply 2
 push local 2
-call Math.divide 2  
+call Math.divide 2
 pop local 1
 push this 1
 push local 1
 push local 4
-call Math.multiply 2  
-add  
+call Math.multiply 2
+add
 pop local 1
-goto LABEL_31 
-label LABEL_30 
+goto IF_END3
+label IF_FALSE3
 push this 14
 push constant 3
-eq  
-not  
-if-goto LABEL_32 
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push constant 250
 pop local 1
 push local 2
 push constant 25
-neg  
-call Math.multiply 2  
+neg
+call Math.multiply 2
 push local 3
-call Math.divide 2  
+call Math.divide 2
 pop local 0
 push this 0
 push local 0
 push local 4
-call Math.multiply 2  
-add  
+call Math.multiply 2
+add
 pop local 0
-goto LABEL_33 
-label LABEL_32 
+goto IF_END4
+label IF_FALSE4
 push constant 0
 pop local 1
 push local 2
 push constant 25
-call Math.multiply 2  
+call Math.multiply 2
 push local 3
-call Math.divide 2  
+call Math.divide 2
 pop local 0
 push this 0
 push local 0
 push local 4
-call Math.multiply 2  
-add  
+call Math.multiply 2
+add
 pop local 0
-label LABEL_33 
-label LABEL_31 
-label LABEL_29 
+label IF_END4
+label IF_END3
+label IF_END2
 push pointer 0
 push local 0
 push local 1
 call Ball.setDestination 3
 pop temp 0
 push constant 0
-return  
+return
