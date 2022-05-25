@@ -8,100 +8,100 @@ pop local 1
 push constant 1
 call Array.new 1
 pop local 2
-push local 0
 push constant 3
-add  
+push local 0
+add
 push constant 2
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 0
 push constant 4
-add  
+push local 0
+add
 push constant 8
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 0
 push constant 5
-add  
+push local 0
+add
 push constant 4
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push constant 3
+push local 0
+add
+pop pointer 1
+push that 0
 push local 1
-push local 0
+add
 push constant 3
-add  
-pop pointer 1
-push that 0
-add  
 push local 0
-push constant 3
-add  
+add
 pop pointer 1
 push that 0
 push constant 3
-add  
+add
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 0
-push local 1
-push local 0
 push constant 3
-add  
+push local 0
+add
 pop pointer 1
 push that 0
-add  
+push local 1
+add
 pop pointer 1
 push that 0
-add  
 push local 0
-push local 0
+add
 push constant 5
-add  
-pop pointer 1
-push that 0
-add  
-pop pointer 1
-push that 0
-push local 1
-push constant 7
 push local 0
-push constant 3
-add  
+add
 pop pointer 1
 push that 0
-sub  
+push local 0
+add
+pop pointer 1
+push that 0
+push constant 7
+push constant 3
+push local 0
+add
+pop pointer 1
+push that 0
+sub
 push constant 2
 call Main.double 1
-sub  
+sub
 push constant 1
-add  
-add  
+add
+push local 1
+add
 pop pointer 1
 push that 0
-call Math.multiply 2  
+call Math.multiply 2
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 2
 push constant 0
-add  
+push local 2
+add
 push constant 0
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 2
 push constant 0
-add  
+push local 2
+add
 pop pointer 1
 push that 0
 pop local 2
@@ -195,9 +195,9 @@ push constant 32
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-push local 1
 push constant 2
-add  
+push local 1
+add
 pop pointer 1
 push that 0
 call Output.printInt 1
@@ -296,9 +296,9 @@ push constant 32
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-push local 0
 push constant 5
-add  
+push local 0
+add
 pop pointer 1
 push that 0
 call Output.printInt 1
@@ -404,68 +404,67 @@ push constant 0
 pop local 2
 push local 2
 push constant 0
-eq  
-not  
-if-goto LABEL_0 
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push local 0
 push constant 10
 call Main.fill 2
 pop temp 0
-push local 0
 push constant 3
-add  
+push local 0
+add
 pop pointer 1
 push that 0
 pop local 2
-push local 2
 push constant 1
-add  
+push local 2
+add
 push constant 33
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 0
 push constant 7
-add  
+push local 0
+add
 pop pointer 1
 push that 0
 pop local 2
-push local 2
 push constant 1
-add  
+push local 2
+add
 push constant 77
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push local 0
 push constant 3
-add  
+push local 0
+add
 pop pointer 1
 push that 0
 pop local 1
-push local 1
 push constant 1
-add  
 push local 1
+add
 push constant 1
-add  
+push local 1
+add
 pop pointer 1
 push that 0
+push constant 1
 push local 2
-push constant 1
-add  
+add
 pop pointer 1
 push that 0
-add  
+add
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-goto LABEL_1 
-label LABEL_0 
-label LABEL_1 
+label IF_FALSE0
 push constant 44
 call String.new 1
 push constant 84
@@ -558,9 +557,9 @@ push constant 32
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-push local 2
 push constant 1
-add  
+push local 2
+add
 pop pointer 1
 push that 0
 call Output.printInt 1
@@ -661,9 +660,9 @@ push constant 32
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-push local 1
 push constant 1
-add  
+push local 1
+add
 pop pointer 1
 push that 0
 call Output.printInt 1
@@ -671,33 +670,33 @@ pop temp 0
 call Output.println 0
 pop temp 0
 push constant 0
-return  
+return
 function Main.double 0
 push argument 0
 push constant 2
-call Math.multiply 2  
-return  
+call Math.multiply 2
+return
 function Main.fill 0
-label LABEL_3 
+label WHILE_EXP0
 push argument 1
 push constant 0
-gt  
-not  
-if-goto LABEL_2 
+gt
+not
+if-goto WHILE_END0
 push argument 1
 push constant 1
-sub  
+sub
 pop argument 1
-push argument 0
 push argument 1
-add  
+push argument 0
+add
 push constant 3
 call Array.new 1
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-goto LABEL_3 
-label LABEL_2 
+goto WHILE_EXP0
+label WHILE_END0
 push constant 0
-return  
+return
