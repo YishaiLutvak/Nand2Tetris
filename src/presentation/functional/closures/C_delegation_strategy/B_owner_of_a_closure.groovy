@@ -1,5 +1,7 @@
 package presentation.functional.closures.C_delegation_strategy
 
+//https://groovy-lang.org/closures.html
+
 class Enclosing0 {
     void run() {
         println('Enclosing0.run()')

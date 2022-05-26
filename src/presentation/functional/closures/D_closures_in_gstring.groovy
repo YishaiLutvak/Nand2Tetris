@@ -1,5 +1,7 @@
 package presentation.functional.closures
 
+//https://groovy-lang.org/closures.html
+
 def x = 1
 def gs = "x = ${x}"
 assert gs == 'x = 1'

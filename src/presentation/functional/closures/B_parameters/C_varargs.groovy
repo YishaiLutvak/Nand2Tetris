@@ -1,6 +1,7 @@
 package presentation.functional.closures.B_parameters
 
 //https://groovy-lang.org/closures.html
+
 /**
  * It is possible for a closure to declare variable arguments like any other method.
  * Vargs methods are methods that can accept a variable number of arguments

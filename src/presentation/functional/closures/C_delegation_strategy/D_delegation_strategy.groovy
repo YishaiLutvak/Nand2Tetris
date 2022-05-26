@@ -1,5 +1,7 @@
 package presentation.functional.closures.C_delegation_strategy
 
+//https://groovy-lang.org/closures.html
+
 class Person2 {
     String name
     def pretty = { "My name is $name" }
