@@ -1,8 +1,6 @@
-package presentation.vsJava
+package presentation.vsJava.multiMethods
 
 import static groovy.test.GroovyTestCase.assertEquals
-
-
 
 /**
  * https://groovy-lang.org/differences.html
@@ -24,7 +22,7 @@ import static groovy.test.GroovyTestCase.assertEquals
  */
 
 
-class DifferencesGroovy {
+class MultiMethodsGroovy {
 
     public static void main(String[] args){
         Object o = "Object";
@@ -38,3 +36,14 @@ class DifferencesGroovy {
         return 2;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
