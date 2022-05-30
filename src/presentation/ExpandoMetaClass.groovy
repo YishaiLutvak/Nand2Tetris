@@ -1,7 +1,8 @@
 package presentation
 
+// https://en.wikipedia.org/wiki/Apache_Groovy
+
 /**
- * https://en.wikipedia.org/wiki/Apache_Groovy
  * Prototype extension
  * Groovy offers support for prototype extension through ExpandoMetaClass,
  * Extension Modules (only in Groovy 2),
@@ -10,12 +11,31 @@ package presentation
  * similar to Ruby's open class concept:
  */
 
+/*
+ * Groovy offers support for prototype
+ * extension through ExpandoMetaClass,
+ * ExpandoMetaClass offers a
+ * domain-specific language (DSL)
+ * to express the changes in the class easily,
+ * similar to Ruby's open class concept:
+ */
 Number.metaClass {
+    println(delegate.toString())
     sqrt = { Math.sqrt(delegate) }
 }
 
 assert 9.sqrt() == 3
 assert 4.sqrt() == 2
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Groovy's changes in code through prototyping are not visible in Java,

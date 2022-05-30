@@ -21,26 +21,26 @@ p2.pretty.delegate = t2
 assert p2.toString() == 'My name is Sarah'
 
 
-class Person3 {
+class Person {
     String name
     def pretty = { "My name is $name" }
     String toString() {
-        pretty()
+        return pretty()
     }
 }
-class Thing3 {
+class Thing {
     String name
 }
 
-def p3 = new Person3(name: 'Sarah')
-def t3 = new Thing3(name: 'Teapot')
+def p = new Person(name: 'Sarah')
+def t = new Thing(name: 'Teapot')
 
-assert p3.toString() == 'My name is Sarah'
-p3.pretty.delegate = t3
-assert p3.toString() == 'My name is Sarah'
+assert p.toString() == 'My name is Sarah'
+p.pretty.delegate = t
+assert p.toString() == 'My name is Sarah'
 
-p3.pretty.resolveStrategy = Closure.DELEGATE_FIRST
-assert p3.toString() == 'My name is Teapot'
+p.pretty.resolveStrategy = Closure.DELEGATE_FIRST
+assert p.toString() == 'My name is Teapot'
 
 
 class Person4 {

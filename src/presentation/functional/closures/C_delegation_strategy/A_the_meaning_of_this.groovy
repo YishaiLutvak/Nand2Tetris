@@ -43,7 +43,7 @@ enclosedInInnerClass.run()
 def nestedClosures = new NestedClosures()
 nestedClosures.run()
 
-class Person {
+class MyPerson {
     String name
     int age
     String toString() { "$name is $age years old" }
@@ -58,5 +58,5 @@ class Person {
     }
 }
 
-def p = new Person(name:'Janice', age:74)
+def p = new MyPerson(name:'Janice', age:74)
 assert p.dump() == 'Janice is 74 years old'
