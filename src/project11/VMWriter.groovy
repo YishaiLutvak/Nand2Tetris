@@ -10,7 +10,7 @@ class VMWriter {
     static enum SEGMENT {CONST,ARG,LOCAL,STATIC,THIS,THAT,POINTER,TEMP,NONE}
     static enum COMMAND {ADD,SUB,NEG,EQ,GT,LT,AND,OR,NOT}
     static private PrintWriter printWriter
-    private static segmentStringHashMap = [
+    private static Map<SEGMENT,String> segmentStringMap = [
             (SEGMENT.CONST):"constant",
             (SEGMENT.ARG):"argument",
             (SEGMENT.LOCAL):"local",
@@ -20,7 +20,7 @@ class VMWriter {
             (SEGMENT.POINTER):"pointer",
             (SEGMENT.TEMP):"temp",
     ]
-    private static commandStringHashMap = [
+    private static Map<COMMAND,String> commandStringMap = [
             (COMMAND.ADD):"add",
             (COMMAND.SUB):"sub",
             (COMMAND.NEG):"neg",
@@ -50,7 +50,7 @@ class VMWriter {
      * @param index
      */
     static void writePush(SEGMENT segment, int index){
-        writeCommand("push",segmentStringHashMap[segment], index as String)
+        writeCommand("push",segmentStringMap[segment], index as String)
     }
 
     /**
@@ -59,7 +59,7 @@ class VMWriter {
      * @param index
      */
     static void writePop(SEGMENT segment, int index){
-        writeCommand("pop",segmentStringHashMap[segment], index as String)
+        writeCommand("pop",segmentStringMap[segment], index as String)
     }
 
     /**
@@ -67,7 +67,7 @@ class VMWriter {
      * @param command
      */
     static void writeArithmetic(COMMAND command){
-        writeCommand(commandStringHashMap[command])
+        writeCommand(commandStringMap[command])
     }
 
     /**

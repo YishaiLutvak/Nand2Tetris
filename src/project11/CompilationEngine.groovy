@@ -637,7 +637,7 @@ class CompilationEngine {
             //')'
             requireSymbol(')')
             //call subroutine
-            vmWriter.writeCall(currentClass + '.' + name, nArgs)
+            vmWriter.writeCall("$currentClass.$name", nArgs)
         } else if (tokenType == TYPE.SYMBOL && tokenizer.symbol() == '.'){
             //(className|varName) '.' subroutineName '(' expressionList ')'
             String objName = name
@@ -650,7 +650,7 @@ class CompilationEngine {
             name = tokenizer.identifier()
             //check for if it is built-in type
             String symbolType = symbolTable.typeOf(objName)
-            if ((symbolType in ["int","boolean","char","void"])){
+            if (symbolType in ["int","boolean","char","void"]){
                 error("no built-in type")
             } else if (symbolType==""){
                 name = "$objName.$name"

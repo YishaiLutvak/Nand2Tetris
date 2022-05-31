@@ -22,20 +22,29 @@ package project11
  */
 class SymbolTable {
 
-    private def classSymbols = [:] // for STATIC, FIELD
-    private def subroutineSymbols =[:] // for ARG, VAR
-    private def indices = [
+    private static Map<String, Symbol> classSymbols // for STATIC, FIELD
+    private static Map<String, Symbol> subroutineSymbols // for ARG, VAR
+    private static Map<Symbol.KIND, Integer> indices
+
+    /**
+     *
+     */
+    SymbolTable(){
+        classSymbols = [:] as Map<String, Symbol>
+        subroutineSymbols = [:] as Map<String, Symbol>
+        indices = [
             (Symbol.KIND.ARG): 0,
             (Symbol.KIND.FIELD): 0,
             (Symbol.KIND.STATIC): 0,
             (Symbol.KIND.VAR): 0,
-    ]
+        ] as Map<Symbol.KIND, Integer>
+    }
 
     /**
      * starts a new subroutine scope
      * resets the subroutine's symbol table
      */
-    void startSubroutine(){
+    static void startSubroutine(){
         subroutineSymbols.clear()
         indices.put(Symbol.KIND.VAR, 0)
         indices.put(Symbol.KIND.ARG, 0)
@@ -49,7 +58,7 @@ class SymbolTable {
      * @param type
      * @param kind
      */
-    void define(String name, String type, Symbol.KIND kind){
+    static void define(String name, String type, Symbol.KIND kind){
         if (kind in [Symbol.KIND.ARG, Symbol.KIND.VAR, Symbol.KIND.STATIC, Symbol.KIND.FIELD]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
@@ -65,7 +74,7 @@ class SymbolTable {
      * @param kind
      * @return
      */
-    int varCount(Symbol.KIND kind){
+    static int varCount(Symbol.KIND kind){
         return indices[kind]
     }
 
@@ -75,7 +84,7 @@ class SymbolTable {
      * @param name
      * @return
      */
-    Symbol.KIND kindOf(String name){
+    static Symbol.KIND kindOf(String name){
         Symbol symbol = lookUp(name)
         if (symbol != null) {
             return symbol.getKind()
@@ -88,7 +97,7 @@ class SymbolTable {
      * @param name
      * @return
      */
-    String typeOf(String name){
+    static String typeOf(String name){
         Symbol symbol = lookUp(name)
         if (symbol != null) {
             return symbol.getType()
@@ -101,7 +110,7 @@ class SymbolTable {
      * @param name
      * @return
      */
-    int indexOf(String name){
+    static int indexOf(String name){
         Symbol symbol = lookUp(name)
         if (symbol != null) {
             return symbol.getIndex()
@@ -114,7 +123,7 @@ class SymbolTable {
      * @param name
      * @return
      */
-    private Symbol lookUp(String name){
+    static private Symbol lookUp(String name){
         /**
          * Note! It is necessary to look in the symbol table of the function before the table of symbols of the class,
          * because the inner scoop should precede the outer scoop
@@ -125,6 +134,7 @@ class SymbolTable {
         } else if (classSymbols[name] != null){
             return classSymbols[name] as Symbol
         } else {
+            //throw new IllegalStateException("The name '$name' a is not in the table of symbols")
             return null
         }
     }
