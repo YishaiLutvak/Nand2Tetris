@@ -22,22 +22,22 @@ package project11
  */
 class SymbolTable {
 
-    private static Map<String, Symbol> classSymbols // for STATIC, FIELD
-    private static Map<String, Symbol> subroutineSymbols // for ARG, VAR
-    private static Map<Symbol.KIND, Integer> indices
+    private static Map<String, Symbol> classSymbols = [:] // for STATIC, FIELD
+    private static Map<String, Symbol> subroutineSymbols = [:] // for ARG, VAR
+    private static Map<Symbol.KIND, Integer> indices = [
+            (Symbol.KIND.ARG): 0,
+            (Symbol.KIND.FIELD): 0,
+            (Symbol.KIND.STATIC): 0,
+            (Symbol.KIND.VAR): 0,
+    ]
 
     /**
      *
      */
     SymbolTable(){
-        classSymbols = [:] as Map<String, Symbol>
-        subroutineSymbols = [:] as Map<String, Symbol>
-        indices = [
-            (Symbol.KIND.ARG): 0,
-            (Symbol.KIND.FIELD): 0,
-            (Symbol.KIND.STATIC): 0,
-            (Symbol.KIND.VAR): 0,
-        ] as Map<Symbol.KIND, Integer>
+        classSymbols.clear()
+        indices.put(Symbol.KIND.STATIC, 0)
+        indices.put(Symbol.KIND.FIELD, 0)
     }
 
     /**
