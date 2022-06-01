@@ -1,6 +1,9 @@
-package presentation
+package presentation.dsl
+
+//https://www.tutorialspoint.com/groovy/groovy_dsls.htm
 
 class EmailDsl {
+
     String toText
     String fromText
     String body
@@ -14,7 +17,9 @@ class EmailDsl {
     }
 
     def to(String toText) { this.toText = toText }
+
     def from(String fromText) { this.fromText = fromText }
+
     def body(String bodyText) { this.body = bodyText }
 
     @Override
@@ -30,4 +35,23 @@ def myEmailDsl = EmailDsl.make {
 }
 
 println(myEmailDsl)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

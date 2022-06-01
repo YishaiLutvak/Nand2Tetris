@@ -1,4 +1,4 @@
-package presentation
+package presentation.vsJava
 
 /**
  * https://en.wikipedia.org/wiki/Apache_Groovy
