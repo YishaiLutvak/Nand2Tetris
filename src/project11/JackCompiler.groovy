@@ -33,7 +33,7 @@ class JackCompiler {
 
         jackFiles.each { File currentJackFile ->
             String outFileName = currentJackFile.name.split(/\.jack/)[0]
-            File outFile = new File(currentJackFile.getParent(),"My_${outFileName}.vm")
+            File outFile = new File(currentJackFile.getParent(),"${outFileName}.vm")
             CompilationEngine compilationEngine = new CompilationEngine(currentJackFile, outFile)
             compilationEngine.compileClass()
             println("File created : " + outFileName)
