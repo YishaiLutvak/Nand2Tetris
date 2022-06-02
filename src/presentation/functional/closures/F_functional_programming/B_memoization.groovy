@@ -5,12 +5,21 @@ package presentation.functional.closures.F_functional_programming
 
 
 def fib
-fib = { long n -> n<2?n:fib(n-1)+fib(n-2) }
-assert fib(15) == 610 // slow!
+def numCallsWithoutMemorize = 0
+fib = { long n ->
+    ++numCallsWithoutMemorize
+    n<2?n:fib(n-1)+fib(n-2)
+}
+assert fib(25) == 75025 // slow!
+println("\nNumber calls without 'memorize()'  $numCallsWithoutMemorize")
 
-fib = { long n -> n<2?n:fib(n-1)+fib(n-2) }.memoize()
+def numCallsWithMemorize = 0
+fib = { long n ->
+    ++numCallsWithMemorize
+    n<2?n:fib(n-1)+fib(n-2)
+}.memoize()
 assert fib(25) == 75025 // fast!
-
+println("\nNumber calls with 'memorize()'  $numCallsWithMemorize !!!")
 
 
 

@@ -232,6 +232,7 @@ class CompilationEngine {
 
     /**
      * Compiles a single statement
+     *
      */
     private static void compileStatement(){
         //determine whether there is a statement_next can be a '}'

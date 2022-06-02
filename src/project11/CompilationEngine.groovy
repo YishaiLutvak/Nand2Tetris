@@ -33,10 +33,14 @@ class CompilationEngine {
      * @param outFile
      */
     CompilationEngine(File inFile, File outFile) {
-        tokenizer = new JackTokenizer(inFile)
-        vmWriter = new VMWriter(outFile)
-        symbolTable = new SymbolTable()
-        labelIndex = 0
+        try {
+            tokenizer = new JackTokenizer(inFile)
+            vmWriter = new VMWriter(outFile)
+            symbolTable = new SymbolTable()
+            labelIndex = 0
+        } catch (FileNotFoundException e) {
+            e.printStackTrace()
+        }
     }
 
     //-------------------compile_xxx ( ) routines - recursive descent-------------------//
@@ -48,14 +52,14 @@ class CompilationEngine {
     private static String compileType(){
         printOpenTagFunction('compileType')
         tokenizer.advance()
-        TYPE myTokenType =  tokenizer.getTokenType()
-        if ((myTokenType == TYPE.KEYWORD && (tokenizer.keyWord() in [KEYWORD.INT, KEYWORD.CHAR, KEYWORD.BOOLEAN])) ||
-                (myTokenType == TYPE.IDENTIFIER)){
+        TYPE type =  tokenizer.getTokenType()
+        if ((type == TYPE.KEYWORD && (tokenizer.keyWord() in [KEYWORD.INT, KEYWORD.CHAR, KEYWORD.BOOLEAN])) ||
+                (type == TYPE.IDENTIFIER)){
             printCloseTagFunction('compileType')
             return tokenizer.getCurrentToken()
         }
+        error('int|char|boolean|className')
         printCloseTagFunction('compileType')
-        error('in|char|boolean|className')
         return ""
     }
 
@@ -101,36 +105,35 @@ class CompilationEngine {
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
         //next is a '}' or next is subroutineDec
-        TYPE myTokenType = tokenizer.getTokenType()
-        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
+        TYPE type = tokenizer.getTokenType()
+        if (type == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             printCloseTagFunction('compileClassVarDec')
             return
         }
         //next is start subroutineDec or classVarDec, both start with keyword
-        if (myTokenType != TYPE.KEYWORD){
-            error('Keywords')
+        if (type != TYPE.KEYWORD){
+            error('keyword')
         }
         //next is subroutineDec
-        KEYWORD myTokenKeyword = tokenizer.keyWord()
-        if (myTokenKeyword in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD]){
+        KEYWORD keyword = tokenizer.keyWord()
+        if (keyword in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD]){
             tokenizer.pointerBack()
             printCloseTagFunction('compileClassVarDec')
             return
         }
         //classVarDec exists
-        if (!(myTokenKeyword in [KEYWORD.STATIC, KEYWORD.FIELD])){
+        if (!(keyword in [KEYWORD.STATIC, KEYWORD.FIELD])){
             error('static or field')
         }
         KIND kind = KIND.NONE
-        switch (myTokenKeyword){
+        switch (keyword){
             case KEYWORD.STATIC -> kind = KIND.STATIC
             case KEYWORD.FIELD -> kind = KIND.FIELD
         }
         //type
-        String type = compileType()
+        String stringType = compileType()
         //at least one varName
-        //#boolean varNamesDone = false
         String name
         do {
             //varName
@@ -139,7 +142,7 @@ class CompilationEngine {
                 error('identifier')
             }
             name = tokenizer.getCurrentToken()
-            symbolTable.define(name,type,kind)
+            symbolTable.define(name,stringType,kind)
             //',' or ';'
             tokenizer.advance()
             if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',';'])){
@@ -149,7 +152,7 @@ class CompilationEngine {
                 break
             }
         } while(true)
-        compileClassVarDec()
+        compileClassVarDec() //Recursive call
         printCloseTagFunction('compileClassVarDec')
     }
 
@@ -160,31 +163,29 @@ class CompilationEngine {
         printOpenTagFunction('compileSubroutine')
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE type = tokenizer.getTokenType()
         //next is a '}'
-        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
+        if (type == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             printCloseTagFunction('compileSubroutine')
             return
         }
         //start of a subroutine
-        if (myTokenType != TYPE.KEYWORD || !(tokenizer.keyWord() in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD])){
+        if (type != TYPE.KEYWORD || !(tokenizer.keyWord() in [KEYWORD.CONSTRUCTOR, KEYWORD.FUNCTION, KEYWORD.METHOD])){
             error('constructor|function|method')
         }
         KEYWORD keyword = tokenizer.keyWord()
+        //reset symbol table of subroutine
         symbolTable.startSubroutine()
         //for method this is the first argument
         if (keyword == KEYWORD.METHOD){
             symbolTable.define('this',currentClass, KIND.ARG)
         }
         tokenizer.advance()
-        /*String type*/
         //'void' or type
-        if (tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID){
-            /*type = 'void'*/
-        } else {
+        if (!(tokenizer.getTokenType() == TYPE.KEYWORD && tokenizer.keyWord() == KEYWORD.VOID)){
             tokenizer.pointerBack()
-            /*type = */compileType()
+            compileType()
         }
         //subroutineName which is a identifier
         tokenizer.advance()
@@ -200,7 +201,7 @@ class CompilationEngine {
         requireSymbol(')')
         //subroutineBody
         compileSubroutineBody(keyword)
-        compileSubroutine()
+        compileSubroutine() //Recursive call
         printCloseTagFunction('compileSubroutine')
     }
 
@@ -224,42 +225,22 @@ class CompilationEngine {
     }
 
     /**
-     * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
-     */
-    private static void writeFunctionDec(KEYWORD keyword){
-        printOpenTagFunction("writeFunctionDec")
-        vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
-        //METHOD and CONSTRUCTOR need to load this pointer
-        if (keyword == KEYWORD.METHOD){
-            //A Jack method with DotAndParentheses arguments is compiled into a VM function that operates on DotAndParentheses + 1 arguments.
-            // The first argument (argument number 0) always refers to the this object.
-            vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
-            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
-        } else if (keyword == KEYWORD.CONSTRUCTOR){
-            //A Jack function or constructor with DotAndParentheses arguments is compiled into a VM function that operates on DotAndParentheses arguments.
-            vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
-            vmWriter.writeCall("Memory.alloc", 1)
-            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
-        }
-        printCloseTagFunction("writeFunctionDec")
-    }
-
-    /**
      * Compiles a single statement
+     * letStatement|ifStatement|whileStatement|doStatement|returnStatement
      */
     static private void compileStatement(){
         printOpenTagFunction("compileStatement")
         //determine whether there is a statement next can be a '}'
         tokenizer.advance()
-        TYPE myTokenType = tokenizer.getTokenType()
+        TYPE type = tokenizer.getTokenType()
         //next is a '}'
-        if (myTokenType == TYPE.SYMBOL && tokenizer.symbol() == '}'){
+        if (type == TYPE.SYMBOL && tokenizer.symbol() == '}'){
             tokenizer.pointerBack()
             printCloseTagFunction("compileStatement")
             return
         }
         //next is 'let'|'if'|'while'|'do'|'return'
-        if (myTokenType != TYPE.KEYWORD){
+        if (type != TYPE.KEYWORD){
             error("keyword")
         } else {
             switch (tokenizer.keyWord()){
@@ -271,7 +252,7 @@ class CompilationEngine {
                 default            -> error("'let'|'if'|'while'|'do'|'return'")
             }
         }
-        compileStatement()
+        compileStatement() //Recursive call
         printCloseTagFunction("compileStatement")
     }
 
@@ -746,6 +727,27 @@ class CompilationEngine {
     }
 
     //---------------------------------Auxiliary functions---------------------------------//
+
+    /**
+     * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
+     */
+    private static void writeFunctionDec(KEYWORD keyword){
+        printOpenTagFunction("writeFunctionDec")
+        vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
+        //METHOD and CONSTRUCTOR need to load this pointer
+        if (keyword == KEYWORD.METHOD){
+            //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
+            //The first argument (argument number 0) always refers to the this object.
+            vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
+            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
+        } else if (keyword == KEYWORD.CONSTRUCTOR){
+            //A Jack constructor with k arguments is compiled into a VM function that operates on k arguments.
+            vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
+            vmWriter.writeCall("Memory.alloc", 1)
+            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
+        }
+        printCloseTagFunction("writeFunctionDec")
+    }
 
     /**
      * return corresponding seg for input kind
