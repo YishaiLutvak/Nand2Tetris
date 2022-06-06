@@ -49,29 +49,30 @@ call Output.printString 1
 pop temp 0
 call Output.println 0
 pop temp 0
-label WHILE_EXP0
+label LABEL_1 
 push local 1
-not
-not
-if-goto WHILE_END0
+not  
+not  
+if-goto LABEL_0 
 push local 0
 push constant 1
-add
+add  
 pop local 0
 push local 0
 push constant 32767
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+eq  
+not  
+if-goto LABEL_2 
 push constant 0
 pop local 0
-label IF_FALSE0
+goto LABEL_3 
+label LABEL_2 
+label LABEL_3 
 call Keyboard.keyPressed 0
 pop local 1
-goto WHILE_EXP0
-label WHILE_END0
+goto LABEL_1 
+label LABEL_0 
 call Screen.clearScreen 0
 pop temp 0
 push local 0
-return
+return  

@@ -225,6 +225,37 @@ class CompilationEngine {
     }
 
     /**
+     * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
+     */
+    private static void writeFunctionDec(KEYWORD keyword){
+        printOpenTagFunction("writeFunctionDec")
+        vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
+        //METHOD and CONSTRUCTOR need to load this pointer
+        if (keyword == KEYWORD.METHOD){
+            //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
+            //The first argument (argument number 0) always refers to the this object.
+            vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
+            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
+        } else if (keyword == KEYWORD.CONSTRUCTOR){
+            //A Jack constructor with k arguments is compiled into a VM function that operates on k arguments.
+            vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
+            vmWriter.writeCall("Memory.alloc", 1)
+            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
+        }
+        printCloseTagFunction("writeFunctionDec")
+    }
+
+    /**
+     * @return current function name, className.subroutineName
+     */
+    private static String currentFunction(){
+        if (currentClass.length() != 0 && currentSubroutine.length() != 0){
+            return "${currentClass}.${currentSubroutine}"
+        }
+        return ""
+    }
+
+    /**
      * Compiles a single statement
      * letStatement|ifStatement|whileStatement|doStatement|returnStatement
      */
@@ -460,7 +491,7 @@ class CompilationEngine {
      * possibly with a trailing else clause
      * 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}')?
      */
-    static private void compileIf(){
+    private static void compileIf(){
         printOpenTagFunction("compileIf")
         String elseLabel = newLabel()
         String endLabel = newLabel()
@@ -510,7 +541,7 @@ class CompilationEngine {
      * integerConstant|stringConstant|keywordConstant|
      * '(' expression ')'|unaryOp term
      */
-    static private void compileTerm(){
+    private static void compileTerm(){
         printOpenTagFunction("compileTerm")
         tokenizer.advance()
         TYPE type1 = tokenizer.getTokenType()
@@ -590,13 +621,11 @@ class CompilationEngine {
         printCloseTagFunction("compileTerm")
     }
 
-    // I am here!!!
-
     /**
      * Compiles a subroutine call
      * subroutineName '(' expressionList ')' | (className|varName) '.' subroutineName '(' expressionList ')'
      */
-    static private void compileSubroutineCall(){
+    private static void compileSubroutineCall(){
         printOpenTagFunction("compileSubroutineCall")
         tokenizer.advance()
         if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
@@ -661,7 +690,7 @@ class CompilationEngine {
      * Compiles an expression
      * term (op term)*
      */
-    static private void compileExpression(){
+    private static void compileExpression(){
         printOpenTagFunction("compileExpression")
         //term
         compileTerm()
@@ -690,7 +719,7 @@ class CompilationEngine {
                 tokenizer.pointerBack()
                 break
             }
-        } while (true)
+        } while(true)
         printCloseTagFunction("compileExpression")
     }
 
@@ -699,7 +728,7 @@ class CompilationEngine {
      * (expression(','expression)*)?
      * @return nArgs
      */
-    static private int compileExpressionList(){
+    private static int compileExpressionList(){
         printOpenTagFunction("compileExpressionList")
         int nArgs = 0
         tokenizer.advance()
@@ -722,7 +751,7 @@ class CompilationEngine {
                     tokenizer.pointerBack()
                     break
                 }
-            } while (true)
+            } while(true)
         }
         printCloseTagFunction("compileExpressionList")
         return nArgs
@@ -731,30 +760,9 @@ class CompilationEngine {
     //---------------------------------Auxiliary functions---------------------------------//
 
     /**
-     * write function declaration, load pointer when keyword is METHOD or CONSTRUCTOR
-     */
-    private static void writeFunctionDec(KEYWORD keyword){
-        printOpenTagFunction("writeFunctionDec")
-        vmWriter.writeFunction(currentFunction(), symbolTable.varCount(KIND.VAR))
-        //METHOD and CONSTRUCTOR need to load this pointer
-        if (keyword == KEYWORD.METHOD){
-            //A Jack method with k arguments is compiled into a VM function that operates on k + 1 arguments.
-            //The first argument (argument number 0) always refers to the this object.
-            vmWriter.writePush(VMWriter.SEGMENT.ARG, 0)
-            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
-        } else if (keyword == KEYWORD.CONSTRUCTOR){
-            //A Jack constructor with k arguments is compiled into a VM function that operates on k arguments.
-            vmWriter.writePush(VMWriter.SEGMENT.CONST, symbolTable.varCount(KIND.FIELD))
-            vmWriter.writeCall("Memory.alloc", 1)
-            vmWriter.writePop(VMWriter.SEGMENT.POINTER,0)
-        }
-        printCloseTagFunction("writeFunctionDec")
-    }
-
-    /**
      * return corresponding seg for input kind
      * @param kind
-     * @return
+     * @return VMWriter.SEGMENT
      */
     private static VMWriter.SEGMENT getSeg(KIND kind){
         printOpenTagFunction("getSeg")
@@ -770,6 +778,9 @@ class CompilationEngine {
         return mySegment
     }
 
+    /**
+     * @return String label
+     */
     private static String newLabel(){
         return "LABEL_" + (labelIndex++)
     }
@@ -793,16 +804,7 @@ class CompilationEngine {
         throw new IllegalStateException("Expected token missing : $val. Current token : ${tokenizer.getCurrentToken()}")
     }
 
-    /**
-     * return current function name, className.subroutineName
-     * @return
-     */
-    static String currentFunction(){
-        if (currentClass.length() != 0 && currentSubroutine.length() != 0){
-            return "${currentClass}.${currentSubroutine}"
-        }
-        return ""
-    }
+    //--------------------------------- Only For Debugging! ---------------------------------//
 
     /**
      *
