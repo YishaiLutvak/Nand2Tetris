@@ -100,7 +100,7 @@ class CompilationEngine {
      * Compiles a static declaration or a field declaration
      * classVarDec ('static'|'field') type varName (','varNAme)* ';'
      */
-    static private void compileClassVarDec(){
+    private static void compileClassVarDec(){
         printOpenTagFunction('compileClassVarDec')
         //first determine whether there is a classVarDec, nextToken is } or start subroutineDec
         tokenizer.advance()
@@ -159,7 +159,7 @@ class CompilationEngine {
     /**
      * Compiles a complete method function or constructor
      */
-    static private void compileSubroutine(){
+    private static void compileSubroutine(){
         printOpenTagFunction('compileSubroutine')
         //determine whether there is a subroutine, next can be a '}'
         tokenizer.advance()
@@ -209,7 +209,7 @@ class CompilationEngine {
      * Compiles the body of a subroutine
      * '{'  varDec* statements '}'
      */
-    static private void compileSubroutineBody(KEYWORD keyword){
+    private static void compileSubroutineBody(KEYWORD keyword){
         printOpenTagFunction("compileSubroutineBody")
         //'{'
         requireSymbol('{')
@@ -228,7 +228,7 @@ class CompilationEngine {
      * Compiles a single statement
      * letStatement|ifStatement|whileStatement|doStatement|returnStatement
      */
-    static private void compileStatement(){
+    private static void compileStatement(){
         printOpenTagFunction("compileStatement")
         //determine whether there is a statement next can be a '}'
         tokenizer.advance()
@@ -281,7 +281,7 @@ class CompilationEngine {
             if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
-            symbolTable.define(tokenizer.getCurrentToken(),type, KIND.ARG)
+            symbolTable.define(tokenizer.identifier(), type, KIND.ARG)
             //',' or ')'
             tokenizer.advance()
             if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',')'])){
@@ -299,7 +299,7 @@ class CompilationEngine {
      * Compiles a var declaration
      * 'var' type varName (',' varName)*;
      */
-    static private void compileVarDec(){
+    private static void compileVarDec(){
         printOpenTagFunction("compileVarDec")
         //determine if there is a varDec
         tokenizer.advance()
@@ -319,7 +319,7 @@ class CompilationEngine {
             if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
-            symbolTable.define(tokenizer.getCurrentToken(),type, KIND.VAR)
+            symbolTable.define(tokenizer.identifier(), type, KIND.VAR)
             //',' or ';'
             tokenizer.advance()
             if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in [',',';'])){
@@ -329,7 +329,7 @@ class CompilationEngine {
                 break
             }
         } while(true)
-        compileVarDec()
+        compileVarDec() //Recursive call
         printCloseTagFunction("compileVarDec")
     }
 
@@ -337,7 +337,7 @@ class CompilationEngine {
      * Compiles a do statement
      * 'do' subroutineCall ';'
      */
-    static private void compileDo(){
+    private static void compileDo(){
         printOpenTagFunction("compileDo")
         //subroutineCall
         compileSubroutineCall()
@@ -352,7 +352,7 @@ class CompilationEngine {
      * Compiles a let statement
      * 'let' varName ('[' ']')? '=' expression ';'
      */
-    static private void compileLet(){
+    private static void compileLet(){
         printOpenTagFunction("compileLet")
         //varName
         tokenizer.advance()
@@ -365,11 +365,11 @@ class CompilationEngine {
         if (tokenizer.getTokenType() != TYPE.SYMBOL || !(tokenizer.symbol() in ['[','='])){
             error("'['|'='")
         }
-        boolean expExist = false
+        boolean arrayExist = false
         //'[' expression ']' ,need to deal with array [base+offset]
         if (tokenizer.symbol() == '['){
-            expExist = true
-            //push array variable,base address into stack
+            arrayExist = true
+            //push array variable, base address of array into stack
             vmWriter.writePush(getSeg(symbolTable.kindOf(varName)),symbolTable.indexOf(varName))
             //calc offset
             compileExpression()
@@ -377,13 +377,14 @@ class CompilationEngine {
             requireSymbol(']')
             //base+offset
             vmWriter.writeArithmetic(VMWriter.COMMAND.ADD)
-            tokenizer.advance()
+            //=
+            requireSymbol('=')
         }
         //expression
         compileExpression()
         //';'
         requireSymbol(';')
-        if (expExist){
+        if (arrayExist){
             //*(base+offset) = expression
             //pop expression value to temp
             vmWriter.writePop(VMWriter.SEGMENT.TEMP,0)
@@ -403,7 +404,7 @@ class CompilationEngine {
      * Compiles a while statement
      * 'while' '(' expression ')' '{' statements '}'
      */
-    static private void compilesWhile(){
+    private static void compilesWhile(){
         printOpenTagFunction("compilesWhile")
         String continueLabel = newLabel()
         String topLabel = newLabel()
@@ -431,20 +432,16 @@ class CompilationEngine {
         printCloseTagFunction("compilesWhile")
     }
 
-    static private String newLabel(){
-        return "LABEL_" + (labelIndex++)
-    }
-
     /**
      * Compiles a return statement
      * ‘return’ expression? ';'
      */
-    static private void compileReturn(){
+    private static void compileReturn(){
         printOpenTagFunction("compileReturn")
         //check if there is any expression
         tokenizer.advance()
         if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.symbol() == ';'){
-            //no expression push 0 to stack
+            //no expression, push 0 to stack
             vmWriter.writePush(VMWriter.SEGMENT.CONST,0)
         } else {
             //expression exist
@@ -531,7 +528,7 @@ class CompilationEngine {
                 compileSubroutineCall()
             } else {
                 //this is an array entry or varName <=> varName|varName '[' expression ']'
-                //if this is an array entry push array variable,base address into stack
+                //if this is an array entry push array variable, base address into stack
                 //if this is varName push variable directly onto stack
                 vmWriter.writePush(getSeg(symbolTable.kindOf(token1)), symbolTable.indexOf(token1))
                 if (type2 == TYPE.SYMBOL && token2 == '['){
@@ -670,16 +667,16 @@ class CompilationEngine {
             if (tokenizer.getTokenType() == TYPE.SYMBOL && tokenizer.isOp()){
                 String opCmd = ""
                 switch (tokenizer.symbol()){
-                    case '+':opCmd = "add";break
-                    case '-':opCmd = "sub";break
-                    case '*':opCmd = "call Math.multiply 2";break
-                    case '/':opCmd = "call Math.divide 2";break
-                    case '<':opCmd = "lt";break
-                    case '>':opCmd = "gt";break
-                    case '=':opCmd = "eq";break
-                    case '&':opCmd = "and";break
-                    case '|':opCmd = "or";break
-                    default:error("Unknown op!")
+                    case '+': opCmd = "add"; break
+                    case '-': opCmd = "sub"; break
+                    case '*': opCmd = "call Math.multiply 2"; break
+                    case '/': opCmd = "call Math.divide 2"; break
+                    case '<': opCmd = "lt"; break
+                    case '>': opCmd = "gt"; break
+                    case '=': opCmd = "eq"; break
+                    case '&': opCmd = "and"; break
+                    case '|': opCmd = "or"; break
+                    default:  error("Unknown op!")
                 }
                 //term
                 compileTerm()
@@ -766,6 +763,10 @@ class CompilationEngine {
         }
         printCloseTagFunction("getSeg")
         return mySegment
+    }
+
+    private static String newLabel(){
+        return "LABEL_" + (labelIndex++)
     }
 
     /**

@@ -20,8 +20,9 @@ package presentation.dsl
  * similar to Ruby's open class concept:
  */
 Number.metaClass {
-    println(delegate.toString())
-    sqrt = { Math.sqrt(delegate) }
+    sqrt = {
+        Math.sqrt(delegate)
+    }
 }
 
 assert 9.sqrt() == 3
