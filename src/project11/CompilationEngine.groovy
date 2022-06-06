@@ -179,7 +179,7 @@ class CompilationEngine {
         symbolTable.startSubroutine()
         //for method this is the first argument
         if (keyword == KEYWORD.METHOD){
-            symbolTable.define('this',currentClass, KIND.ARG)
+            symbolTable.define('this', currentClass, KIND.ARG)
         }
         tokenizer.advance()
         //'void' or type
@@ -506,8 +506,8 @@ class CompilationEngine {
      * A single look-ahead token, which may be one of "[" "(" "." suffices to distinguish between the three possibilities
      * Any other token is not part of this term and should not be advanced over
      *
-     * integerConstant|stringConstant|keywordConstant|
      * varName|varName '[' expression ']'|subroutineCall|
+     * integerConstant|stringConstant|keywordConstant|
      * '(' expression ')'|unaryOp term
      */
     static private void compileTerm(){
@@ -621,7 +621,6 @@ class CompilationEngine {
             String objName = name
             //subroutineName
             tokenizer.advance()
-            // System.out.println("subroutineName:" + tokenizer.identifier())
             if (tokenizer.getTokenType() != TYPE.IDENTIFIER){
                 error("identifier")
             }
@@ -633,10 +632,10 @@ class CompilationEngine {
             } else if (symbolType==""){
                 name = "$objName.$name"
             } else {
-                nArgs = 1
                 //push variable directly onto stack
                 vmWriter.writePush(getSeg(symbolTable.kindOf(objName)), symbolTable.indexOf(objName))
-                name = "${symbolTable.typeOf(objName)}.$name"
+                nArgs = 1
+                name = "$symbolType.$name"
             }
             //'('
             requireSymbol('(')
@@ -645,7 +644,7 @@ class CompilationEngine {
             //')'
             requireSymbol(')')
             //call subroutine
-            vmWriter.writeCall(name,nArgs)
+            vmWriter.writeCall(name, nArgs)
         } else {
             error("'('|'.'")
         }
