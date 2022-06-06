@@ -607,6 +607,7 @@ class CompilationEngine {
         tokenizer.advance()
         TYPE tokenType = tokenizer.getTokenType()
         if (tokenType == TYPE.SYMBOL && tokenizer.symbol() == '('){
+            //הפונקציה מהצורה: Func(x,y) <=> הפונקציה היא method של עצמי
             //push this pointer
             vmWriter.writePush(VMWriter.SEGMENT.POINTER,0)
             //'(' expressionList ')'
@@ -617,6 +618,7 @@ class CompilationEngine {
             //call subroutine
             vmWriter.writeCall("$currentClass.$name", nArgs)
         } else if (tokenType == TYPE.SYMBOL && tokenizer.symbol() == '.'){
+            //
             //(className|varName) '.' subroutineName '(' expressionList ')'
             String objName = name
             //subroutineName
@@ -630,8 +632,12 @@ class CompilationEngine {
             if (symbolType in ["int","boolean","char","void"]){
                 error("no built-in type")
             } else if (symbolType==""){
+                //הפונקציה מהצורה: MyClass.Func(x,y) או מהצורה: OtherClass.Func(x,y)
+                //כלומר, או שהיא פונקציה סטטית של המחלקה הנוכחית, או שהיא פונקציה סטטית של מחלקה אחרת
                 name = "$objName.$name"
             } else {
+                //הפונקציה מהצורה: Obj.Func(x,y) <=>
+                //הפונקציה היא method של מחלקה אחרת, כלומר אוכל לקבל מטבלת הסמלים את הטיפוס שלה
                 //push variable directly onto stack
                 vmWriter.writePush(getSeg(symbolTable.kindOf(objName)), symbolTable.indexOf(objName))
                 nArgs = 1
