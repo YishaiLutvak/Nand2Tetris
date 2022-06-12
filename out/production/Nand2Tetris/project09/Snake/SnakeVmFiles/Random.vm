@@ -1,0 +1,61 @@
+function Random.setSeed 0
+push argument 0
+pop static 0
+push constant 0
+return  
+function Random.rand 0
+push static 0
+push constant 20251
+add  
+pop static 0
+push static 0
+push constant 0
+lt  
+not  
+if-goto LABEL_0 
+push static 0
+push constant 32767
+sub  
+push constant 1
+sub  
+pop static 0
+goto LABEL_1 
+label LABEL_0 
+label LABEL_1 
+push static 0
+return  
+function Random.randRange 2
+push constant 1
+pop local 0
+label LABEL_3 
+push local 0
+push argument 0
+lt  
+not  
+if-goto LABEL_2 
+push local 0
+push constant 2
+call Math.multiply 2  
+push constant 1
+add  
+pop local 0
+goto LABEL_3 
+label LABEL_2 
+call Random.rand 0
+push local 0
+and  
+pop local 1
+label LABEL_5 
+push local 1
+push argument 0
+gt  
+not  
+if-goto LABEL_4 
+call Random.rand 0
+push local 0
+and  
+pop local 1
+goto LABEL_5 
+label LABEL_4 
+push local 1
+return  

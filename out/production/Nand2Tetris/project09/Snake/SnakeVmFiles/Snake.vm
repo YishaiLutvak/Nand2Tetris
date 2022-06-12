@@ -1,0 +1,394 @@
+function Snake.new 1
+push constant 11
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+push argument 3
+sub  
+pop this 1
+push argument 2
+pop this 2
+push argument 3
+pop this 3
+push argument 4
+pop this 4
+push constant 0
+pop this 5
+push constant 4
+pop this 6
+push constant 4
+pop this 7
+push constant 512
+pop this 10
+push this 10
+call Array.new 1
+pop this 8
+push this 10
+call Array.new 1
+pop this 9
+push constant 0
+pop local 0
+label LABEL_1 
+push local 0
+push this 3
+lt  
+not  
+if-goto LABEL_0 
+push this 1
+push constant 1
+add  
+pop this 1
+push pointer 0
+push this 0
+call SnakeGame.getCycle 1
+call Snake.drawHead 2
+pop temp 0
+push local 0
+push constant 1
+add  
+pop local 0
+push this 0
+call SnakeGame.nextCycle 1
+pop temp 0
+goto LABEL_1 
+label LABEL_0 
+push pointer 0
+return  
+function Snake.dispose 0
+push argument 0
+pop pointer 0
+push this 8
+call Array.dispose 1
+pop temp 0
+push this 9
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return  
+function Snake.checkRewriteHistory 0
+push argument 0
+pop pointer 0
+push this 0
+call SnakeGame.getCycle 1
+push this 10
+eq  
+not  
+if-goto LABEL_2 
+push pointer 0
+call Snake.rewriteHistory 1
+pop temp 0
+push constant 0
+not  
+return  
+goto LABEL_3 
+label LABEL_2 
+label LABEL_3 
+push constant 0
+return  
+function Snake.rewriteHistory 3
+push argument 0
+pop pointer 0
+push this 3
+pop local 0
+push constant 0
+pop local 2
+push this 10
+push this 3
+sub  
+pop local 1
+label LABEL_5 
+push local 0
+push constant 0
+gt  
+not  
+if-goto LABEL_4 
+push this 8
+push local 2
+add  
+push this 8
+push local 1
+add  
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 9
+push local 2
+add  
+push this 9
+push local 1
+add  
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push constant 1
+add  
+pop local 1
+push local 2
+push constant 1
+add  
+pop local 2
+push local 0
+push constant 1
+sub  
+pop local 0
+goto LABEL_5 
+label LABEL_4 
+push constant 0
+return  
+function Snake.posX 0
+push argument 0
+pop pointer 0
+push this 1
+return  
+function Snake.posY 0
+push argument 0
+pop pointer 0
+push this 2
+return  
+function Snake.getLength 0
+push argument 0
+pop pointer 0
+push this 3
+return  
+function Snake.getDir 0
+push argument 0
+pop pointer 0
+push this 6
+return  
+function Snake.getLastDir 0
+push argument 0
+pop pointer 0
+push this 7
+return  
+function Snake.setDir 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 6
+push constant 0
+return  
+function Snake.rememberDir 0
+push argument 0
+pop pointer 0
+push this 6
+pop this 7
+push constant 0
+return  
+function Snake.tryMove 1
+push argument 0
+pop pointer 0
+push this 0
+call SnakeGame.getGrid 1
+pop local 0
+push this 6
+push constant 1
+eq  
+not  
+if-goto LABEL_6 
+push this 2
+push constant 0
+eq  
+not  
+if-goto LABEL_8 
+push constant 0
+return  
+goto LABEL_9 
+label LABEL_8 
+push this 2
+push constant 1
+sub  
+pop this 2
+label LABEL_9 
+goto LABEL_7 
+label LABEL_6 
+label LABEL_7 
+push this 6
+push constant 2
+eq  
+not  
+if-goto LABEL_10 
+push this 2
+push local 0
+call SnakeGrid.sizeY 1
+eq  
+not  
+if-goto LABEL_12 
+push constant 0
+return  
+goto LABEL_13 
+label LABEL_12 
+push this 2
+push constant 1
+add  
+pop this 2
+label LABEL_13 
+goto LABEL_11 
+label LABEL_10 
+label LABEL_11 
+push this 6
+push constant 3
+eq  
+not  
+if-goto LABEL_14 
+push this 1
+push constant 0
+eq  
+not  
+if-goto LABEL_16 
+push constant 0
+return  
+goto LABEL_17 
+label LABEL_16 
+push this 1
+push constant 1
+sub  
+pop this 1
+label LABEL_17 
+goto LABEL_15 
+label LABEL_14 
+label LABEL_15 
+push this 6
+push constant 4
+eq  
+not  
+if-goto LABEL_18 
+push this 1
+push local 0
+call SnakeGrid.sizeX 1
+eq  
+not  
+if-goto LABEL_20 
+push constant 0
+return  
+goto LABEL_21 
+label LABEL_20 
+push this 1
+push constant 1
+add  
+pop this 1
+label LABEL_21 
+goto LABEL_19 
+label LABEL_18 
+label LABEL_19 
+push local 0
+push this 1
+push this 2
+call SnakeGrid.checkOccupied 3
+not  
+if-goto LABEL_22 
+push constant 0
+return  
+goto LABEL_23 
+label LABEL_22 
+label LABEL_23 
+push constant 0
+not  
+return  
+function Snake.grow 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+call Snake.drawHead 2
+pop temp 0
+push this 5
+push constant 0
+gt  
+not  
+if-goto LABEL_24 
+push this 5
+push constant 1
+sub  
+pop this 5
+push this 3
+push constant 1
+add  
+pop this 3
+goto LABEL_25 
+label LABEL_24 
+push pointer 0
+push argument 1
+call Snake.clearTail 2
+pop temp 0
+label LABEL_25 
+push constant 0
+return  
+function Snake.drawHead 1
+push argument 0
+pop pointer 0
+push this 0
+call SnakeGame.getGrid 1
+pop local 0
+push local 0
+push this 1
+push this 2
+call SnakeGrid.drawSnakeBit 3
+pop temp 0
+push this 8
+push argument 1
+add  
+push this 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 9
+push argument 1
+add  
+push this 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return  
+function Snake.clearTail 4
+push argument 0
+pop pointer 0
+push argument 1
+push this 3
+sub  
+pop local 1
+push this 8
+push local 1
+add  
+pop pointer 1
+push that 0
+pop local 2
+push this 9
+push local 1
+add  
+pop pointer 1
+push that 0
+pop local 3
+push this 0
+call SnakeGame.getGrid 1
+pop local 0
+push local 0
+push local 2
+push local 3
+call SnakeGrid.clearSnakeBit 3
+pop temp 0
+push constant 0
+return  
+function Snake.eatFood 0
+push argument 0
+pop pointer 0
+push this 5
+push this 4
+add  
+pop this 5
+push constant 0
+return  
