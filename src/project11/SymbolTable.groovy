@@ -1,4 +1,5 @@
 package project11
+import static project11.Symbol.KIND
 
 
 /**
@@ -24,20 +25,22 @@ class SymbolTable {
 
     private static Map<String, Symbol> classSymbols = [:] // for STATIC, FIELD
     private static Map<String, Symbol> subroutineSymbols = [:] // for ARG, VAR
-    private static Map<Symbol.KIND, Integer> indices = [
-            (Symbol.KIND.ARG): 0,
-            (Symbol.KIND.FIELD): 0,
-            (Symbol.KIND.STATIC): 0,
-            (Symbol.KIND.VAR): 0,
+    private static Map<KIND, Integer> indices = [
+            (KIND.ARG): 0,
+            (KIND.FIELD): 0,
+            (KIND.STATIC): 0,
+            (KIND.VAR): 0,
     ]
 
     /**
-     *
+     * constructor
+     * starts a new class scope
+     * resets the class's symbol table
      */
     SymbolTable(){
         classSymbols.clear()
-        indices.put(Symbol.KIND.STATIC, 0)
-        indices.put(Symbol.KIND.FIELD, 0)
+        indices.put(KIND.STATIC, 0)
+        indices.put(KIND.FIELD, 0)
     }
 
     /**
@@ -46,24 +49,24 @@ class SymbolTable {
      */
     static void startSubroutine(){
         subroutineSymbols.clear()
-        indices.put(Symbol.KIND.VAR, 0)
-        indices.put(Symbol.KIND.ARG, 0)
+        indices.put(KIND.VAR, 0)
+        indices.put(KIND.ARG, 0)
     }
 
     /**
      * Defines a new identifier of a given name,type and kind
-     * and assigns it a running index, STATIC and FIELD identifiers
-     * groovy a class scope, while ARG and VAR identifiers have a subroutine scope
-     * @param name
-     * @param type
-     * @param kind
+     * and assigns it a running index, STATIC and FIELD identifiers have a class scope,
+     * while ARG and VAR identifiers have a subroutine scope
+     * @param name of symbol - entry (key) in symbol table
+     * @param type of symbol - int, char, boolean or class name
+     * @param kind of symbol - ARG, VAR, STATIC and FIELD
      */
-    static void define(String name, String type, Symbol.KIND kind){
-        if (kind in [Symbol.KIND.ARG, Symbol.KIND.VAR, Symbol.KIND.STATIC, Symbol.KIND.FIELD]){
+    static void define(String name, String type, KIND kind){
+        if (kind in [KIND.ARG, KIND.VAR, KIND.STATIC, KIND.FIELD]){
             int index = indices[kind]
             Symbol symbol = new Symbol(type,kind,index)
             indices.put(kind, index+1)
-            kind in [Symbol.KIND.ARG, Symbol.KIND.VAR] ?
+            kind in [KIND.ARG, KIND.VAR] ?
                     subroutineSymbols.put(name, symbol) :
                     classSymbols.put(name, symbol)
         }
@@ -74,7 +77,7 @@ class SymbolTable {
      * @param kind
      * @return
      */
-    static int varCount(Symbol.KIND kind){
+    static int varCount(KIND kind){
         return indices[kind]
     }
 
@@ -84,12 +87,12 @@ class SymbolTable {
      * @param name
      * @return
      */
-    static Symbol.KIND kindOf(String name){
+    static KIND kindOf(String name){
         Symbol symbol = lookUp(name)
         if (symbol != null) {
             return symbol.getKind()
         }
-        return Symbol.KIND.NONE
+        return KIND.NONE
     }
 
     /**
@@ -134,8 +137,8 @@ class SymbolTable {
         } else if (classSymbols[name] != null){
             return classSymbols[name] as Symbol
         } else {
-            //throw new IllegalStateException("The name '$name' a is not in the table of symbols")
             return null
+            //throw new IllegalStateException("The name '$name' a is not in the table of symbols")
         }
     }
 }
